@@ -190,3 +190,67 @@ footer.page-foot .fine{color:var(--muted);font-size:12px;line-height:1.65}
   section.sec{padding:56px 0 12px}
   .page-tabs{display:none}
 }
+
+/* ===== polish ===== */
+/* 스크롤바 */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#33333d;border-radius:99px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#41414d}
+
+/* 표 줄무늬 + 첫 행 강조 */
+.tbl tbody tr:nth-child(even) td{background:rgba(255,255,255,.014)}
+.tbl tbody tr:hover td{background:rgba(245,121,42,.045)}
+.tbl td b{color:var(--text)}
+
+/* 콜아웃 아이콘 정렬 고정 */
+.callout .ico{min-width:30px;text-align:center;padding-top:1px}
+
+/* 다이어그램 호버 */
+figure.vp{transition:border-color .2s}
+figure.vp:hover{border-color:#3a3a46}
+
+/* 본문 링크 밑줄 디테일 */
+main p a,main li a{text-underline-offset:3px;text-decoration:underline;text-decoration-color:rgba(255,164,92,.35)}
+main p a:hover,main li a:hover{text-decoration-color:var(--orange-2)}
+
+/* 단계 리스트 호버 */
+ol.steps li{transition:border-color .15s,background .15s}
+ol.steps li:hover{border-color:#3a3a46;background:var(--panel-2)}
+
+/* 코드블록 헤더 느낌 + 가로 스크롤바 */
+pre.code-block{position:relative}
+pre.code-block::-webkit-scrollbar{height:8px}
+pre.code-block::-webkit-scrollbar-thumb{border:none}
+
+/* sec-sub 가독성 */
+.sec-sub{max-width:620px}
+
+/* kbd 호버 미세 */
+.tbl kbd{font-size:.74em}
+
+/* 사이드바 하단 여백 + 페이드 */
+#sidebar::after{content:"";display:block;height:40px}
+
+/* 검색창 포커스 */
+#cheat-search:focus{border-color:rgba(245,121,42,.5);outline:none;box-shadow:0 0 0 3px rgba(245,121,42,.12)}
+
+/* 푸터 정돈 */
+footer.page-foot .fine{max-width:420px}
+
+/* top 버튼 호버 */
+#top-btn:hover{border-color:var(--orange);color:var(--orange)}
+
+/* 히어로 태그 호버 */
+.hero-tag{transition:border-color .15s}
+.hero-tag:hover{border-color:#3d3d4a}
+
+/* 제목 옆 배지 정렬 */
+h2 .lv{transform:translateY(-2px)}
+
+/* 인쇄 시 사이드바 제거 */
+@media print{
+  #sidebar,#menu-btn,#overlay,#top-btn,#progress,.page-topbar{display:none!important}
+  main{margin-left:0}
+  body{background:#fff;color:#111}
+}
