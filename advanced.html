@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블렌더 고급 — 이펙트, 파티클, Geometry Nodes, Python</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23b580ff'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23fff'>B</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark adv">B</div>
+    <div><b>고급 강좌</b><small>ADVANCED</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <div class="nav-group"><span>이펙트 기초</span>
+    <a class="nav-link" href="#particles"><span class="n">21</span>파티클 시스템</a>
+    <a class="nav-link" href="#physics"><span class="n">22</span>물리 시뮬레이션</a>
+    <a class="nav-link" href="#eevee"><span class="n">23</span>EEVEE 이펙트 세팅</a>
+  </div>
+  <div class="nav-group"><span>이펙트 레시피</span>
+    <a class="nav-link" href="#fx-anatomy"><span class="n">24</span>솔스RNG 이펙트 해부</a>
+    <a class="nav-link" href="#fx-recipes"><span class="n">25</span>이펙트 레시피 7종</a>
+    <a class="nav-link" href="#fx-studio"><span class="n">26</span>Studio 이펙트 구현</a>
+  </div>
+  <div class="nav-group"><span>고급 기법</span>
+    <a class="nav-link" href="#geonodes"><span class="n">27</span>Geometry Nodes</a>
+    <a class="nav-link" href="#procedural"><span class="n">28</span>프로시저럴 텍스처</a>
+    <a class="nav-link" href="#python"><span class="n">29</span>Python 자동화</a>
+    <a class="nav-link" href="#optimize"><span class="n">30</span>최적화와 성능</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="beginner.html">입문</a>
+    <a class="page-tab" href="intermediate.html">중급</a>
+    <a class="page-tab tab-adv" href="advanced.html">고급</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(181,128,255,.16),transparent 65%),radial-gradient(360px 280px at 18% 80%,rgba(90,167,255,.07),transparent 60%)">
+  <div class="wrap">
+    <div class="hero-chip chip-adv">ADVANCED</div>
+    <h1>블렌더 고급 + 이펙트</h1>
+    <p class="lead">파티클, 물리, 이펙트 레시피 7종. 솔스RNG 스타일을 블렌더에서 만들고 Studio로 재현하는 방법까지.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag"><b>7</b>이펙트 레시피</span>
+      <span class="hero-tag">솔스RNG 해부</span>
+      <span class="hero-tag">Studio 연동</span>
+    </div>
+  </div>
+</div>
+
+<!-- 21 PARTICLES -->
+<section class="sec" id="particles">
+  <div class="wrap">
+    <h2><span class="num">21</span>파티클 시스템 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">오라, 빛 입자, 연기, 불꽃을 표현하는 파티클 시스템. 이펙트의 핵심 기술입니다.</p>
+
+    <h3>파티클이란?</h3>
+    <p>파티클은 메시 표면에서 자동으로 생성되고 움직이는 작은 오브젝트들입니다. 불꽃 하나하나, 오라에서 날리는 입자들, 눈발이 모두 파티클로 만들어집니다.</p>
+
+    <h3>파티클 시스템 추가</h3>
+    <p>오브젝트 선택 &gt; Properties &gt; 파티클 아이콘(점들) &gt; <code>+</code> &gt; <code>New</code>.</p>
+
+    <h3>파티클 타입</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>타입</th><th>특징</th><th>이펙트 활용</th></tr></thead>
+      <tbody>
+        <tr><td>Emitter (방출기)</td><td>표면에서 입자를 계속 방출. 일정 시간 후 사라짐</td><td>불꽃, 오라 입자, 마법 가루, 상승 입자</td></tr>
+        <tr><td>Hair (헤어)</td><td>표면에서 가닥이 자람. 정적</td><td>풀, 털, 가시처럼 방사형으로 뻗는 오라 스파이크</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Emitter 주요 파라미터</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>항목</th><th>위치</th><th>설명</th><th>오라 이펙트 권장값</th></tr></thead>
+      <tbody>
+        <tr><td>Number (개수)</td><td>Emission</td><td>총 파티클 개수</td><td>200~600</td></tr>
+        <tr><td>Lifetime (생존 시간)</td><td>Emission</td><td>파티클이 살아있는 프레임 수</td><td>30~60 (짧으면 반짝, 길면 부유)</td></tr>
+        <tr><td>Normal (수직 속도)</td><td>Velocity</td><td>표면에서 수직으로 튀어나가는 속도</td><td>상승 이펙트: 1~3</td></tr>
+        <tr><td>Gravity (중력)</td><td>Field Weights</td><td>중력 영향도. 0이면 무중력</td><td>부유 오라: 0</td></tr>
+        <tr><td>Size (크기)</td><td>Render</td><td>파티클 표시 크기</td><td>먼지: 0.02~0.05, 구슬: 0.1~0.2</td></tr>
+        <tr><td>Random (크기 랜덤)</td><td>Render</td><td>크기를 랜덤하게</td><td>0.3~0.5로 자연스럽게</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>포스 필드 (Force Field)</h3>
+    <p>파티클에 힘을 주는 오브젝트입니다. <span class="keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>A</kbd></span> &gt; Force Field:</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>종류</th><th>효과</th><th>이펙트 활용</th></tr></thead>
+      <tbody>
+        <tr><td>Vortex (소용돌이)</td><td>축 중심으로 회전</td><td>회전하는 오라, 토네이도</td></tr>
+        <tr><td>Wind (바람)</td><td>한 방향으로 밀기</td><td>상승 기류, 먼지 날리기</td></tr>
+        <tr><td>Turbulence (난류)</td><td>무작위 방향으로 흔들기</td><td>불규칙하게 떠다니는 오라 입자</td></tr>
+        <tr><td>Charge (끌어당기기/밀어내기)</td><td>가운데로 끌어당기거나 밀어냄</td><td>에너지 집중(양수) 또는 폭발(음수)</td></tr>
+        <tr><td>Force (힘)</td><td>지정한 방향으로 힘</td><td>방향성 있는 이펙트</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>파티클 재질</h3>
+    <p>파티클 오브젝트에 Emission(발광) 재질을 적용하면 빛나는 파티클이 됩니다. Emission Strength를 5~20으로 설정하고, EEVEE에서 Bloom을 켜면 실제로 빛이 번지는 효과가 납니다.</p>
+
+    <h3>뷰포트 성능</h3>
+    <ul class="plain">
+      <li><b>Display Percentage:</b> 파티클 설정에서 Display로 내려가면 있습니다. 10~30%로 낮춰 작업 시 버벅임 방지.</li>
+      <li><b>Render Percentage:</b> 렌더링 시에는 100%로.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 22 PHYSICS -->
+<section class="sec" id="physics">
+  <div class="wrap">
+    <h2><span class="num">22</span>물리 시뮬레이션 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">천, 강체 파편, 유체, 연기. 시뮬레이션 결과를 정적 메시로 굳혀 게임 에셋으로 활용합니다.</p>
+
+    <h3>Cloth (천 시뮬레이션)</h3>
+    <p>Properties &gt; Physics &gt; <code>Cloth</code>. 깃발, 망토, 커튼에 활용합니다.</p>
+    <ul class="plain">
+      <li><b>Vertex Mass:</b> 천의 무게. 실크처럼 가볍게 = 0.1, 가죽처럼 무겁게 = 1.0.</li>
+      <li><b>Stiffness:</b> 뻣뻣한 정도. 높을수록 잘 안 구부러짐.</li>
+      <li><b>Pinning:</b> 특정 버텍스를 고정점으로 지정. 깃발 끝은 고정하고 나머지는 펄럭이게.</li>
+      <li>충돌면 오브젝트에도 Physics &gt; Collision을 추가해야 천이 그 표면에 닿습니다.</li>
+      <li><b>결과 고정:</b> 원하는 형태가 됐을 때 해당 프레임에서 모디파이어를 Apply(적용).</li>
+    </ul>
+
+    <h3>Rigid Body (강체 - 물리 파편)</h3>
+    <ul class="plain">
+      <li><b>Active:</b> 물리 영향을 받는 오브젝트. 파편, 도미노처럼 쓰러지는 오브젝트.</li>
+      <li><b>Passive:</b> 고정된 충돌면. 바닥, 벽.</li>
+      <li><b>Collision Shape:</b> Box나 Sphere(빠름), Mesh(정확하지만 느림). 단순한 형태는 Box를 쓰세요.</li>
+    </ul>
+
+    <h3>Cell Fracture (파편 분열)</h3>
+    <p>메시를 세포 분열하듯 여러 파편으로 나눠주는 애드온입니다. Preferences에서 <code>Cell Fracture</code>를 활성화한 뒤:</p>
+    <ol class="steps">
+      <li>분열시킬 메시 선택.</li>
+      <li><kbd>F3</kbd> 검색창 &gt; <code>Cell Fracture</code> 실행.</li>
+      <li>Source Limit: 파편 개수 (50~150 권장).</li>
+      <li>생성된 파편들 전체 선택 &gt; Physics &gt; Rigid Body (Active).</li>
+      <li>Force Field (Charge, 음수값)로 폭발 효과.</li>
+    </ol>
+
+    <h3>Volume (볼륨 - 연기/안개)</h3>
+    <p>볼륨 재질로 3D 공간 안에 연기나 안개를 채울 수 있습니다:</p>
+    <ol class="steps">
+      <li>Cube 추가 &gt; 연기 영역 크기로 조절.</li>
+      <li>재질 추가 &gt; Shader Editor에서 Surface 셰이더를 지우고 <b>Volume Scatter</b> 노드 추가.</li>
+      <li>Volume Scatter의 Color로 연기 색상, Density로 진하기 조절.</li>
+      <li>Noise Texture를 Density에 연결하면 불균일한 자연스러운 연기.</li>
+    </ol>
+
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>블렌더 물리 시뮬레이션은 결과를 정적 형태로 굳혀서 FBX로 내보내는 용도로 씁니다. 천 시뮬로 자연스러운 망토 형태를 잡고 Apply한 뒤 내보내기. 실시간 물리는 Studio에서 별도 처리합니다.</p></div>
+  </div>
+</section>
+
+<!-- 23 EEVEE -->
+<section class="sec" id="eevee">
+  <div class="wrap">
+    <h2><span class="num">23</span>EEVEE 이펙트 세팅 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">이펙트 프리뷰에 최적인 EEVEE 엔진을 최대한 활용하는 설정.</p>
+
+    <h3>이펙트 필수 설정</h3>
+    <p>Properties &gt; Render &gt; EEVEE (렌더 엔진이 EEVEE일 때):</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>설정</th><th>권장값</th><th>효과</th></tr></thead>
+      <tbody>
+        <tr><td>Bloom</td><td>켬, Threshold 0.8, Intensity 0.05</td><td>Emission 재질이 실제로 빛나는 효과. 이펙트 필수</td></tr>
+        <tr><td>Ambient Occlusion</td><td>켬, Distance 0.2</td><td>메시 틈새에 음영이 생겨 입체감 증가</td></tr>
+        <tr><td>Screen Space Reflections</td><td>켬</td><td>표면 반사 효과</td></tr>
+        <tr><td>Volumetrics</td><td>켬, Tile Size 2px</td><td>안개, 빛기둥(God Ray) 표현</td></tr>
+        <tr><td>Shadows &gt; Cube Size</td><td>4096</td><td>그림자 품질 최대화</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Bloom 활용법</h3>
+    <p>Emission 재질의 Strength를 3 이상으로 올리고 Bloom을 켜면 재질에서 빛이 번져 글로우 효과가 납니다. Threshold는 이 밝기 이상에서만 Bloom이 발생하는 기준값입니다. 너무 낮으면 전체가 번져 지저분해지고, 너무 높으면 발광 효과가 안 나옵니다. 0.8이 적절합니다.</p>
+
+    <h3>Volumetric 빛기둥 만들기 (God Ray)</h3>
+    <ol class="steps">
+      <li>Render &gt; Volumetrics 켜기.</li>
+      <li>World 설정에서 Shader Editor를 World로 전환 &gt; Use Nodes.</li>
+      <li>Volume Scatter 노드 추가. Density 0.02~0.05.</li>
+      <li>Spot 조명을 배치하고 Shadow 옵션 켜기.</li>
+      <li>조명 방향으로 빛기둥이 보입니다.</li>
+    </ol>
+
+    <h3>EEVEE vs Cycles 비교</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>항목</th><th>EEVEE</th><th>Cycles</th></tr></thead>
+      <tbody>
+        <tr><td>속도</td><td>매우 빠름 (초~분)</td><td>느림 (분~시간)</td></tr>
+        <tr><td>Bloom</td><td>내장, 즉시 사용</td><td>컴포지터에서 별도 처리</td></tr>
+        <tr><td>이펙트 프리뷰</td><td>최적</td><td>정확하지만 느림</td></tr>
+        <tr><td>포트폴리오 이미지</td><td>충분함</td><td>가장 사실적</td></tr>
+        <tr><td>결론</td><td>이펙트, 게임용 에셋 렌더에 사용</td><td>최종 포트폴리오 이미지에 사용</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 24 FX ANATOMY -->
+<section class="sec" id="fx-anatomy">
+  <div class="wrap">
+    <h2><span class="num">24</span>솔스RNG 이펙트 해부 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">솔스RNG 같은 스타일의 이펙트가 어떤 요소로 이루어져 있는지 분해합니다.</p>
+
+    <h3>이펙트의 구성 요소</h3>
+    <figure class="vp">
+      <div class="vp-head"><span class="vp-ico"></span>솔스RNG 스타일 이펙트 구조</div>
+      <div class="vp-body">
+        <svg viewBox="0 0 540 320" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:540px">
+          <!-- 캐릭터 -->
+          <rect x="210" y="110" width="120" height="170" rx="12" fill="#1d1d24" stroke="#5b5b6a" stroke-width="1.4"/>
+          <text x="270" y="200" class="ts" text-anchor="middle" fill="#e9e9ef">캐릭터</text>
+
+          <!-- A 오라 -->
+          <ellipse cx="270" cy="195" rx="86" ry="115" fill="none" stroke="#ffc44d" stroke-width="2" opacity=".4"/>
+          <ellipse cx="270" cy="195" rx="98" ry="130" fill="none" stroke="#ffc44d" stroke-width="1" opacity=".18"/>
+
+          <!-- B 빔 -->
+          <rect x="264" y="20" width="12" height="90" rx="6" fill="#5aa7ff" opacity=".7"/>
+
+          <!-- C 링 -->
+          <ellipse cx="270" cy="195" rx="115" ry="42" fill="none" stroke="#b580ff" stroke-width="2" stroke-dasharray="6 4" opacity=".7"/>
+
+          <!-- D 파티클들 -->
+          <circle cx="232" cy="128" r="4" fill="#ffa45c" opacity=".8"/>
+          <circle cx="300" cy="140" r="3" fill="#ffa45c" opacity=".7"/>
+          <circle cx="248" cy="96" r="4.5" fill="#ffa45c" opacity=".75"/>
+          <circle cx="284" cy="88" r="3" fill="#ffa45c" opacity=".6"/>
+          <circle cx="220" cy="155" r="3.5" fill="#ffa45c" opacity=".65"/>
+          <circle cx="315" cy="118" r="4" fill="#ffa45c" opacity=".7"/>
+          <circle cx="258" cy="76" r="3" fill="#ffa45c" opacity=".6"/>
+          <circle cx="302" cy="82" r="3.5" fill="#ffa45c" opacity=".65"/>
+
+          <!-- E 트레일 -->
+          <path d="M215 230 Q165 242 115 238" fill="none" stroke="#5ad08a" stroke-width="2.5" stroke-linecap="round" opacity=".6"/>
+
+          <!-- 라벨 선 + 텍스트 -->
+          <line x1="368" y1="195" x2="420" y2="230" stroke="#ffc44d" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+          <text x="422" y="228" class="t" fill="#ffc44d">A. 오라</text>
+          <text x="422" y="240" class="tm" fill="#ffc44d">Emission+Fresnel</text>
+
+          <line x1="276" y1="20" x2="420" y2="30" stroke="#5aa7ff" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+          <text x="422" y="28" class="t" fill="#5aa7ff">B. 수직 빔</text>
+          <text x="422" y="40" class="tm" fill="#5aa7ff">Emission Cylinder</text>
+
+          <line x1="385" y1="195" x2="420" y2="155" stroke="#b580ff" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+          <text x="422" y="153" class="t" fill="#b580ff">C. 회전 링</text>
+          <text x="422" y="165" class="tm" fill="#b580ff">Torus+Wireframe</text>
+
+          <line x1="315" y1="118" x2="420" y2="95" stroke="#ffa45c" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+          <text x="422" y="93" class="t" fill="#ffa45c">D. 부유 파티클</text>
+          <text x="422" y="105" class="tm" fill="#ffa45c">Emitter+Turbulence</text>
+
+          <line x1="165" y1="240" x2="80" y2="268" stroke="#5ad08a" stroke-width="1" stroke-dasharray="4 3" opacity=".5"/>
+          <text x="8" y="266" class="t" fill="#5ad08a">E. 이동 잔상</text>
+          <text x="8" y="278" class="tm" fill="#5ad08a">Particle Low Grav</text>
+
+          <text x="8" y="312" class="tm" fill="#555">블렌더에서 시각화 → Studio에서 재구현</text>
+        </svg>
+      </div>
+      <figcaption>A~E 5가지 요소를 조합하면 솔스RNG 스타일 이펙트가 됩니다. 색상과 속도만 바꿔도 전혀 다른 느낌이 납니다.</figcaption>
+    </figure>
+
+    <h3>요소별 블렌더 구현 방법</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>요소</th><th>블렌더 방법</th><th>핵심 포인트</th></tr></thead>
+      <tbody>
+        <tr><td>A. 오라 (전신 발광)</td><td>캐릭터 메시 복제 &rarr; Scale 1.05 &rarr; Emission+Fresnel 재질</td><td>Layer Weight의 Fresnel 출력을 Mix Shader Fac에 연결. 외곽만 빛남</td></tr>
+        <tr><td>B. 빔 (수직 빛기둥)</td><td>길쭉한 Cylinder &rarr; Emission 재질 &rarr; Scale Y 애니메이션</td><td>Scale Y를 0에서 1로 키프레임. Bloom 필수</td></tr>
+        <tr><td>C. 링 (회전 고리)</td><td>Torus + Wireframe 모디파이어 &rarr; Z축 회전 키프레임</td><td>Wireframe 두께 0.01~0.02. Relative ON</td></tr>
+        <tr><td>D. 파티클 (부유 입자)</td><td>Emitter &rarr; Gravity 0 &rarr; Turbulence Force Field</td><td>Turbulence Strength 2~5. Lifetime 40~80</td></tr>
+        <tr><td>E. 트레일 (이동 잔상)</td><td>Emitter &rarr; Gravity 0.1 &rarr; Normal 속도 낮게</td><td>Lifetime 40~80. Size 0.05~0.1</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>이펙트 프리뷰 영상 만들기</h3>
+    <ol class="steps">
+      <li>EEVEE 엔진 선택 + Bloom + AO 켜기.</li>
+      <li>검은 배경 캐릭터(또는 단순 블록) 배치.</li>
+      <li>A~E 요소 순서대로 추가. 각각 Emission 재질 + 원하는 색.</li>
+      <li>Timeline 1~120 프레임 루프 설정.</li>
+      <li>Space로 재생 확인.</li>
+      <li><span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>F12</kbd></span>로 영상(mp4) 렌더링.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 25 FX RECIPES -->
+<section class="sec" id="fx-recipes">
+  <div class="wrap">
+    <h2><span class="num">25</span>이펙트 레시피 7종 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">블렌더에서 바로 만들 수 있는 이펙트 레시피입니다. 단계별로 따라하면 됩니다.</p>
+
+    <h3>레시피 1 — 회오리 오라</h3>
+    <ol class="steps">
+      <li>캐릭터 메시 선택 &gt; <span class="keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>D</kbd></span>로 복제.</li>
+      <li>복제한 메시에 <b>Simple Deform</b> 모디파이어 추가. Mode: Twist, Angle: 45도.</li>
+      <li><b>Solidify</b> 모디파이어 추가. Thickness: 0.015.</li>
+      <li>재질: Emission + Layer Weight(Fresnel)로 외곽만 발광. Strength 5~10.</li>
+      <li>Simple Deform의 Angle 값에 키프레임. 0도 &rarr; 360도 &rarr; Loop. 비틀리며 회전하는 오라.</li>
+    </ol>
+
+    <h3>레시피 2 — 에너지 구체 (Orb)</h3>
+    <ol class="steps">
+      <li>UV Sphere 추가. Segments 64, Rings 32.</li>
+      <li>재질: Noise Texture(Scale 3, Distortion 2) &rarr; ColorRamp(어두운 파랑~밝은 하늘색~흰색) &rarr; Emission(Strength 12~18).</li>
+      <li><b>Displace 모디파이어</b> 추가. Texture: 같은 Noise, Strength: 0.06. 표면이 살아서 꿈틀거리는 느낌.</li>
+      <li>Noise Texture의 <code>W</code> 파라미터에 키프레임(0 &rarr; 100). 텍스처가 시간에 따라 변화해 구체가 살아있는 것처럼 보임.</li>
+    </ol>
+
+    <h3>레시피 3 — 번개/전기</h3>
+    <ol class="steps">
+      <li>Bezier Curve 추가. 시작점과 끝점 두 개 배치.</li>
+      <li>에디트 모드 &gt; 전체 선택(<kbd>A</kbd>) &gt; 우클릭 &gt; <code>Subdivide</code> 5~7번 반복. 중간 점이 많이 생깁니다.</li>
+      <li>중간 점들을 선택하고 G로 조금씩 이동. 지그재그 형태 만들기.</li>
+      <li>Curve 설정 &gt; Geometry &gt; Bevel &gt; Round. Depth: 0.015 (두께).</li>
+      <li>재질: Emission, 밝은 파랑/흰색, Strength: 25~40.</li>
+      <li>위 과정을 3~5개 복제하고 각각 살짝 다른 경로로 조정 &rarr; 번개 다발.</li>
+    </ol>
+
+    <h3>레시피 4 — 마법진</h3>
+    <ol class="steps">
+      <li>Plane(평면) 추가 &gt; UV 언랩.</li>
+      <li>외부 툴(Figma, Photoshop, 또는 무료 온라인 툴)에서 룬 문자/원진 PNG 제작. 흰색 선, 투명 배경. 2048x2048 권장.</li>
+      <li>재질: Image Texture(룬 PNG) &rarr; Emission. Alpha 출력을 재질 Alpha에 연결.</li>
+      <li>재질 설정: Blend Mode &gt; Alpha Blend. Backface Culling 끄기.</li>
+      <li>Z축으로 납작하게(Scale Z 0.01) &rarr; 바닥에 누워있는 마법진.</li>
+      <li>회전 키프레임으로 천천히 회전. 여러 개 크기를 다르게 해서 동심원으로 쌓기.</li>
+    </ol>
+
+    <h3>레시피 5 — 파편/분열 이펙트</h3>
+    <ol class="steps">
+      <li>Preferences에서 <b>Cell Fracture</b> 애드온 활성화.</li>
+      <li>분열할 오브젝트 선택 &gt; <kbd>F3</kbd>에서 Cell Fracture 검색 &gt; 실행.</li>
+      <li>Source Limit: 80~150. OK.</li>
+      <li>생성된 파편들 전체 선택 &gt; Physics &gt; <b>Rigid Body (Active)</b>.</li>
+      <li>Force Field(Charge, 음수 세기)를 중앙에 배치 &gt; 일정 프레임부터 활성화 &rarr; 파편 폭발.</li>
+      <li>컴포지터에서 Glare 노드 추가로 파편에 빛 번짐.</li>
+    </ol>
+
+    <h3>레시피 6 — 연기/안개 볼륨</h3>
+    <ol class="steps">
+      <li>Cube 추가 &gt; 연기 영역 크기로 조절.</li>
+      <li>재질 추가 &gt; Shader Editor에서 Surface는 삭제, <b>Volume Scatter</b> 추가.</li>
+      <li>Volume Scatter: Color 연기 색상, Density 0.15~0.4.</li>
+      <li>Noise Texture(Scale 2) &rarr; Density에 연결. 자연스러운 불균일 연기.</li>
+      <li>Noise의 W 파라미터에 키프레임(0 &rarr; 50). 연기가 흐르는 애니메이션.</li>
+    </ol>
+
+    <h3>레시피 7 — 홀로그램</h3>
+    <ol class="steps">
+      <li>메시에 재질 추가.</li>
+      <li><b>Emission</b>: 색상 #00FFEE (청록), Strength: 3.</li>
+      <li><b>Wave Texture</b>(Rings, Scale 50) &rarr; <b>ColorRamp</b>(밝음/어둠 반복) &rarr; Alpha에 연결.</li>
+      <li>재질 설정: Blend Mode &gt; Alpha Blend. Shadow Mode &gt; None.</li>
+      <li><b>Wireframe 모디파이어</b>: Relative Thickness, 두께 0.002. 선 격자 오버레이 추가.</li>
+      <li>두 재질(홀로그램 + 선 격자)을 Mix Shader로 합성. 비율은 0.5~0.7.</li>
+    </ol>
+
+    <div class="callout co-adv"><span class="ico">ADV</span><p>레시피들을 조합하면 더 다양한 이펙트가 됩니다. 오라(레시피1) + 에너지 구체(레시피2) + 파티클 = 솔스RNG "신 오라" 느낌. 번개(레시피3) + 마법진(레시피4) = 소환 이펙트.</p></div>
+  </div>
+</section>
+
+<!-- 26 FX STUDIO -->
+<section class="sec" id="fx-studio">
+  <div class="wrap">
+    <h2><span class="num">26</span>Studio 이펙트 구현 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">블렌더에서 만든 이펙트 컨셉을 Roblox Studio에서 실제로 구현하는 방법.</p>
+
+    <h3>ParticleEmitter 주요 속성</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>속성</th><th>설명</th><th>솔스RNG 활용</th></tr></thead>
+      <tbody>
+        <tr><td>Texture</td><td>파티클 이미지 (rbxassetid://...)</td><td>원형 그라데이션, 별, 빛 점</td></tr>
+        <tr><td>Color</td><td>ColorSequence - 생명주기 동안 색상 변화</td><td>흰색 &rarr; 오라색 &rarr; 투명</td></tr>
+        <tr><td>Transparency</td><td>NumberSequence - 생명주기 투명도</td><td>0 &rarr; 0 &rarr; 1 = 서서히 사라짐</td></tr>
+        <tr><td>Size</td><td>NumberSequence - 크기 변화</td><td>0.1 &rarr; 0.8 &rarr; 0 = 커졌다 사라짐</td></tr>
+        <tr><td>Rate</td><td>초당 파티클 방출 개수</td><td>오라: 20~50 / 폭발: 200~500</td></tr>
+        <tr><td>Lifetime</td><td>NumberRange - 파티클 생존 시간(초)</td><td>부유: 3~6초 / 폭발 파편: 0.5~1초</td></tr>
+        <tr><td>Speed</td><td>NumberRange - 방출 속도</td><td>낮게=부유(0.5~2), 높게=발사(5~20)</td></tr>
+        <tr><td>LightEmission</td><td>0~1 발광 강도</td><td>1 = 배경을 통과해 빛남</td></tr>
+        <tr><td>LightInfluence</td><td>0~1 조명 영향</td><td>0 = 항상 원래 색상 유지</td></tr>
+        <tr><td>SpreadAngle</td><td>방출 각도 (X, Y)</td><td>360도 = 전방향, 0도 = 직선</td></tr>
+        <tr><td>Enabled</td><td>ON/OFF</td><td>Luau 코드로 true/false 토글</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Beam (빔) 속성</h3>
+    <ul class="plain">
+      <li><b>Attachment0 / Attachment1:</b> 빔의 시작점과 끝점. Part에 Attachment를 두 개 만들어야 합니다.</li>
+      <li><b>Width0 / Width1:</b> 양 끝 폭. 0은 뾰족, 1~3은 균일한 두께.</li>
+      <li><b>LightEmission:</b> 1로 설정하면 빔이 배경을 통과해 빛납니다.</li>
+      <li><b>CurveSize0 / CurveSize1:</b> 빔 휘어짐. 번개처럼 구불구불하게 할 때.</li>
+      <li><b>FaceCamera:</b> 켜면 항상 카메라를 향합니다.</li>
+    </ul>
+
+    <h3>Trail (트레일) 속성</h3>
+    <ul class="plain">
+      <li><b>Attachment0 / Attachment1:</b> 추적할 두 점. 오브젝트 앞뒤에 배치.</li>
+      <li><b>Lifetime:</b> 트레일이 유지되는 시간(초). 0.3~1.5.</li>
+      <li><b>MinLength:</b> 이 거리 이상 이동해야 트레일 생성.</li>
+      <li><b>LightEmission:</b> 트레일 발광 강도.</li>
+    </ul>
+
+    <h3>블렌더 이펙트 &rarr; Studio 매핑</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>블렌더 이펙트</th><th>Studio 구현 방법</th><th>핵심 설정</th></tr></thead>
+      <tbody>
+        <tr><td>Emission 오라</td><td>SelectionBox 또는 BillboardGui</td><td>ImageTransparency, ZIndex</td></tr>
+        <tr><td>파티클 Emitter</td><td>ParticleEmitter</td><td>Rate, Lifetime, LightEmission</td></tr>
+        <tr><td>수직 빔</td><td>Beam Instance</td><td>Width0/1, LightEmission</td></tr>
+        <tr><td>이동 잔상</td><td>Trail Instance</td><td>Lifetime, MinLength</td></tr>
+        <tr><td>볼륨 연기</td><td>ParticleEmitter (연기 텍스처)</td><td>낮은 Speed, 높은 Transparency</td></tr>
+        <tr><td>번개</td><td>Beam + Attachment 이동 애니메이션</td><td>CurveSize, 빠른 재생</td></tr>
+        <tr><td>홀로그램</td><td>SurfaceGui + Frame + Tween</td><td>BackgroundTransparency Tween</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Luau 이펙트 코드</h3>
+    <pre class="code-block"><span class="cm">-- 오라 ON/OFF 모듈 예시</span>
+<span class="kw">local</span> AuraModule = {}
+
+<span class="kw">function</span> <span class="fn">AuraModule.Enable</span>(character, color)
+    <span class="kw">local</span> fx = character:FindFirstChild(<span class="str">"AuraEffects"</span>)
+    <span class="kw">if not</span> fx <span class="kw">then return end</span>
+
+    <span class="kw">for</span> _, obj <span class="kw">in ipairs</span>(fx:GetDescendants()) <span class="kw">do</span>
+        <span class="kw">if</span> obj:IsA(<span class="str">"ParticleEmitter"</span>) <span class="kw">then</span>
+            obj.Enabled = <span class="kw">true</span>
+            obj.Color = ColorSequence.new(color)
+        <span class="kw">elseif</span> obj:IsA(<span class="str">"Beam"</span>) <span class="kw">or</span> obj:IsA(<span class="str">"Trail"</span>) <span class="kw">then</span>
+            obj.Enabled = <span class="kw">true</span>
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">function</span> <span class="fn">AuraModule.Disable</span>(character)
+    <span class="kw">local</span> fx = character:FindFirstChild(<span class="str">"AuraEffects"</span>)
+    <span class="kw">if not</span> fx <span class="kw">then return end</span>
+
+    <span class="kw">for</span> _, obj <span class="kw">in ipairs</span>(fx:GetDescendants()) <span class="kw">do</span>
+        <span class="kw">if</span> obj:IsA(<span class="str">"ParticleEmitter"</span>)
+        <span class="kw">or</span> obj:IsA(<span class="str">"Beam"</span>)
+        <span class="kw">or</span> obj:IsA(<span class="str">"Trail"</span>) <span class="kw">then</span>
+            obj.Enabled = <span class="kw">false</span>
+        <span class="kw">end</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">return</span> AuraModule</pre>
+
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>블렌더는 이펙트의 "레퍼런스(참고 영상)"를 만드는 도구로 활용하세요. 색상 코드, 크기 비율, 속도를 블렌더에서 시각적으로 정한 뒤 Studio에서 같은 수치로 재현하면 일관성이 생깁니다.</p></div>
+  </div>
+</section>
+
+<!-- 27 GEONODES -->
+<section class="sec" id="geonodes">
+  <div class="wrap">
+    <h2><span class="num">27</span>Geometry Nodes <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">노드로 지오메트리(형태)를 자동으로 생성하고 변형하는 시스템. 반복 패턴, 자동 배치에 강력합니다.</p>
+
+    <h3>Geometry Nodes란?</h3>
+    <p>Geometry Nodes는 노드(블록)를 연결해서 메시의 형태를 프로그래밍 방식으로 만드는 기능입니다. 예를 들어 "표면의 모든 점에 나무를 배치하라"처럼 규칙 기반으로 복잡한 형태를 만들 수 있습니다.</p>
+
+    <h3>Geometry Nodes 추가</h3>
+    <p>오브젝트 선택 &gt; Properties &gt; Modifier &gt; <code>Add Modifier</code> &gt; <code>Geometry Nodes</code>. 노드 에디터가 열립니다.</p>
+
+    <h3>자주 쓰는 노드</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>노드</th><th>하는 일</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td>Instance on Points</td><td>각 점에 오브젝트 배치</td><td>표면에 돌, 나무, 스파이크 배치</td></tr>
+        <tr><td>Mesh to Points</td><td>메시의 버텍스를 점 클라우드로 변환</td><td>Instance on Points와 함께</td></tr>
+        <tr><td>Set Position</td><td>각 점의 위치 변경</td><td>Noise로 울퉁불퉁하게</td></tr>
+        <tr><td>Curve to Mesh</td><td>커브에 단면을 씌워 메시 생성</td><td>파이프, 케이블 자동 생성</td></tr>
+        <tr><td>Resample Curve</td><td>커브의 점 개수 조절</td><td>균일한 간격으로 나누기</td></tr>
+        <tr><td>Random Value</td><td>랜덤 숫자 생성</td><td>크기, 회전, 위치를 랜덤하게</td></tr>
+        <tr><td>Scene Time</td><td>현재 프레임/시간 값</td><td>시간 기반 자동 애니메이션</td></tr>
+        <tr><td>Realize Instances</td><td>인스턴스를 실제 메시로 변환</td><td>FBX 내보내기 전 필수</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>간단한 예시: 타워 표면에 스파이크 배치</h3>
+    <ol class="steps">
+      <li>타워 메시 선택 &gt; Geometry Nodes 모디파이어 추가.</li>
+      <li>Mesh to Points 노드 &rarr; Instance on Points 노드 연결.</li>
+      <li>Instance on Points의 Instance 입력에 스파이크 메시 오브젝트 연결 (Object Info 노드 사용).</li>
+      <li>Random Value 노드로 각 스파이크의 회전/크기 랜덤화.</li>
+    </ol>
+
+    <div class="callout co-warn"><span class="ico">!!</span><p>Geometry Nodes로 만든 인스턴스는 FBX로 내보내기 전에 <b>Realize Instances</b> 노드를 통과시키거나, 모디파이어를 Apply해야 합니다. 안 하면 빈 메시로 내보내집니다.</p></div>
+  </div>
+</section>
+
+<!-- 28 PROCEDURAL -->
+<section class="sec" id="procedural">
+  <div class="wrap">
+    <h2><span class="num">28</span>프로시저럴 텍스처링 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">이미지 파일 없이 노드만으로 텍스처를 만드는 방법. 에너지 패턴, 금속 스크래치, 마법 재질에 적합합니다.</p>
+
+    <h3>프로시저럴 텍스처란?</h3>
+    <p>이미지 파일을 쓰는 대신, 수학적으로 생성된 패턴을 텍스처로 쓰는 방법입니다. 해상도에 상관없이 깔끔하고, 파라미터 하나로 패턴 전체를 바꿀 수 있습니다.</p>
+
+    <h3>주요 텍스처 노드</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>노드</th><th>패턴</th><th>이펙트 활용</th></tr></thead>
+      <tbody>
+        <tr><td>Noise Texture</td><td>구름/안개 같은 불규칙 패턴</td><td>에너지 구체 표면, 거친 금속, 연기</td></tr>
+        <tr><td>Voronoi Texture</td><td>세포 분열 같은 패턴</td><td>에너지 균열, 세포 조각, 마법 문양</td></tr>
+        <tr><td>Wave Texture</td><td>물결 또는 링 패턴</td><td>마법 에너지 링, 홀로그램 스캔 라인</td></tr>
+        <tr><td>Gradient Texture</td><td>그라데이션</td><td>거리 기반 색상 전환</td></tr>
+        <tr><td>Magic Texture</td><td>사이키델릭 패턴</td><td>마법 인쇄, 차원 이동 이펙트</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>레시피: 에너지 오라 재질 (완전 프로시저럴)</h3>
+    <ol class="steps">
+      <li><b>Layer Weight</b> 노드: Fresnel 출력. 시선 각도에 따라 외곽이 밝아짐.</li>
+      <li><b>Noise Texture</b>(Scale 8, Detail 12): Fac 출력.</li>
+      <li><b>ColorRamp</b>: 검정~원하는 오라 색~흰색. 날카롭게 설정.</li>
+      <li><b>Math(Multiply)</b>: Fresnel 값 * ColorRamp 출력.</li>
+      <li><b>Emission</b>: Strength 5~10.</li>
+      <li><b>Mix Shader</b>: Transparent BSDF + Emission. Fac = 위 결과.</li>
+      <li>재질 설정: Blend Mode &gt; Alpha Blend.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 29 PYTHON -->
+<section class="sec" id="python">
+  <div class="wrap">
+    <h2><span class="num">29</span>Python 자동화 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">반복 작업을 자동화하는 Python 스크립팅. FBX 일괄 내보내기, 오브젝트 자동 배치 등.</p>
+
+    <h3>Python 스크립팅이란?</h3>
+    <p>블렌더는 Python 언어로 거의 모든 기능을 제어할 수 있습니다. 상단 <code>Scripting</code> 워크스페이스에서 코드를 작성하고 실행합니다. 같은 작업을 100번 반복해야 할 때, 또는 복잡한 패턴을 자동으로 만들 때 씁니다.</p>
+
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Info 에디터(상단 메뉴바를 넓혀서 에디터 타입을 Info로 변경)에서 블렌더에서 한 모든 작업이 Python 코드로 기록됩니다. "이 버튼 눌렀을 때 Python 코드가 뭐야?" 를 확인하는 가장 쉬운 방법입니다.</p></div>
+
+    <h3>기본 문법 예시</h3>
+    <pre class="code-block"><span class="kw">import</span> bpy
+
+<span class="cm"># 현재 선택된 오브젝트 이름 출력</span>
+obj = bpy.context.active_object
+<span class="kw">if</span> obj:
+    <span class="fn">print</span>(obj.name)
+
+<span class="cm"># 씬의 모든 오브젝트 목록 출력</span>
+<span class="kw">for</span> o <span class="kw">in</span> bpy.data.objects:
+    <span class="fn">print</span>(o.name, o.type)
+
+<span class="cm"># 큐브 추가</span>
+bpy.ops.mesh.primitive_cube_add(location=(<span class="num">0</span>, <span class="num">0</span>, <span class="num">2</span>))</pre>
+
+    <h3>실용 예시 1: 오브젝트 원형으로 배열</h3>
+    <pre class="code-block"><span class="kw">import</span> bpy, math
+
+obj = bpy.context.active_object  <span class="cm"># 선택한 오브젝트</span>
+count = <span class="num">12</span>       <span class="cm"># 배열 개수</span>
+radius = <span class="num">5.0</span>    <span class="cm"># 원 반지름</span>
+
+<span class="kw">for</span> i <span class="kw">in</span> range(count):
+    angle = (<span class="num">2</span> * math.pi / count) * i
+    x = radius * math.cos(angle)
+    y = radius * math.sin(angle)
+    new_obj = obj.copy()
+    new_obj.data = obj.data.copy()
+    new_obj.location = (x, y, <span class="num">0</span>)
+    bpy.context.scene.collection.objects.link(new_obj)</pre>
+
+    <h3>실용 예시 2: FBX 일괄 내보내기</h3>
+    <pre class="code-block"><span class="kw">import</span> bpy, os
+
+output_dir = <span class="str">"C:/MyExports/"</span>  <span class="cm"># 저장 경로</span>
+os.makedirs(output_dir, exist_ok=<span class="kw">True</span>)
+
+<span class="kw">for</span> obj <span class="kw">in</span> bpy.data.objects:
+    <span class="kw">if</span> obj.type != <span class="str">'MESH'</span>:
+        <span class="kw">continue</span>
+    bpy.ops.object.select_all(action=<span class="str">'DESELECT'</span>)
+    obj.select_set(<span class="kw">True</span>)
+    bpy.context.view_layer.objects.active = obj
+    path = os.path.join(output_dir, obj.name + <span class="str">".fbx"</span>)
+    bpy.ops.export_scene.fbx(
+        filepath=path,
+        use_selection=<span class="kw">True</span>,
+        apply_scale_options=<span class="str">'FBX_SCALE_NONE'</span>,
+        mesh_smooth_type=<span class="str">'FACE'</span>
+    )
+    <span class="fn">print</span>(<span class="str">f"저장됨: {path}"</span>)</pre>
+  </div>
+</section>
+
+<!-- 30 OPTIMIZE -->
+<section class="sec" id="optimize">
+  <div class="wrap">
+    <h2><span class="num">30</span>최적화와 성능 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">게임 에셋을 최적화해서 로블록스 게임 성능을 유지하는 방법.</p>
+
+    <h3>왜 최적화가 필요한가?</h3>
+    <p>폴리곤(면)이 너무 많거나, 텍스처 해상도가 너무 높으면 게임이 느려집니다. 특히 타워디펜스 게임은 같은 타워가 여러 개 배치되므로 하나의 에셋이 가벼울수록 전체 게임이 쾌적합니다.</p>
+
+    <h3>폴리곤 예산 (TD 타워 기준)</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>타입</th><th>트라이앵글 목표</th><th>텍스처 해상도</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>작은 소품 (장식용)</td><td>200~800</td><td>256x256</td><td>많이 배치됨</td></tr>
+        <tr><td>기본 타워</td><td>800~2,000</td><td>512x512</td><td>여러 개 배치됨</td></tr>
+        <tr><td>특수 타워 (이펙트 있음)</td><td>2,000~5,000</td><td>512~1024</td><td>화면에 제한적</td></tr>
+        <tr><td>보스 몬스터</td><td>3,000~8,000</td><td>1024x1024</td><td>화면에 하나씩</td></tr>
+        <tr><td>배경 지형</td><td>1,000~4,000</td><td>512x512 타일</td><td>이동 없는 배경</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>블렌더에서 폴리곤 줄이기</h3>
+    <ul class="plain">
+      <li><b>Decimate 모디파이어:</b> Ratio를 0.5로 설정하면 폴리곤 수가 절반으로 줄어듭니다. Planar 모드는 평평한 면을 자동으로 통합.</li>
+      <li><b>Merge by Distance:</b> 에디트 모드 &gt; Mesh &gt; Merge by Distance. 겹쳐있는 버텍스 자동 제거.</li>
+      <li><b>Remove Doubles:</b> F3에서 검색. 중복 버텍스 제거.</li>
+      <li><b>Dissolve Edges:</b> 불필요한 내부 엣지 선택 후 Ctrl+X로 제거. 폴리곤 수 감소.</li>
+    </ul>
+
+    <h3>텍스처 최적화</h3>
+    <ul class="plain">
+      <li>256x256 또는 512x512가 대부분의 에셋에 충분합니다.</li>
+      <li>PNG는 투명도가 필요할 때, JPEG는 불필요할 때. JPEG가 용량이 훨씬 작습니다.</li>
+      <li>여러 오브젝트를 같은 텍스처 하나로 처리하는 텍스처 아틀라스(Atlas)를 쓰면 draw call이 줄어 성능 향상.</li>
+    </ul>
+
+    <h3>Studio 이펙트 최적화</h3>
+    <ul class="plain">
+      <li><b>ParticleEmitter Rate:</b> 너무 높으면 프레임 드랍. 타워당 Rate 합계 100~200 이하 유지.</li>
+      <li><b>Enabled 관리:</b> 화면 밖 타워의 이펙트는 Enabled = false로.</li>
+      <li><b>LightInfluence 0:</b> 1이면 조명 계산이 추가됨. 이펙트 파티클은 0으로 설정.</li>
+      <li><b>텍스처 공유:</b> 같은 이미지를 여러 이펙트가 공유하면 메모리 절약.</li>
+    </ul>
+
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>Studio의 MicroProfiler(Ctrl+F6)로 성능을 측정할 수 있습니다. 이펙트가 많은 씬에서 GPU 시간이 높으면 ParticleEmitter Rate를 줄이거나 Enabled 관리를 해야 합니다.</p></div>
+  </div>
+</section>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Blender / Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="intermediate.html">&larr; 중급</a>
+      <a href="index.html">메인</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+</body>
+</html>
