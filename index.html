@@ -145,6 +145,36 @@ footer p{color:var(--muted);font-size:12px}
 
 @media(max-width:860px){.level-grid{grid-template-columns:1fr}.feat-grid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:560px){.feat-grid{grid-template-columns:1fr}.hero-div{display:none}.hd-nav a{padding:5px 9px;font-size:12px}}
+
+/* ===== polish ===== */
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.hero-badge{animation:fadeUp .5s ease both}
+.hero h1{animation:fadeUp .55s .06s ease both}
+.hero p{animation:fadeUp .6s .12s ease both}
+.hero-stats{animation:fadeUp .65s .18s ease both}
+@media (prefers-reduced-motion: reduce){.hero-badge,.hero h1,.hero p,.hero-stats{animation:none}}
+
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#33333d;border-radius:99px;border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:#41414d}
+
+.ch-list li{transition:background .13s,padding-left .13s;border-radius:6px}
+.ch-list li:hover{background:rgba(255,255,255,.025);padding-left:6px}
+
+.lv-btn{position:relative}
+.lv-btn .arr{display:inline-block;transition:transform .18s}
+.lv-btn:hover .arr{transform:translateX(4px)}
+
+.hd-nav a.cta{color:var(--orange-2);border:1px solid rgba(245,121,42,.35);background:var(--orange-dim)}
+.hd-nav a.cta:hover{background:rgba(245,121,42,.2)}
+
+.feat-card{transition:transform .18s,border-color .18s}
+.feat-card:hover{transform:translateY(-3px);border-color:#3a3a46}
+
+footer .foot-links{display:flex;justify-content:center;gap:10px;margin-bottom:14px}
+footer .foot-links a{font-size:12.5px;color:var(--muted);padding:5px 13px;border:1px solid var(--border-soft);border-radius:8px;font-weight:600}
+footer .foot-links a:hover{color:var(--text);border-color:var(--border);text-decoration:none}
 </style>
 </head>
 <body>
@@ -200,7 +230,7 @@ footer p{color:var(--muted);font-size:12px}
         <li><span class="cn">09</span>FBX로 내보내기</li>
         <li><span class="cn">10</span>단축키 전체 목록</li>
       </ul>
-      <a href="beginner.html" class="lv-btn btn-beg">입문 강좌 시작하기 &rarr;</a>
+      <a href="beginner.html" class="lv-btn btn-beg">입문 강좌 시작하기 <span class="arr">&rarr;</span></a>
     </div>
 
     <div class="lcard int">
@@ -219,7 +249,7 @@ footer p{color:var(--muted);font-size:12px}
         <li><span class="cn">19</span>씬 정리하기</li>
         <li><span class="cn">20</span>유용한 애드온</li>
       </ul>
-      <a href="intermediate.html" class="lv-btn btn-int">중급 강좌 시작하기 &rarr;</a>
+      <a href="intermediate.html" class="lv-btn btn-int">중급 강좌 시작하기 <span class="arr">&rarr;</span></a>
     </div>
 
     <div class="lcard adv">
@@ -238,7 +268,7 @@ footer p{color:var(--muted);font-size:12px}
         <li><span class="cn">29</span>Python 자동화</li>
         <li><span class="cn">30</span>최적화와 성능</li>
       </ul>
-      <a href="advanced.html" class="lv-btn btn-adv">고급 강좌 시작하기 &rarr;</a>
+      <a href="advanced.html" class="lv-btn btn-adv">고급 강좌 시작하기 <span class="arr">&rarr;</span></a>
     </div>
   </div>
 </section>
@@ -310,6 +340,11 @@ footer p{color:var(--muted);font-size:12px}
 </section>
 
 <footer>
+  <div class="foot-links">
+    <a href="beginner.html">입문 강좌</a>
+    <a href="intermediate.html">중급 강좌</a>
+    <a href="advanced.html">고급 + 이펙트</a>
+  </div>
   <p>이 가이드는 공식 Blender / Roblox 문서가 아닙니다. Blender는 Blender Foundation의 상표. Roblox는 Roblox Corporation의 상표.</p>
 </footer>
 
