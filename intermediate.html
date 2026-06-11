@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블렌더 중급 — 스컬프트, 셰이더 노드, 리깅, 애니메이션</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23f5792a'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%231a1208'>B</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark int">B</div>
+    <div><b>중급 강좌</b><small>INTERMEDIATE</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <div class="nav-group"><span>메시 심화</span>
+    <a class="nav-link" href="#topo"><span class="n">11</span>깔끔한 메시 구조</a>
+    <a class="nav-link" href="#sculpt"><span class="n">12</span>스컬프트 조각</a>
+    <a class="nav-link" href="#curves"><span class="n">13</span>커브로 파이프/케이블</a>
+  </div>
+  <div class="nav-group"><span>재질 심화</span>
+    <a class="nav-link" href="#shader"><span class="n">14</span>노드로 재질 만들기</a>
+    <a class="nav-link" href="#texturing"><span class="n">15</span>텍스처 직접 그리기</a>
+    <a class="nav-link" href="#lighting"><span class="n">16</span>조명과 렌더링</a>
+  </div>
+  <div class="nav-group"><span>캐릭터/애니메이션</span>
+    <a class="nav-link" href="#rigging"><span class="n">17</span>뼈대와 웨이트</a>
+    <a class="nav-link" href="#anim"><span class="n">18</span>애니메이션 만들기</a>
+  </div>
+  <div class="nav-group"><span>정리</span>
+    <a class="nav-link" href="#collections"><span class="n">19</span>씬 정리하기</a>
+    <a class="nav-link" href="#addons"><span class="n">20</span>유용한 애드온</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="beginner.html">입문</a>
+    <a class="page-tab tab-int" href="intermediate.html">중급</a>
+    <a class="page-tab" href="advanced.html">고급</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 300px at 68% -8%,rgba(245,121,42,.13),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-int">INTERMEDIATE</div>
+    <h1>블렌더 중급</h1>
+    <p class="lead">기초 모델링이 되는데 퀄리티를 올리고 싶을 때. 노드 재질, 뼈대, 애니메이션까지.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">노드 재질</span>
+      <span class="hero-tag">리깅 + 애니메이션</span>
+    </div>
+  </div>
+</div>
+
+<!-- 11 -->
+<section class="sec" id="topo">
+  <div class="wrap">
+    <h2><span class="num">11</span>깔끔한 메시 구조 만들기 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">애니메이션에 적합한 메시 구조(토폴로지)와, 고해상도 모델을 저해상도로 변환하는 방법.</p>
+
+    <h3>왜 메시 구조가 중요한가?</h3>
+    <p>팔꿈치를 구부릴 때 피부가 자연스럽게 접히려면, 그 관절 부분의 면들이 구부러지는 방향을 따라 배치되어야 합니다. 면의 배치 구조가 잘못되면 리깅(뼈대 연결) 시 메시가 찢어지거나 이상하게 변형됩니다.</p>
+
+    <h3>좋은 메시 구조의 원칙</h3>
+    <ul class="plain">
+      <li><b>사각형 면(Quad) 위주:</b> 삼각형 면은 가능하면 피합니다. 내보낼 때 자동 변환하므로 모델링 중에는 사각형으로 유지.</li>
+      <li><b>루프를 따라 엣지 배치:</b> 관절, 눈, 입 주위 엣지가 그 방향을 따라 돌아가야 자연스러운 변형이 됩니다.</li>
+      <li><b>너무 많은 엣지가 한 점에 모이면 안 됨:</b> 5개 이상의 엣지가 한 점(폴)에 모이면 렌더링이 이상해질 수 있습니다. 필요한 곳 외에는 최소화.</li>
+      <li><b>폴리곤 크기 균일:</b> 같은 메시 안에서 면 크기가 너무 크게 다르면 렌더링 이상이 생길 수 있습니다.</li>
+    </ul>
+
+    <h3>5개 이상 꼭짓점 면(Ngon) 피하기</h3>
+    <p>5개 이상의 엣지로 둘러싸인 면을 Ngon이라고 합니다. 게임 엔진에서 삼각형으로 자동 변환될 때 예측 불가능하게 변형될 수 있습니다. 가능하면 4개 이하의 엣지를 가진 면으로 분할하세요. 단, 평평하고 변형되지 않는 부분(바닥, 뚜껑)은 예외적으로 허용됩니다.</p>
+
+    <h3>리토폴로지 (Retopology)</h3>
+    <p>리토폴로지는 복잡한 고해상도 메시를 기반으로 더 적고 깔끔한 면으로 다시 메시를 만드는 작업입니다. 조각(스컬프트)으로 디테일이 많은 형태를 만든 뒤, 그 위에 게임용 간단한 메시를 그리는 과정입니다.</p>
+    <ol class="steps">
+      <li>스컬프트로 만든 고해상도 메시 위에 새 Plane(평면)을 추가합니다.</li>
+      <li>새 메시에 <b>Shrinkwrap 모디파이어</b>를 붙입니다. Target을 고해상도 메시로 설정. 이러면 새 메시가 고해상도 표면에 착 달라붙습니다.</li>
+      <li>에디트 모드에서 면을 추가하면서 깔끔한 구조로 다시 그립니다.</li>
+      <li>완성 후 Shrinkwrap 모디파이어를 Apply(적용)합니다.</li>
+      <li>고해상도 메시의 디테일을 노멀 맵으로 베이킹해서 저해상도에 적용합니다 (15챕터 참조).</li>
+    </ol>
+
+    <h3>LoopTools 애드온</h3>
+    <p>Edit &gt; Preferences &gt; Add-ons에서 <code>LoopTools</code>를 활성화하면 에디트 모드에서 우클릭 메뉴에 추가됩니다:</p>
+    <ul class="plain">
+      <li><b>Circle:</b> 선택한 버텍스들을 완벽한 원 모양으로 정렬.</li>
+      <li><b>Relax:</b> 선택한 버텍스들의 간격을 균일하게 이완.</li>
+      <li><b>Space:</b> 선택한 버텍스들의 간격을 균등하게.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 12 -->
+<section class="sec" id="sculpt">
+  <div class="wrap">
+    <h2><span class="num">12</span>스컬프트로 디테일 조각하기 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">점토를 빚듯 3D 메시를 조각하는 모드. 자연스러운 형태, 주름, 갑옷 디테일에 사용합니다.</p>
+
+    <h3>스컬프트 모드 진입</h3>
+    <p>오브젝트 선택 후 상단 모드 드롭다운 &gt; <code>Sculpt Mode</code>. 또는 상단 <code>Sculpting</code> 워크스페이스 탭.</p>
+    <p>스컬프트를 하려면 메시에 충분한 폴리곤(면)이 있어야 합니다. 폴리곤이 너무 적으면 브러시 효과가 제대로 나오지 않습니다. 먼저 Subdivision Surface 모디파이어를 Apply해서 면을 충분히 늘린 뒤 시작하세요.</p>
+
+    <h3>브러시 기본 조작</h3>
+    <ul class="plain">
+      <li><b>F:</b> 브러시 크기 조절 (드래그).</li>
+      <li><b>Shift+F:</b> 브러시 강도 조절.</li>
+      <li><b>Ctrl 누른 채로 클릭:</b> 효과 반전 (올리기 &harr; 파기).</li>
+      <li><b>X:</b> X축 대칭 켜기. 한쪽만 조각하면 반대편도 자동으로.</li>
+    </ul>
+
+    <h3>주요 브러시</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>브러시</th><th>효과</th><th>언제 쓰나</th></tr></thead>
+      <tbody>
+        <tr><td>Draw</td><td>표면을 올리거나 파기 (Ctrl = 파기)</td><td>기본 형태 만들기</td></tr>
+        <tr><td>Clay Strips</td><td>점토 덩어리처럼 붙이기</td><td>볼, 근육, 살집</td></tr>
+        <tr><td>Grab</td><td>잡아당기기</td><td>코, 귀 형태 잡기</td></tr>
+        <tr><td>Smooth (Shift 누름)</td><td>울퉁불퉁한 표면 부드럽게</td><td>언제든 Shift 누르면 사용</td></tr>
+        <tr><td>Flatten</td><td>평탄하게 다듬기</td><td>갑옷 판, 평면 부위</td></tr>
+        <tr><td>Crease</td><td>날카로운 주름 만들기</td><td>갑옷 엣지, 주름</td></tr>
+        <tr><td>Inflate</td><td>부풀리기</td><td>볼, 눈꺼풀</td></tr>
+        <tr><td>Mask (M)</td><td>보호 영역 칠하기. 마스크된 곳은 영향 안 받음</td><td>일부분만 스컬프트할 때</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Dyntopo (다이나믹 토폴로지)</h3>
+    <p>스컬프트하는 곳에 자동으로 폴리곤을 추가해 주는 기능입니다. 디테일이 필요한 부위에 집중적으로 폴리곤이 생깁니다. <span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>D</kbd></span>로 켜고 끕니다.</p>
+    <div class="callout co-warn"><span class="ico">!!</span><p>Dyntopo를 켜면 기존 UV 정보, 버텍스 그룹, 모디파이어 설정이 삭제됩니다. 스컬프트 전용 메시에만 쓰고, UV나 리깅이 끝난 메시에는 쓰지 마세요.</p></div>
+
+    <h3>Multiresolution 모디파이어</h3>
+    <p>Dyntopo 대신 쓸 수 있는 방법입니다. 모디파이어를 붙이고 Subdivide 버튼을 눌러 레벨을 올리면, 낮은 레벨에서 큰 형태를 잡고 높은 레벨에서 세밀한 디테일을 추가할 수 있습니다. UV와 리깅이 유지됩니다.</p>
+  </div>
+</section>
+
+<!-- 13 -->
+<section class="sec" id="curves">
+  <div class="wrap">
+    <h2><span class="num">13</span>커브로 파이프/케이블 만들기 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">수학적 곡선(커브)으로 파이프, 케이블, 경로를 메시보다 쉽게 만드는 방법.</p>
+
+    <h3>커브란?</h3>
+    <p>일반 메시는 점, 선, 면으로 이루어져 있습니다. 커브는 수학적으로 정의된 곡선으로, 컨트롤 포인트를 움직여 형태를 조정합니다. 파이프, 전선, 리본 같은 길쭉한 형태를 만들기에 적합합니다.</p>
+
+    <h3>커브 추가</h3>
+    <p><span class="keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>A</kbd></span> &gt; Curve &gt; <code>Bezier</code>. 가장 일반적인 커브 타입입니다.</p>
+    <p>에디트 모드에서 컨트롤 포인트를 선택하고 이동하면 커브 형태가 바뀝니다. 각 포인트에는 핸들(손잡이)이 있어 곡선의 방향을 조절합니다.</p>
+
+    <h3>커브에 두께 주기 (파이프 만들기)</h3>
+    <ol class="steps">
+      <li>커브를 선택하고 오른쪽 Properties 패널에서 커브 아이콘 클릭.</li>
+      <li>Geometry 섹션 &gt; Bevel &gt; <b>Round</b> 선택.</li>
+      <li>Depth 값을 올리면 커브에 원형 단면 두께가 생깁니다.</li>
+      <li>Resolution 값으로 단면의 부드러움을 조절합니다.</li>
+      <li>Fill Caps를 켜면 양쪽 끝이 막힙니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>커브를 메시로 변환하려면 Object 메뉴 &gt; Convert &gt; Mesh. FBX로 내보내기 전에 변환이 필요합니다.</p></div>
+
+    <h3>핸들 타입</h3>
+    <p>에디트 모드에서 컨트롤 포인트 선택 후 <span class="keys"><kbd>V</kbd></span>:</p>
+    <ul class="plain">
+      <li><b>Auto:</b> 자동으로 부드럽게. 처음엔 이걸 쓰세요.</li>
+      <li><b>Aligned:</b> 두 핸들이 일직선. 부드러운 연결.</li>
+      <li><b>Free:</b> 핸들을 각각 자유롭게 조절.</li>
+      <li><b>Vector:</b> 직선 세그먼트. 각진 연결.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 14 -->
+<section class="sec" id="shader">
+  <div class="wrap">
+    <h2><span class="num">14</span>노드로 재질 만들기 (Shader Editor) <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">시각적 노드 방식으로 복잡한 재질을 만드는 방법. 금속, 유리, 발광 재질 등.</p>
+
+    <h3>Shader Editor란?</h3>
+    <p>재질을 그래프(노드) 방식으로 만드는 편집기입니다. 블록(노드)을 연결해서 색상, 텍스처, 반사 등을 조합합니다. 상단 <code>Shading</code> 워크스페이스에서 아래쪽 에디터가 Shader Editor입니다.</p>
+
+    <h3>자주 쓰는 노드</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>노드 이름</th><th>하는 일</th><th>언제 쓰나</th></tr></thead>
+      <tbody>
+        <tr><td>Principled BSDF</td><td>기본 셰이더. 대부분의 재질을 표현</td><td>금속, 플라스틱, 피부, 유리 등 거의 모든 재질</td></tr>
+        <tr><td>Emission</td><td>빛을 발산하는 재질</td><td>이펙트, 네온, 발광 오라, 빛나는 효과</td></tr>
+        <tr><td>Mix Shader</td><td>두 재질을 비율로 섞기</td><td>반투명 오라, 얼음, 부분적 투명</td></tr>
+        <tr><td>Transparent BSDF</td><td>완전 투명한 재질</td><td>Mix Shader와 함께 반투명 효과에 사용</td></tr>
+        <tr><td>Image Texture</td><td>이미지 파일을 텍스처로 사용</td><td>UV로 이미지 텍스처 붙이기</td></tr>
+        <tr><td>Noise Texture</td><td>자동으로 노이즈 패턴 생성</td><td>울퉁불퉁한 표면, 구름, 에너지 패턴</td></tr>
+        <tr><td>ColorRamp</td><td>흑백 값을 원하는 색상으로 변환</td><td>패턴에 색상 입히기, 그라데이션</td></tr>
+        <tr><td>Math</td><td>수학 계산 (더하기, 곱하기 등)</td><td>값 조절, 강도 계산</td></tr>
+        <tr><td>Normal Map</td><td>노멀 맵 텍스처를 처리</td><td>베이킹한 노멀 맵을 재질에 연결</td></tr>
+        <tr><td>Layer Weight</td><td>바라보는 각도에 따라 다른 값 (프레넬)</td><td>외곽이 밝아지는 오라 효과</td></tr>
+        <tr><td>Texture Coordinate</td><td>UV, 오브젝트 좌표 등 제공</td><td>텍스처 좌표 지정</td></tr>
+        <tr><td>Mapping</td><td>텍스처 위치, 회전, 크기 조절</td><td>텍스처 타일링 조정</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>Node Wrangler 애드온 단축키</h3>
+    <p>Preferences에서 <code>Node Wrangler</code>를 활성화하면 사용 가능:</p>
+    <ul class="plain">
+      <li><span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Shift</kbd><span class="plus">+</span>클릭</span>: 해당 노드 출력을 Viewer에 연결해서 중간 결과 미리보기.</li>
+      <li><span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>T</kbd></span>: Image Texture에 자동으로 Texture Coordinate + Mapping 연결.</li>
+      <li><span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>Shift</kbd><span class="plus">+</span><kbd>T</kbd></span>: Color, Roughness, Normal 맵 파일을 한번에 불러오기.</li>
+    </ul>
+
+    <h3>레시피: 빛나는 발광 재질 (이펙트용)</h3>
+    <ol class="steps">
+      <li>재질 추가 &gt; Shader Editor 열기.</li>
+      <li>기본 Principled BSDF 노드 옆에 <b>Emission</b> 노드 추가 (Shift+A &gt; Shader &gt; Emission).</li>
+      <li>Emission Color를 원하는 색상으로 설정. Strength를 5~15로 올립니다.</li>
+      <li><b>Mix Shader</b> 노드 추가. Shader 입력 1에 Principled BSDF, 입력 2에 Emission 연결.</li>
+      <li><b>Layer Weight</b> 노드 추가. Fresnel 출력을 Mix Shader의 Fac에 연결. 외곽 부분만 발광하는 오라 효과 완성.</li>
+    </ol>
+
+    <h3>레시피: 금속 재질</h3>
+    <ol class="steps">
+      <li>Principled BSDF: Metallic = 1.0.</li>
+      <li>Base Color: 짙은 회색 (#909090 정도).</li>
+      <li>Roughness: 0.15~0.35 (광택 금속). 0.7~0.9 (녹슨 금속).</li>
+      <li>더 자연스러운 질감이 필요하면 Noise Texture &rarr; ColorRamp &rarr; Roughness 연결. 무작위 스크래치 효과.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- 15 -->
+<section class="sec" id="texturing">
+  <div class="wrap">
+    <h2><span class="num">15</span>텍스처 직접 그리기 + 베이킹 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">3D 표면에 직접 그림 그리기 + 고해상도 모델의 디테일을 텍스처 이미지로 굽기.</p>
+
+    <h3>텍스처 페인팅</h3>
+    <p>상단 <code>Texture Paint</code> 워크스페이스. UV가 있어야 작동합니다. 3D 뷰포트에서 직접 모델 표면에 그림을 그릴 수 있습니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>브러시</th><th>효과</th></tr></thead>
+      <tbody>
+        <tr><td>TexDraw</td><td>기본 칠하기. 색상이나 텍스처 패턴 도포</td></tr>
+        <tr><td>Soften</td><td>경계를 부드럽게 블러 처리</td></tr>
+        <tr><td>Smear</td><td>픽셀을 끌어당겨 번지는 효과</td></tr>
+        <tr><td>Fill</td><td>연결된 영역 단색으로 채우기</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>텍스처 페인트 후 Image Editor에서 Image &gt; Save As로 저장해야 합니다. 저장하지 않으면 블렌더를 닫을 때 사라집니다.</p></div>
+
+    <h3>베이킹 (Baking) 이란?</h3>
+    <p>베이킹은 렌더링 결과를 이미지 파일로 저장하는 작업입니다. 주로 고해상도 메시의 노멀(면 방향), 그림자, 색상 정보를 저해상도 메시의 UV에 "굽는" 방식으로 사용합니다. 이렇게 하면 저해상도 메시에도 고해상도처럼 보이는 디테일을 줄 수 있습니다.</p>
+
+    <h3>노멀 맵 베이킹 방법</h3>
+    <p>노멀 맵은 면이 어느 방향을 향하는지를 색상으로 표현한 텍스처입니다. 고해상도의 울퉁불퉁한 표면을 저해상도 메시에 적용할 때 씁니다.</p>
+    <ol class="steps">
+      <li>Properties &gt; Render에서 렌더 엔진을 <code>Cycles</code>로 변경. 베이킹은 Cycles 전용입니다.</li>
+      <li>저해상도 메시의 Shader Editor에서 <b>Image Texture 노드 추가</b>. 새 이미지 만들기(1024x1024 권장). 연결은 하지 않고 <b>선택된 상태</b>로 둡니다.</li>
+      <li>저해상도 메시 선택 &rarr; <kbd>Shift</kbd>+클릭으로 고해상도 메시 추가 선택 (고해상도가 마지막 선택이어야 함).</li>
+      <li>Properties &gt; Render &gt; Bake &gt; Bake Type: <code>Normal</code>.</li>
+      <li><code>Selected to Active</code> 켜기. Extrusion 값 0.05~0.1.</li>
+      <li><code>Bake</code> 버튼 클릭. 완료 후 Image Editor에서 저장.</li>
+      <li>저해상도 재질에서 Image Texture 노드에 저장한 이미지 연결 &rarr; <code>Normal Map</code> 노드 통과 &rarr; Principled BSDF의 Normal에 연결.</li>
+    </ol>
+
+    <h3>베이킹 타입</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>타입</th><th>무엇을 굽나</th><th>활용</th></tr></thead>
+      <tbody>
+        <tr><td>Normal</td><td>면 방향 정보</td><td>고해상도 디테일을 저해상도에 표현</td></tr>
+        <tr><td>AO (Ambient Occlusion)</td><td>구석, 틈새의 그림자</td><td>메시 깊이감 표현. Base Color에 곱하기</td></tr>
+        <tr><td>Diffuse</td><td>조명 없는 기본 색상</td><td>색상 텍스처 만들기</td></tr>
+        <tr><td>Roughness</td><td>표면 거칠기 정보</td><td>Roughness 텍스처</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 16 -->
+<section class="sec" id="lighting">
+  <div class="wrap">
+    <h2><span class="num">16</span>조명과 렌더링 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">포트폴리오 이미지나 이펙트 프리뷰를 위한 조명 세팅.</p>
+
+    <h3>렌더 엔진 선택</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>엔진</th><th>특징</th><th>언제 쓰나</th></tr></thead>
+      <tbody>
+        <tr><td>EEVEE</td><td>실시간 방식. 매우 빠름. 이펙트(Bloom 등) 내장</td><td>이펙트 프리뷰, 빠른 렌더링</td></tr>
+        <tr><td>Cycles</td><td>물리 기반 방식. 느리지만 사실적</td><td>포트폴리오 이미지, 최고 품질 렌더링</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>조명 종류</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>종류</th><th>특징</th><th>사용 예</th></tr></thead>
+      <tbody>
+        <tr><td>Point (포인트)</td><td>전구처럼 모든 방향으로 빛 발산</td><td>전구, 마법 구체, 파이어볼</td></tr>
+        <tr><td>Sun (태양)</td><td>먼 곳에서 오는 평행한 빛. 그림자가 선명</td><td>태양, 달, 주 광원</td></tr>
+        <tr><td>Spot (스팟)</td><td>원뿔 형태 집광. 방향성 있는 빛</td><td>무대 조명, 손전등, 빛기둥</td></tr>
+        <tr><td>Area (에리어)</td><td>면광. 부드러운 그림자</td><td>창문 빛, 소프트박스</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>3점 조명 (기본 셋업)</h3>
+    <p>피사체를 자연스럽게 보이게 하는 기본 조명 배치입니다:</p>
+    <ol class="steps">
+      <li><b>Key Light (주광원):</b> 가장 밝은 빛. 피사체 좌상단 45도에 배치. 주 그림자 생성.</li>
+      <li><b>Fill Light (보조광):</b> Key Light 반대편. 세기는 Key의 1/3~1/2. 그림자를 너무 어둡지 않게.</li>
+      <li><b>Rim Light (역광):</b> 피사체 뒤에서. 외곽선 강조로 배경과 분리감.</li>
+    </ol>
+
+    <h3>HDRI 환경 조명</h3>
+    <p>HDRI는 실제 환경을 360도로 촬영한 이미지입니다. 이것을 배경으로 설정하면 자연스러운 반사와 환경광이 생깁니다.</p>
+    <ol class="steps">
+      <li>상단 Shading 워크스페이스에서 왼쪽 상단 드롭다운을 <code>World</code>로 변경.</li>
+      <li>Use Nodes 클릭.</li>
+      <li>Environment Texture 노드 추가 &rarr; Open으로 HDRI 이미지(.hdr) 불러오기.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>무료 HDRI는 <a href="https://polyhaven.com/hdris" target="_blank" rel="noopener">polyhaven.com</a>에서 받을 수 있습니다. 2K~4K 해상도면 충분합니다.</p></div>
+
+    <h3>EEVEE Bloom 설정</h3>
+    <p>Emission(발광) 재질에 빛 번짐 효과를 주려면 EEVEE의 Bloom을 켜세요:</p>
+    <p>Properties &gt; Render &gt; Bloom 체크. Threshold: 0.8 (이 밝기 이상에서만 번짐 발생). Intensity: 0.05~0.1. Emission Strength가 높은 재질이 실제로 빛나는 것처럼 보입니다.</p>
+  </div>
+</section>
+
+<!-- 17 -->
+<section class="sec" id="rigging">
+  <div class="wrap">
+    <h2><span class="num">17</span>뼈대(리깅)와 웨이트 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">메시에 뼈대를 넣어 움직이게 하는 과정. 타워의 팔 움직임, 캐릭터 걷기에 필요합니다.</p>
+
+    <h3>리깅이란?</h3>
+    <p>리깅은 메시(겉모습)에 뼈대(Armature)를 넣고 연결하는 작업입니다. 마치 인형에 철사 뼈대를 넣는 것과 같습니다. 뼈대를 움직이면 연결된 메시가 따라서 변형됩니다.</p>
+
+    <h3>Armature 만들기</h3>
+    <ol class="steps">
+      <li><span class="keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>A</kbd></span> &gt; Armature. 뼈대 하나가 생깁니다.</li>
+      <li>에디트 모드(<kbd>Tab</kbd>)에서 뼈대 끝을 선택하고 <kbd>E</kbd>를 눌러 새 뼈를 추가합니다.</li>
+      <li>오른쪽 패널(N 키)에서 각 뼈의 이름을 정합니다. 좌우 대칭이면 끝에 <code>.L</code>(왼쪽) <code>.R</code>(오른쪽) 붙이기.</li>
+    </ol>
+
+    <h3>메시에 뼈대 연결하기</h3>
+    <ol class="steps">
+      <li>메시 선택 &rarr; <kbd>Shift</kbd>+클릭으로 Armature 추가 선택.</li>
+      <li><span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>P</kbd></span> &gt; <code>With Automatic Weights</code>. 자동으로 뼈대와 메시를 연결합니다.</li>
+      <li>포즈 모드(<kbd>Ctrl</kbd>+<kbd>Tab</kbd>)에서 뼈를 움직여 결과 확인.</li>
+    </ol>
+
+    <h3>웨이트 페인팅</h3>
+    <p>웨이트는 각 뼈가 메시의 어느 버텍스를 얼마나 강하게 움직이는지를 나타냅니다. 자동 웨이트가 이상할 때 직접 수정합니다.</p>
+    <ul class="plain">
+      <li>메시 선택 후 모드를 <code>Weight Paint</code>로 변경.</li>
+      <li>색상: 빨간색(1.0) = 100% 영향, 파란색(0) = 영향 없음.</li>
+      <li>포즈 모드의 뼈를 클릭하면 그 뼈의 웨이트 분포가 보입니다.</li>
+      <li>Add 브러시로 웨이트 추가, Subtract로 제거, Smooth로 경계 부드럽게.</li>
+    </ul>
+
+    <h3>IK (Inverse Kinematics)</h3>
+    <p>IK는 "역방향 운동학"입니다. 끝 뼈만 움직이면 연결된 뼈들이 자동으로 자연스러운 포즈를 잡습니다. 발끝을 고정한 상태에서 걷기 애니메이션 만들 때 유용합니다.</p>
+    <ol class="steps">
+      <li>포즈 모드에서 IK를 적용할 끝 뼈 선택.</li>
+      <li>Bone Constraints 탭(뼈 아이콘) &gt; Add Constraint &gt; <code>Inverse Kinematics</code>.</li>
+      <li>Chain Length: 영향받을 위쪽 뼈 개수. 발이면 2(발목 + 무릎).</li>
+    </ol>
+
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>뼈대가 있는 FBX를 Studio에 가져오면 뼈대 구조가 그대로 들어옵니다. Studio의 AnimationEditor에서 이 뼈대를 움직여 애니메이션을 만들 수도 있습니다.</p></div>
+  </div>
+</section>
+
+<!-- 18 -->
+<section class="sec" id="anim">
+  <div class="wrap">
+    <h2><span class="num">18</span>애니메이션 만들기 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">키프레임으로 움직임을 만들고, 게임용 클립으로 내보내는 방법.</p>
+
+    <h3>키프레임이란?</h3>
+    <p>키프레임은 특정 시간(프레임)에 오브젝트의 상태(위치, 회전, 크기)를 저장한 것입니다. 두 키프레임 사이는 블렌더가 자동으로 보간(중간값 계산)합니다.</p>
+
+    <h3>키프레임 삽입</h3>
+    <ul class="plain">
+      <li>원하는 프레임으로 이동 (타임라인 하단 숫자 또는 화살표 키).</li>
+      <li>이동/회전/크기 조절 후 <span class="keys"><kbd>I</kbd></span> &gt; Location / Rotation / Scale 선택.</li>
+      <li>또는 변환할 속성(예: Location X) 위에서 마우스 우클릭 &gt; <code>Insert Keyframe</code>.</li>
+    </ul>
+
+    <h3>Dope Sheet</h3>
+    <p>모든 채널의 키프레임을 한눈에 볼 수 있는 에디터입니다. 타임라인보다 더 자세한 편집이 가능합니다. 에디터 타입을 <code>Dope Sheet</code>로 변경. 키프레임을 드래그해서 이동, <kbd>S</kbd>로 간격 조절, <kbd>X</kbd>로 삭제.</p>
+
+    <h3>Graph Editor</h3>
+    <p>키프레임 사이의 보간 곡선을 편집합니다. 곡선 모양으로 움직임의 "느낌"이 결정됩니다. 예를 들어 직선이면 일정한 속도, S자 곡선이면 자연스러운 가속/감속이 됩니다.</p>
+
+    <h3>NLA Editor (클립 관리)</h3>
+    <p>NLA Editor는 여러 애니메이션 클립을 레이어로 쌓거나 조합하는 에디터입니다. Idle(대기), Walk(걷기), Attack(공격) 클립을 각각 만들어서 관리할 수 있습니다.</p>
+    <ol class="steps">
+      <li>Dope Sheet의 상단 드롭다운을 <code>Action Editor</code>로 변경.</li>
+      <li>각 애니메이션(Idle, Attack 등)마다 새 Action을 만들어 별도로 저장.</li>
+      <li>완성된 Action을 <code>Push Down</code> 버튼으로 NLA Editor의 스트립으로 변환.</li>
+    </ol>
+
+    <h3>Shape Keys (모프 타겟)</h3>
+    <p>메시의 형태 변형을 키로 저장하는 기능입니다. 눈 깜빡임, 입 모양, 얼굴 표정 변화에 씁니다.</p>
+    <ol class="steps">
+      <li>Properties &gt; Object Data (메시 아이콘) &gt; Shape Keys &gt; <code>+</code>. Basis가 생성됩니다.</li>
+      <li>다시 <code>+</code>를 눌러 새 Shape Key 추가 (이름: "Smile" 등).</li>
+      <li>에디트 모드에서 버텍스를 이동해 원하는 표정 형태 만들기.</li>
+      <li>Value 슬라이더를 0~1로 조절해서 변형 정도 조절. 슬라이더에 키프레임도 가능.</li>
+    </ol>
+
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>Roblox Studio는 FBX의 애니메이션 클립을 Action 단위로 가져옵니다. Idle, Walk, Attack을 별도 Action으로 분리해서 내보내면 Studio에서 각각 독립적으로 사용할 수 있습니다.</p></div>
+  </div>
+</section>
+
+<!-- 19 -->
+<section class="sec" id="collections">
+  <div class="wrap">
+    <h2><span class="num">19</span>씬 정리하기 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">오브젝트가 많아지면 정리가 필요합니다. 컬렉션으로 그룹 관리.</p>
+
+    <h3>컬렉션이란?</h3>
+    <p>컬렉션은 오브젝트를 그룹으로 묶는 폴더 같은 기능입니다. 아웃라이너에서 관리됩니다. 컬렉션 단위로 숨기거나, 렌더에서 제외하거나, 특정 레이어에서만 보이게 할 수 있습니다.</p>
+
+    <h3>컬렉션 관리</h3>
+    <ul class="plain">
+      <li><b>새 컬렉션:</b> 아웃라이너 오른쪽 클릭 &gt; New Collection.</li>
+      <li><b>이동:</b> 오브젝트 선택 후 <kbd>M</kbd> &gt; 컬렉션 선택.</li>
+      <li><b>숨기기/보이기:</b> 아웃라이너에서 눈 아이콘 클릭.</li>
+    </ul>
+
+    <h3>이름 규칙 (추천)</h3>
+    <pre class="code-block"><span class="cm"># 종류_이름_버전</span>
+<span class="str">MESH_TowerBase_v02</span>
+<span class="str">RIG_TowerArm</span>
+<span class="str">MAT_Metal_Rusty</span>
+<span class="str">CAM_MainRender</span></pre>
+    <p>일관된 이름 규칙을 쓰면 오브젝트가 100개가 넘어도 찾기 쉽습니다.</p>
+
+    <h3>작업 저장 습관</h3>
+    <ul class="plain">
+      <li><b>Ctrl+S:</b> 수시로 저장. 블렌더는 가끔 예고 없이 종료됩니다.</li>
+      <li><b>버전 관리:</b> 중요한 변경 전에는 다른 이름으로 저장. tower_v01.blend, tower_v02.blend.</li>
+      <li><b>자동 저장:</b> Preferences &gt; Save &amp; Load &gt; Auto Save 켜기.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 20 -->
+<section class="sec" id="addons">
+  <div class="wrap">
+    <h2><span class="num">20</span>유용한 애드온 <span class="lv lv-2">중급</span></h2>
+    <p class="sec-sub">생산성을 높이는 애드온. 블렌더 내장 + 무료 외부 애드온.</p>
+
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>애드온</th><th>내장/외부</th><th>하는 일</th><th>활성화</th></tr></thead>
+      <tbody>
+        <tr><td>Node Wrangler</td><td>내장</td><td>Shader 노드 작업 단축키 대폭 추가</td><td>Add-ons에서 검색 후 켜기</td></tr>
+        <tr><td>LoopTools</td><td>내장</td><td>버텍스를 원형/직선으로 정렬, 간격 균등화</td><td>Add-ons에서 검색 후 켜기</td></tr>
+        <tr><td>Bool Tool</td><td>내장</td><td>Boolean 작업을 빠르게 할 수 있는 UI 추가</td><td>Add-ons에서 검색 후 켜기</td></tr>
+        <tr><td>Cell Fracture</td><td>내장</td><td>메시를 파편으로 분열 (폭발 이펙트 준비)</td><td>Add-ons에서 검색 후 켜기</td></tr>
+        <tr><td>Rigify</td><td>내장</td><td>캐릭터 리그(뼈대)를 자동으로 생성</td><td>Add-ons에서 검색 후 켜기</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>애드온 설치 방법</h3>
+    <ol class="steps">
+      <li>Edit &gt; Preferences &gt; Add-ons.</li>
+      <li>내장 애드온: 검색창에 이름 입력 &rarr; 체크박스 켜기.</li>
+      <li>외부 애드온(.zip 파일): 우상단 <code>Install...</code> 클릭 &rarr; zip 파일 선택 &rarr; 체크박스 켜기.</li>
+      <li>설정이 유지되도록 우하단 <code>Save Preferences</code> 클릭 (또는 Auto-Save Preferences 켜기).</li>
+    </ol>
+  </div>
+</section>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Blender / Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="beginner.html">&larr; 입문</a>
+      <a href="index.html">메인</a>
+      <a href="advanced.html">고급으로 &rarr;</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+</body>
+</html>
