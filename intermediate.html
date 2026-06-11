@@ -7,6 +7,24 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23f5792a'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%231a1208'>B</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media (prefers-reduced-motion: reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+/* 다음 단계 카드 */
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s}
+.next-level:hover .nl-arrow{transform:translateX(5px)}
+.next-beg:hover{border-color:rgba(90,208,138,.4)}.next-beg:hover .nl-arrow{color:var(--green)}
+.next-int:hover{border-color:rgba(245,121,42,.4)}.next-int:hover .nl-arrow{color:var(--orange-2)}
+.next-adv:hover{border-color:rgba(181,128,255,.4)}.next-adv:hover .nl-arrow{color:var(--purple)}
+</style>
 </head>
 <body>
 <div id="progress"></div>
@@ -74,7 +92,7 @@
     <ul class="plain">
       <li><b>사각형 면(Quad) 위주:</b> 삼각형 면은 가능하면 피합니다. 내보낼 때 자동 변환하므로 모델링 중에는 사각형으로 유지.</li>
       <li><b>루프를 따라 엣지 배치:</b> 관절, 눈, 입 주위 엣지가 그 방향을 따라 돌아가야 자연스러운 변형이 됩니다.</li>
-      <li><b>너무 많은 엣지가 한 점에 모이면 안 됨:</b> 5개 이상의 엣지가 한 점(폴)에 모이면 렌더링이 이상해질 수 있습니다. 필요한 곳 외에는 최소화.</li>
+      <li><b>너무 많은 엣지가 한 점에 모이면 안 됨:</b> 5개 이상의 엣지가 한 점에 모인 곳을 폴(Pole)이라고 합니다. 폴이 많으면 표면이 찌그러져 보일 수 있으니 필요한 곳 외에는 최소화.</li>
       <li><b>폴리곤 크기 균일:</b> 같은 메시 안에서 면 크기가 너무 크게 다르면 렌더링 이상이 생길 수 있습니다.</li>
     </ul>
 
@@ -474,6 +492,14 @@
     </ol>
   </div>
 </section>
+
+<div class="wrap">
+    <a class="next-level next-adv" href="advanced.html">
+      <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">고급 강좌 — 파티클, 이펙트 레시피 7종, Studio 연동</span></div>
+      <span class="nl-arrow">&rarr;</span>
+    </a></div>
+
+</main>
 
 <footer class="page-foot">
   <div class="wrap">
