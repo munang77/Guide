@@ -7,6 +7,24 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23b580ff'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23fff'>B</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media (prefers-reduced-motion: reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+/* 다음 단계 카드 */
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s}
+.next-level:hover .nl-arrow{transform:translateX(5px)}
+.next-beg:hover{border-color:rgba(90,208,138,.4)}.next-beg:hover .nl-arrow{color:var(--green)}
+.next-int:hover{border-color:rgba(245,121,42,.4)}.next-int:hover .nl-arrow{color:var(--orange-2)}
+.next-adv:hover{border-color:rgba(181,128,255,.4)}.next-adv:hover .nl-arrow{color:var(--purple)}
+</style>
 </head>
 <body>
 <div id="progress"></div>
@@ -348,7 +366,7 @@
       <li>Source Limit: 80~150. OK.</li>
       <li>생성된 파편들 전체 선택 &gt; Physics &gt; <b>Rigid Body (Active)</b>.</li>
       <li>Force Field(Charge, 음수 세기)를 중앙에 배치 &gt; 일정 프레임부터 활성화 &rarr; 파편 폭발.</li>
-      <li>컴포지터에서 Glare 노드 추가로 파편에 빛 번짐.</li>
+      <li>컴포지터(렌더 후 보정 도구, 상단 Compositing 탭)에서 Glare 노드를 추가하면 파편에 빛 번짐 효과가 더해집니다.</li>
     </ol>
 
     <h3>레시피 6 — 연기/안개 볼륨</h3>
@@ -637,7 +655,7 @@ os.makedirs(output_dir, exist_ok=<span class="kw">True</span>)
     <ul class="plain">
       <li>256x256 또는 512x512가 대부분의 에셋에 충분합니다.</li>
       <li>PNG는 투명도가 필요할 때, JPEG는 불필요할 때. JPEG가 용량이 훨씬 작습니다.</li>
-      <li>여러 오브젝트를 같은 텍스처 하나로 처리하는 텍스처 아틀라스(Atlas)를 쓰면 draw call이 줄어 성능 향상.</li>
+      <li>여러 오브젝트를 같은 텍스처 하나로 처리하는 텍스처 아틀라스(Atlas)를 쓰면 그래픽 처리 횟수(draw call)가 줄어 성능이 좋아집니다.</li>
     </ul>
 
     <h3>Studio 이펙트 최적화</h3>
@@ -651,6 +669,14 @@ os.makedirs(output_dir, exist_ok=<span class="kw">True</span>)
     <div class="callout co-rbx"><span class="ico">RBX</span><p>Studio의 MicroProfiler(Ctrl+F6)로 성능을 측정할 수 있습니다. 이펙트가 많은 씬에서 GPU 시간이 높으면 ParticleEmitter Rate를 줄이거나 Enabled 관리를 해야 합니다.</p></div>
   </div>
 </section>
+
+<div class="wrap">
+    <a class="next-level next-beg" href="index.html">
+      <div><span class="nl-label">COMPLETE</span><span class="nl-title">모든 강좌 완료 — 메인으로 돌아가기</span></div>
+      <span class="nl-arrow">&rarr;</span>
+    </a></div>
+
+</main>
 
 <footer class="page-foot">
   <div class="wrap">
