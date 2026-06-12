@@ -35,6 +35,7 @@
     <div><b>고급 강좌</b><small>ADVANCED</small></div>
   </div>
   <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
   <div class="nav-group"><span>시뮬레이션</span>
     <a class="nav-link" href="#particles"><span class="n">21</span>파티클 시스템 심화</a>
     <a class="nav-link" href="#physics"><span class="n">22</span>물리 시뮬레이션</a>
@@ -89,7 +90,7 @@
     <p class="sec-sub">Emitter와 Hair 파티클의 세밀한 제어. 포스 필드와 충돌 설정까지.</p>
 
     <h3>파티클 시스템 추가</h3>
-    <p>오브젝트 선택 &gt; Properties &gt; 파티클 아이콘(점 세 개) &gt; <code>+</code> &gt; New.</p>
+    <p>오브젝트 선택 &gt; Properties &gt; <span class="term" tabindex="0" data-tip="불꽃, 연기, 반짝이처럼 작은 입자를 잔뜩 뿌려 만드는 효과">파티클</span> 아이콘(점 세 개) &gt; <code>+</code> &gt; New.</p>
 
     <h3>Emitter vs Hair</h3>
     <div class="tbl-wrap"><table class="tbl">
@@ -138,7 +139,7 @@
       <li>Clump, Roughness 탭에서 뭉치거나 불규칙하게 만들 수 있습니다.</li>
     </ol>
 
-    <div class="callout co-tip"><span class="ico">TIP</span><p>작업 중 파티클이 너무 많아 뷰포트가 느리면, 파티클 설정 &gt; Viewport Display &gt; Display As를 Dot으로, Amount를 10~20%로 낮추세요. 렌더 시엔 자동으로 원래대로 됩니다.</p></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>작업 중 파티클이 너무 많아 뷰포트가 느리면, 파티클 설정 &gt; Viewport Display &gt; Display As를 Dot으로, Amount를 10~20%로 낮추세요. <span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그려내는 것">렌더</span> 시엔 자동으로 원래대로 됩니다.</p></div>
   </div>
 </section>
 
@@ -156,7 +157,7 @@
         <tr><td>Vertex Mass</td><td>천의 무게 (kg)</td><td>실크 0.05 / 면 0.3 / 가죽 1.0</td></tr>
         <tr><td>Tension Stiffness</td><td>늘어남 저항</td><td>높을수록 탄탄. 가죽: 50+</td></tr>
         <tr><td>Bending Stiffness</td><td>구부러짐 저항</td><td>낮을수록 부드럽게 흐름</td></tr>
-        <tr><td>Pinning</td><td>고정 버텍스 그룹 지정</td><td>깃발 한쪽 끝, 옷 어깨 부위</td></tr>
+        <tr><td>Pinning</td><td>고정 <span class="term" tabindex="0" data-tip="3D 모델을 이루는 점. 점들이 모여 선과 면이 됨">버텍스</span> 그룹 지정</td><td>깃발 한쪽 끝, 옷 어깨 부위</td></tr>
         <tr><td>Self Collision</td><td>천이 자기 자신과 충돌</td><td>두꺼운 옷, 쌓이는 처마 치마</td></tr>
       </tbody>
     </table></div>
@@ -176,14 +177,14 @@
     <h3>Cell Fracture — 파편 분열</h3>
     <ol class="steps">
       <li>Preferences &gt; Add-ons에서 <code>Cell Fracture</code> 활성화.</li>
-      <li>분열시킬 메시 선택 &gt; <span class="keys"><kbd>F3</kbd></span> &gt; Cell Fracture 검색 &gt; 실행.</li>
+      <li>분열시킬 <span class="term" tabindex="0" data-tip="점과 선과 면으로 이루어진 3D 모델의 형태 그 자체">메시</span> 선택 &gt; <span class="keys"><kbd>F3</kbd></span> &gt; Cell Fracture 검색 &gt; 실행.</li>
       <li>Source Limit: 파편 수(50~200). 높을수록 촘촘하게 분열.</li>
       <li>생성된 파편 전체 선택 &gt; Physics &gt; Rigid Body (Active).</li>
       <li>중앙에 Force Field(Magnetic, 음수값)를 배치 &gt; 일정 프레임에서 켜기 &rarr; 폭발.</li>
     </ol>
 
     <h3>시뮬레이션 베이크와 메시 굳히기</h3>
-    <p>원하는 형태가 됐을 때 오브젝트의 모디파이어를 Apply(적용)하면 시뮬레이션 결과가 정적 메시가 됩니다. FBX 내보내기 전에 이 작업이 필요합니다.</p>
+    <p>원하는 형태가 됐을 때 오브젝트의 모디파이어를 Apply(적용)하면 시뮬레이션 결과가 정적 메시가 됩니다. <span class="term" tabindex="0" data-tip="3D 모델을 프로그램끼리 주고받을 때 쓰는 파일 형식 (.fbx)">FBX</span> 내보내기 전에 이 작업이 필요합니다.</p>
   </div>
 </section>
 
@@ -229,7 +230,7 @@
 <section class="sec" id="cycles-adv">
   <div class="wrap">
     <h2><span class="num">24</span>Cycles 렌더링 심화 <span class="lv lv-3">고급</span></h2>
-    <p class="sec-sub">Cycles의 물리 기반 렌더링 원리와 노이즈 제거, 최적화 설정.</p>
+    <p class="sec-sub">Cycles의 물리 기반 <span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그림으로 그려내는 과정">렌더링</span> 원리와 노이즈 제거, 최적화 설정.</p>
 
     <h3>Cycles 작동 원리</h3>
     <p>Cycles는 경로 추적(Path Tracing) 방식입니다. 카메라에서 빛 경로를 수천 번 역추적해 물리적으로 정확한 빛 계산을 합니다. 샘플 수가 많을수록 노이즈가 줄고 시간이 오래 걸립니다.</p>
@@ -298,7 +299,7 @@
         <tr><td>Blur</td><td>블러 처리</td><td>피사계심도(DOF) 수동 제어</td></tr>
         <tr><td>Defocus</td><td>피사계심도 블러</td><td>배경 흐림 효과</td></tr>
         <tr><td>Denoise</td><td>AI 노이즈 제거</td><td>Cycles 노이즈 제거</td></tr>
-        <tr><td>Alpha Over</td><td>두 이미지를 알파 기반으로 합성</td><td>레이어 합성</td></tr>
+        <tr><td>Alpha Over</td><td>두 이미지를 <span class="term" tabindex="0" data-tip="이미지의 투명도 정보. 알파 0이면 완전 투명">알파</span> 기반으로 합성</td><td>레이어 합성</td></tr>
         <tr><td>Viewer</td><td>중간 결과 미리보기</td><td>Node Wrangler Ctrl+Shift+클릭으로 자동 연결</td></tr>
       </tbody>
     </table></div>
@@ -389,7 +390,7 @@
 
     <h3>실용 예시: 건물 랜덤 높이 생성</h3>
     <ol class="steps">
-      <li>Grid Mesh(10x10) 추가 &gt; Geometry Nodes 모디파이어.</li>
+      <li>Grid Mesh(10x10) 추가 &gt; Geometry Nodes <span class="term" tabindex="0" data-tip="원본을 직접 건드리지 않고 효과(복제, 휘기, 둥글리기 등)를 입히는 블렌더 기능">모디파이어</span>.</li>
       <li>Mesh Faces 선택 &gt; <code>Extrude Mesh</code> 노드.</li>
       <li><code>Random Value</code>(Float, min 1, max 8) &rarr; Extrude의 Offset Scale에 연결.</li>
       <li>각 면이 랜덤 높이로 돌출됩니다. 씬을 새로 고칠 때마다 다른 건물 배치.</li>
@@ -441,7 +442,7 @@
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th>모드</th><th>특징</th><th>사용 경우</th></tr></thead>
       <tbody>
-        <tr><td>UV</td><td>UV 언랩된 좌표 사용</td><td>UV에 맞춰 텍스처 배치 시</td></tr>
+        <tr><td>UV</td><td>UV 언랩된 좌표 사용</td><td>UV에 맞춰 <span class="term" tabindex="0" data-tip="3D 모델 표면에 입히는 그림(이미지). 옷에 프린트된 무늬 같은 것">텍스처</span> 배치 시</td></tr>
         <tr><td>Object</td><td>오브젝트 로컬 공간 기준</td><td>대부분의 프로시저럴 텍스처. 변형에 안정적</td></tr>
         <tr><td>Generated</td><td>메시 경계 상자 기준 0~1</td><td>UV 없이 빠르게 배치</td></tr>
         <tr><td>World</td><td>월드 공간 기준</td><td>여러 오브젝트가 같은 패턴을 공유할 때</td></tr>
@@ -628,9 +629,9 @@ new_mat  = bpy.data.materials[<span class="str">"FinalMaterial"</span>]
 
     <h3>예시 5 — 마법진</h3>
     <ol class="steps">
-      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Mesh &gt; <code>Plane</code>. 이게 전부입니다. 폴리곤 1개.</li>
+      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Mesh &gt; <code>Plane</code>. 이게 전부입니다. <span class="term" tabindex="0" data-tip="3D 모델을 이루는 면 조각. 많을수록 정교하지만 게임이 무거워짐">폴리곤</span> 1개.</li>
       <li>UV는 기본 그대로. 마법진 그림(원형 문양, 룬 문자, 기하 패턴)을 투명 배경 PNG로 준비해서 통째로 입힙니다.</li>
-      <li>마법진 텍스처는 직접 그려도 되고, 블렌더 셰이더 노드(Wave + Voronoi 조합)로 만들어 베이킹해도 됩니다 — 챕터 28 프로시저럴 텍스처링 참고.</li>
+      <li>마법진 텍스처는 직접 그려도 되고, 블렌더 <span class="term" tabindex="0" data-tip="표면이 빛을 받았을 때 어떻게 보일지 계산하는 규칙">셰이더</span> 노드(Wave + Voronoi 조합)로 만들어 베이킹해도 됩니다 — 챕터 28 프로시저럴 텍스처링 참고.</li>
       <li>Studio에서 바닥에 깔고 Y축 회전만 계속 돌리면 차지 연출 완성. 위로 올라가는 링을 함께 띄우면 소환 느낌.</li>
     </ol>
 
@@ -671,6 +672,7 @@ new_mat  = bpy.data.materials[<span class="str">"FinalMaterial"</span>]
     <nav class="foot-nav">
       <a href="intermediate.html">&larr; 중급</a>
       <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
       <a href="master.html">초고급 &rarr;</a>
     </nav>
   </div>
