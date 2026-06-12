@@ -254,3 +254,44 @@ h2 .lv{transform:translateY(-2px)}
   main{margin-left:0}
   body{background:#fff;color:#111}
 }
+
+/* ===== 맵/초고급 페이지 전용 ===== */
+--map:#5aa7ff;--map-dim:rgba(90,167,255,.13);
+.logo-mark.map{background:linear-gradient(150deg,#7ec0ff,#5aa7ff)}
+.logo-mark.mas{background:linear-gradient(150deg,#e040fb,#b580ff)}
+.chip-map{color:#5aa7ff;background:rgba(90,167,255,.13);border:1px solid rgba(90,167,255,.38)}
+.chip-mas{color:#e040fb;background:rgba(224,64,251,.1);border:1px solid rgba(224,64,251,.35)}
+.tab-map{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,255,.3)}
+.tab-mas{color:#e040fb;background:rgba(224,64,251,.1);border-color:rgba(224,64,251,.3)}
+.lv-map{color:#7ec0ff;border-color:rgba(90,167,255,.4);background:rgba(90,167,255,.1)}
+.lv-mas{color:#e040fb;border-color:rgba(224,64,251,.35);background:rgba(224,64,251,.08)}
+h3.map-h::before,h3.mas-h::before{background:#5aa7ff}
+h3.mas-h::before{background:#e040fb}
+.num-map{font-family:var(--mono);font-size:.57em;font-weight:700;color:#5aa7ff;background:rgba(90,167,255,.13);border:1px solid rgba(90,167,255,.28);padding:2.5px 8px;border-radius:7px;letter-spacing:.02em;flex:none}
+.num-mas{font-family:var(--mono);font-size:.57em;font-weight:700;color:#e040fb;background:rgba(224,64,251,.1);border:1px solid rgba(224,64,251,.28);padding:2.5px 8px;border-radius:7px;letter-spacing:.02em;flex:none}
+
+/* next-level 색상 확장 */
+.next-map:hover{border-color:rgba(90,167,255,.4)}.next-map:hover .nl-arrow{color:#7ec0ff}
+.next-mas:hover{border-color:rgba(224,64,251,.4)}.next-mas:hover .nl-arrow{color:#e040fb}
+.next-beg:hover{border-color:rgba(90,208,138,.4)}.next-beg:hover .nl-arrow{color:var(--green)}
+
+/* 경로 시각화 (맵 가이드) */
+.path-vis{background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:18px 20px;margin:20px 0;overflow-x:auto}
+.path-nodes{display:flex;align-items:center;gap:0;flex-wrap:nowrap;min-width:max-content}
+.pnode{background:var(--panel-2);border:1px solid var(--border);border-radius:10px;padding:9px 14px;text-align:center;min-width:76px}
+.pnode .pn{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.1em;color:var(--muted);display:block;margin-bottom:3px}
+.pnode .pt{font-size:13px;font-weight:700;color:var(--text)}
+.pnode.spawn{border-color:rgba(90,208,138,.4);background:rgba(90,208,138,.07)}.pnode.spawn .pt{color:var(--green)}
+.pnode.end{border-color:rgba(255,112,112,.4);background:rgba(255,112,112,.07)}.pnode.end .pt{color:#ff7070}
+.pnode.check{border-color:rgba(90,167,255,.4);background:rgba(90,167,255,.1)}.pnode.check .pt{color:#7ec0ff}
+.parrow{color:var(--muted);font-size:16px;padding:0 5px;font-family:var(--mono);flex:none}
+
+/* prop-tag */
+.prop-tag{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;border:1px solid;margin:1px 2px;vertical-align:middle}
+.pt-r{color:#ff7070;border-color:rgba(255,112,112,.4);background:rgba(255,112,112,.07)}
+.pt-g{color:var(--green);border-color:rgba(90,208,138,.4);background:var(--green-dim)}
+.pt-b{color:#7ec0ff;border-color:rgba(90,167,255,.4);background:rgba(90,167,255,.1)}
+.pt-y{color:#ffc44d;border-color:rgba(255,196,77,.4);background:rgba(255,196,77,.07)}
+
+/* lua 코드 */
+.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:var(--green)}.lua .cm{color:var(--muted)}.lua .num{color:var(--orange-2)}.lua .type{color:#ffc44d}
