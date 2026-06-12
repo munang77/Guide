@@ -34,9 +34,10 @@
     <div><b>초고급 강좌</b><small>MASTER</small></div>
   </div>
   <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
   <div class="nav-group"><span>셰이더 마스터</span>
     <a class="nav-link" href="#osl"><span class="n">31</span>OSL 셰이더 프로그래밍</a>
-    <a class="nav-link" href="#custom-shader"><span class="n">32</span>커스텀 BSDF 설계</span></a>
+    <a class="nav-link" href="#custom-shader"><span class="n">32</span>커스텀 BSDF 설계</a>
     <a class="nav-link" href="#matlib"><span class="n">33</span>재질 라이브러리 구축</a>
   </div>
   <div class="nav-group"><span>파이프라인</span>
@@ -85,7 +86,7 @@
     <p class="sec-sub">Open Shading Language로 노드로는 만들 수 없는 재질을 코드로 직접 작성합니다. Cycles 전용.</p>
 
     <h3>OSL이란?</h3>
-    <p>OSL(Open Shading Language)은 픽사, 소니픽처스 등 VFX 스튜디오에서 사용하는 셰이더 언어입니다. 블렌더 Cycles에서 Script 노드를 통해 사용할 수 있습니다. 노드로는 표현하기 어려운 복잡한 수학 기반 패턴이나 물리 모델을 코드로 직접 작성합니다.</p>
+    <p>OSL(Open Shading Language)은 픽사, 소니픽처스 등 VFX 스튜디오에서 사용하는 <span class="term" tabindex="0" data-tip="표면이 빛을 받았을 때 어떻게 보일지 계산하는 규칙">셰이더</span> 언어입니다. 블<span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그려내는 것">렌더</span> Cycles에서 Script 노드를 통해 사용할 수 있습니다. 노드로는 표현하기 어려운 복잡한 수학 기반 패턴이나 물리 모델을 코드로 직접 작성합니다.</p>
 
     <h3>사용 조건</h3>
     <ul class="plain">
@@ -135,7 +136,7 @@
 
     <h3>OSL vs 노드 선택 기준</h3>
     <ul class="plain">
-      <li><b>노드 사용:</b> 일반 PBR 재질, 표준 텍스처 조합, 팀원과 공유하는 재질.</li>
+      <li><b>노드 사용:</b> 일반 PBR 재질, 표준 <span class="term" tabindex="0" data-tip="3D 모델 표면에 입히는 그림(이미지). 옷에 프린트된 무늬 같은 것">텍스처</span> 조합, 팀원과 공유하는 재질.</li>
       <li><b>OSL 사용:</b> 수학적으로 복잡한 패턴, 절차적 기하학 패턴, 커스텀 BSDF 모델, 노드로 만들기 비효율적인 경우.</li>
     </ul>
   </div>
@@ -283,13 +284,13 @@ bpy.ops.render.render(animation=<span class="kw">True</span>, write_still=<span 
 <section class="sec" id="vfx-pipeline">
   <div class="wrap">
     <h2><span class="num-mas">35</span>VFX 파이프라인 <span class="lv lv-mas">초고급</span></h2>
-    <p class="sec-sub">모델링, 리깅, 애니메이션, 시뮬레이션, 렌더링, 합성까지 하나의 파이프라인으로 연결합니다.</p>
+    <p class="sec-sub">모델링, 리깅, 애니메이션, 시뮬레이션, <span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그림으로 그려내는 과정">렌더링</span>, 합성까지 하나의 파이프라인으로 연결합니다.</p>
 
     <h3>VFX 파이프라인 개요</h3>
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th>단계</th><th>도구</th><th>산출물</th></tr></thead>
       <tbody>
-        <tr><td>1. 에셋 제작</td><td>블렌더 (모델링/텍스처)</td><td>FBX / OBJ / USD 에셋</td></tr>
+        <tr><td>1. <span class="term" tabindex="0" data-tip="모델, 그림, 소리처럼 게임을 만들 때 쓰는 재료 파일을 통틀어 부르는 말">에셋</span> 제작</td><td>블렌더 (모델링/텍스처)</td><td><span class="term" tabindex="0" data-tip="3D 모델을 프로그램끼리 주고받을 때 쓰는 파일 형식 (.fbx)">FBX</span> / OBJ / USD 에셋</td></tr>
         <tr><td>2. 리깅</td><td>블렌더 (Armature / Rigify)</td><td>뼈대 있는 FBX</td></tr>
         <tr><td>3. 애니메이션</td><td>블렌더 (Dope Sheet / NLA)</td><td>Alembic (.abc) 캐시</td></tr>
         <tr><td>4. 시뮬레이션</td><td>블렌더 (Cloth / Fluid / Particles)</td><td>Alembic 캐시</td></tr>
@@ -317,11 +318,11 @@ bpy.ops.render.render(animation=<span class="kw">True</span>, write_still=<span 
     <p class="sec-sub">다른 DCC 툴(Maya, Houdini, Cinema 4D 등)과 애니메이션/시뮬레이션 데이터를 교환합니다.</p>
 
     <h3>Alembic (.abc)</h3>
-    <p>애니메이션된 메시, 카메라, 파티클 경로를 프레임별로 저장하는 캐시 포맷입니다. 뼈대 없이 메시 자체가 움직이는 정보(Vertex Cache)를 저장합니다.</p>
+    <p>애니메이션된 <span class="term" tabindex="0" data-tip="점과 선과 면으로 이루어진 3D 모델의 형태 그 자체">메시</span>, 카메라, <span class="term" tabindex="0" data-tip="불꽃, 연기, 반짝이처럼 작은 입자를 잔뜩 뿌려 만드는 효과">파티클</span> 경로를 프레임별로 저장하는 캐시 포맷입니다. 뼈대 없이 메시 자체가 움직이는 정보(Vertex Cache)를 저장합니다.</p>
     <ul class="plain">
       <li><b>내보내기:</b> File &gt; Export &gt; Alembic. 프레임 범위, XForm, Curves, Hair 포함 여부 선택.</li>
       <li><b>가져오기:</b> File &gt; Import &gt; Alembic. 시뮬레이션 결과를 다른 프로그램에서 가져올 때.</li>
-      <li><b>캐시 모디파이어:</b> 오브젝트에 <code>Mesh Sequence Cache</code> 모디파이어 추가로 .abc 파일 연결. 실시간 스트리밍.</li>
+      <li><b>캐시 <span class="term" tabindex="0" data-tip="원본을 직접 건드리지 않고 효과(복제, 휘기, 둥글리기 등)를 입히는 블렌더 기능">모디파이어</span>:</b> 오브젝트에 <code>Mesh Sequence Cache</code> 모디파이어 추가로 .abc 파일 연결. 실시간 <span class="term" tabindex="0" data-tip="맵 전체가 아니라 플레이어 주변만 불러와서 메모리와 로딩을 아끼는 방식">스트리밍</span>.</li>
     </ul>
 
     <h3>USD (Universal Scene Description)</h3>
@@ -340,13 +341,13 @@ bpy.ops.render.render(animation=<span class="kw">True</span>, write_still=<span 
 <section class="sec" id="retopo-adv">
   <div class="wrap">
     <h2><span class="num-mas">37</span>프로덕션 리토폴로지 <span class="lv lv-mas">초고급</span></h2>
-    <p class="sec-sub">게임/애니메이션 프로덕션 기준의 정밀한 리토폴로지 기법.</p>
+    <p class="sec-sub">게임/애니메이션 프로덕션 기준의 정밀한 리<span class="term" tabindex="0" data-tip="메시의 면들이 어떤 구조로 짜여 있는지. 깔끔할수록 변형과 수정이 쉬움">토폴로지</span> 기법.</p>
 
     <h3>프로덕션 토폴로지 규칙</h3>
     <ul class="plain">
       <li><b>엣지 루프 흐름:</b> 관절(어깨, 무릎, 손목, 입)을 따라 엣지 루프가 돌아야 합니다. 변형 시 메시가 찢어지지 않는 유일한 방법.</li>
       <li><b>폴 위치:</b> 5방향 폴(5-pole)은 덜 움직이는 부위(정수리, 귀 뒤)에. 3방향 폴(3-pole)은 엣지를 줄여야 하는 전환점에.</li>
-      <li><b>균일한 폴리곤 밀도:</b> 얼굴처럼 디테일이 필요한 곳은 조밀하게, 배처럼 단순한 부분은 성기게. 하지만 인접한 두 영역의 밀도 차이가 4배를 넘지 않도록.</li>
+      <li><b>균일한 <span class="term" tabindex="0" data-tip="3D 모델을 이루는 면 조각. 많을수록 정교하지만 게임이 무거워짐">폴리곤</span> 밀도:</b> 얼굴처럼 디테일이 필요한 곳은 조밀하게, 배처럼 단순한 부분은 성기게. 하지만 인접한 두 영역의 밀도 차이가 4배를 넘지 않도록.</li>
       <li><b>삼각형 최소화:</b> 변형 영역에는 절대 삼각형이 없어야 합니다. 외곽선, 움직이지 않는 딱딱한 부분에만 허용.</li>
     </ul>
 
@@ -356,7 +357,7 @@ bpy.ops.render.render(animation=<span class="kw">True</span>, write_still=<span 
       <li>새 오브젝트를 추가하고 <b>Shrinkwrap 모디파이어</b>로 고해상도 표면에 자동으로 달라붙게 설정.</li>
       <li><b>Mirror 모디파이어</b>를 Shrinkwrap 위에 추가. 한쪽만 리토폴로지하면 됩니다.</li>
       <li>에디트 모드에서 면을 하나씩 추가하며 루프 흐름을 따라 메시를 만들어 나갑니다.</li>
-      <li>완성 후 모디파이어 Apply. 고해상도에서 노멀맵 베이킹.</li>
+      <li>완성 후 모디파이어 Apply. 고해상도에서 노멀맵 <span class="term" tabindex="0" data-tip="복잡한 디테일이나 조명을 이미지 한 장으로 구워내 저장하는 것">베이킹</span>.</li>
     </ol>
 
     <h3>폴리곤 수 기준 (캐릭터)</h3>
@@ -527,6 +528,7 @@ classes = [MESH_OT_my_tool, VIEW3D_PT_my_panel]
     <nav class="foot-nav">
       <a href="advanced.html">&larr; 고급</a>
       <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
     </nav>
   </div>
 </footer>
