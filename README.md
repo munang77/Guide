@@ -1,42 +1,51 @@
-# 🗼 블렌더 × 로블록스 타워디펜스 — 입문 가이드
+# 블렌더 & Roblox Studio 완전 가이드
 
-로블록스 타워디펜스 게임용 3D 에셋을 만들기 위한 **블렌더 한국어 입문 가이드**입니다.
-설치 → 뷰포트 조작 → 모델링 → 색 입히기(팔레트 텍스처) → FBX 내보내기 → Roblox Studio 임포트까지, 완전 처음인 사람 눈높이로 정리했어요.
+블렌더와 Roblox Studio 맵 제작을 처음부터 끝까지 배우는 한국어 가이드 사이트입니다.
 
-- **13개 챕터** + 90+ 단축키 검색형 치트시트
-- **15개 직접 그린 SVG 다이어그램** (이미지 파일 불필요 — 전부 인라인)
-- 로블록스 특화 팁: 트라이앵글 예산, 스터드 크기 감각, 터렛 피벗(원점) 잡기, 모듈식 맵 타일
-- 외부 의존성은 폰트(Pretendard CDN) 하나뿐인 **단일 `index.html`**
+**사이트 바로가기 → https://munang77.github.io/Guide/**
 
-## 미리보기 (로컬)
+---
 
-`index.html`을 더블클릭해서 브라우저로 열면 끝입니다. 빌드·설치 과정이 없어요.
+## 구성
 
-## GitHub Pages로 배포하기
+### 블렌더 (4단계 · 40+EX 챕터)
 
-1. [github.com/new](https://github.com/new)에서 **Public** 저장소 생성 (예: `blender-guide`)
-2. 저장소에서 `Add file ▸ Upload files` → `index.html`과 `README.md` 업로드 → `Commit changes`
-3. `Settings ▸ Pages` → Source: **Deploy from a branch**, Branch: **main / (root)** → Save
+블렌더 그 자체를 통달하는 강좌. 게임 에셋 제작에 초점.
 
-1~2분 뒤 `https://<아이디>.github.io/blender-guide/` 에서 접속할 수 있습니다.
+| 단계 | 페이지 | 내용 |
+|---|---|---|
+| 입문 | `beginner.html` | 설치, 화면 조작, 모델링 기초, 재질, UV, FBX 내보내기 |
+| 중급 | `intermediate.html` | 스컬프트, 셰이더 노드, 베이킹, 리깅, 애니메이션 |
+| 고급 | `advanced.html` | 파티클, 물리/유체 시뮬레이션, Geometry Nodes, Python + **EX: 게임 스킬 이펙트 메시 (검기, 빔, 마법진 등)** |
+| 초고급 | `master.html` | OSL 셰이더 코딩, 커스텀 BSDF, 렌더팜, VFX 파이프라인, 애드온 개발 |
 
-> git에 익숙하다면 물론 `git clone` → 파일 추가 → `git push` 방식도 동일하게 동작합니다.
+### Roblox Studio 맵 제작 (3단계 · 30챕터)
 
-## 커스터마이징
+스크립트 없이 맵 제작에만 집중하는 강좌. 블렌더와 완전히 독립.
 
-색·폰트는 `index.html` 상단 `:root`의 CSS 변수만 바꾸면 사이트 전체에 반영됩니다.
+| 단계 | 페이지 | 내용 |
+|---|---|---|
+| 초급 | `studio-beginner.html` | 설치, 파트, 지형, Toolbox, 머티리얼, 퍼블리시 |
+| 중급 | `studio-intermediate.html` | 맵 설계, 지형 심화, 건축 기법, 임포트, 조명, 사운드 |
+| 고급 | `studio-advanced.html` | 대형 맵 설계, 스트리밍, 최적화, 테마 연출, 모바일 대응 |
 
-```css
-:root{
-  --orange:#f5792a;   /* 포인트 색 (블렌더 오렌지) */
-  --blue:#5aa7ff;     /* 로블록스 콜아웃 색 */
-  --bg:#131316;       /* 배경 */
-}
-```
+### 부가 페이지
 
-섹션을 추가하고 싶으면 `<section class="sec" id="...">` 블록을 복사하고, 사이드바 `<nav>`에 같은 `id`로 링크 한 줄만 추가하면 스크롤 하이라이트까지 자동으로 동작합니다.
+- `index.html` — 메인 허브
+- `glossary.html` — 용어 사전 (검색 가능). 본문에서도 점선 밑줄 용어에 마우스를 올리면 뜻이 뜹니다.
+- `style.css` — 공통 스타일
 
-## 라이선스 / 고지
+## 특징
 
-자유롭게 수정·배포하세요. 단축키는 Blender 4.x 기본 키맵(영문 UI) 기준입니다.
-Blender는 Blender Foundation, Roblox는 Roblox Corporation의 상표이며 이 문서는 독립적인 학습용 자료입니다.
+- 사전 지식 없이 설치부터 따라올 수 있는 구성
+- 어려운 용어는 본문 툴팁 + 용어 사전으로 즉석 설명
+- 추천 설정값을 표로 정리 — 따라 하면 바로 결과가 나오게
+- 블렌더에서 만든 에셋을 Studio 맵에 올리는 흐름까지 연결
+
+## 직접 띄우기
+
+이 저장소를 fork 한 뒤 Settings > Pages > Deploy from a branch (main, root) 로 설정하면 본인 계정에서도 사이트가 열립니다. 모든 파일이 같은 폴더(root)에 있어야 페이지 간 링크가 작동합니다.
+
+---
+
+이 가이드는 공식 Blender / Roblox 문서가 아닙니다.
