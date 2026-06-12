@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Studio 초급 — Roblox Studio 완전정복</title>
+<title>Studio 초급 — 맵 제작 기초</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%235aa7ff'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%230a1520'>S</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
@@ -37,7 +37,7 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
 <nav id="sidebar">
   <div class="logo">
     <div class="logo-mark map">S</div>
-    <div><b>Studio 초급</b><small>STUDIO BASICS</small></div>
+    <div><b>Studio 초급</b><small>MAP BASICS</small></div>
   </div>
   <a class="logo-home" href="index.html">&larr; 메인으로</a>
   <div class="nav-group"><span>시작</span>
@@ -53,8 +53,8 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
     <a class="nav-link" href="#terrain"><span class="n">06</span>지형 에디터</a>
     <a class="nav-link" href="#toolbox"><span class="n">07</span>Toolbox와 에셋</a>
   </div>
-  <div class="nav-group"><span>스크립트 첫걸음</span>
-    <a class="nav-link" href="#first-script"><span class="n">08</span>첫 스크립트</a>
+  <div class="nav-group"><span>꾸미기</span>
+    <a class="nav-link" href="#materials"><span class="n">08</span>머티리얼과 색</a>
   </div>
   <div class="nav-group"><span>마무리</span>
     <a class="nav-link" href="#test-publish"><span class="n">09</span>테스트와 퍼블리시</a>
@@ -74,14 +74,14 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
 <main>
 <div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(90,167,255,.15),transparent 65%)">
   <div class="wrap">
-    <div class="hero-chip chip-map">ROBLOX STUDIO — LEVEL 1</div>
-    <h1>Studio 초급</h1>
-    <p class="lead">설치 첫날부터 첫 게임 퍼블리시까지. Roblox Studio의 기본기를 잡는 단계.</p>
+    <div class="hero-chip chip-map">STUDIO BEGINNER</div>
+    <h1>Studio 초급 — 맵 제작 기초</h1>
+    <p class="lead">설치 첫날부터 첫 맵 퍼블리시까지. 파트, 지형, 머티리얼 — 맵 제작의 기본기를 잡는 단계.</p>
     <div class="hero-tags">
       <span class="hero-tag"><b>10</b>챕터</span>
       <span class="hero-tag">파트 다루기</span>
       <span class="hero-tag">지형 에디터</span>
-      <span class="hero-tag">첫 스크립트</span>
+      <span class="hero-tag">머티리얼</span>
       <span class="hero-tag">퍼블리시</span>
     </div>
   </div>
@@ -320,56 +320,48 @@ Workspace
 </section>
 
 <!-- 08 -->
-<section class="sec" id="first-script">
+<section class="sec" id="materials">
   <div class="wrap">
-    <h2><span class="num">08</span>첫 스크립트 <span class="lv lv-map">초급</span></h2>
-    <p class="sec-sub">Studio의 진짜 힘은 스크립트입니다. Luau 언어로 게임에 생명을 불어넣습니다.</p>
+    <h2><span class="num">08</span>머티리얼과 색 <span class="lv lv-map">초급</span></h2>
+    <p class="sec-sub">같은 파트도 머티리얼과 색에 따라 완전히 다른 맵이 됩니다. 맵의 첫인상을 결정하는 요소.</p>
 
-    <h3>스크립트 만들기</h3>
+    <h3>머티리얼 종류</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>머티리얼</th><th>느낌</th><th>맵 활용</th></tr></thead>
+      <tbody>
+        <tr><td>Plastic / SmoothPlastic</td><td>매끈, 무광</td><td>기본값. 로우폴리 스타일 맵의 표준</td></tr>
+        <tr><td>Wood / WoodPlanks</td><td>나무 결</td><td>집, 다리, 울타리, 부두</td></tr>
+        <tr><td>Brick / Cobblestone</td><td>벽돌, 자갈</td><td>건물 벽, 길바닥, 성벽</td></tr>
+        <tr><td>Concrete / Slate</td><td>거친 돌</td><td>도시 바닥, 절벽, 바위</td></tr>
+        <tr><td>Metal / DiamondPlate / CorrodedMetal</td><td>금속</td><td>기계, 공장, 폐허</td></tr>
+        <tr><td>Grass / Sand / Ground</td><td>자연 표면</td><td>야외 지면 파트</td></tr>
+        <tr><td>Neon</td><td>자체 발광</td><td>간판, 마법 효과, 용암 코어, 빛 장식</td></tr>
+        <tr><td>Glass / ForceField</td><td>투명 계열</td><td>창문, 보호막, 물 표현</td></tr>
+        <tr><td>Ice / Snow</td><td>얼음, 눈</td><td>설원 맵</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Neon은 Lighting의 Bloom과 만나면 진짜 빛처럼 번집니다. 어두운 맵에서 Neon 파트 하나만 잘 써도 분위기가 살아납니다.</p></div>
+
+    <h3>색 정하기</h3>
     <ol class="steps">
-      <li>Explorer에서 ServerScriptService 옆 <code>+</code> &gt; <code>Script</code>.</li>
-      <li>더블클릭하면 코드 에디터가 열립니다.</li>
-      <li>기본으로 <code>print("Hello world!")</code>가 적혀 있습니다.</li>
-      <li><kbd>F5</kbd>로 Play하면 Output 창에 Hello world!가 출력됩니다.</li>
+      <li>파트 선택 &gt; Properties &gt; <code>Color</code> 클릭 &gt; 색상표에서 선택.</li>
+      <li>또는 Home 탭의 <code>Color</code> 버튼으로 빠르게 칠하기.</li>
+      <li>정확한 색이 필요하면 색상표 아래 RGB 값을 직접 입력합니다.</li>
     </ol>
 
-    <h3>기본 문법 맛보기</h3>
-    <pre class="code-block lua"><span class="cm">-- 변수</span>
-<span class="kw">local</span> myName = <span class="str">"Roblox"</span>
-<span class="kw">local</span> myNumber = <span class="num">10</span>
+    <h3>맵 색 조합 기본기</h3>
+    <ul class="plain">
+      <li><b>3색 규칙:</b> 주색(바닥/벽 70%) + 보조색(소품 25%) + 포인트색(5%)로 제한하면 정돈돼 보입니다.</li>
+      <li><b>채도 낮추기:</b> 원색(빨강 255,0,0)보다 살짝 탁한 색이 배경으로 편안합니다. 포인트에만 쨍한 색.</li>
+      <li><b>같은 색 계열로 명암:</b> 벽은 밝은 회색, 그림자 지는 부분은 어두운 회색 — 같은 계열로 단계만 주면 자연스럽습니다.</li>
+      <li><b>참고:</b> 좋아하는 게임 맵 스크린샷을 옆에 띄워두고 색을 따라 잡는 게 가장 빠른 연습입니다.</li>
+    </ul>
 
-<span class="cm">-- 출력</span>
-<span class="fn">print</span>(myName)            <span class="cm">-- Roblox</span>
-<span class="fn">print</span>(myNumber + <span class="num">5</span>)      <span class="cm">-- 15</span>
-
-<span class="cm">-- 조건문</span>
-<span class="kw">if</span> myNumber > <span class="num">5</span> <span class="kw">then</span>
-    <span class="fn">print</span>(<span class="str">"5보다 큽니다"</span>)
-<span class="kw">end</span>
-
-<span class="cm">-- 반복문</span>
-<span class="kw">for</span> i = <span class="num">1</span>, <span class="num">3</span> <span class="kw">do</span>
-    <span class="fn">print</span>(<span class="str">"반복 "</span> .. i)
-<span class="kw">end</span></pre>
-
-    <h3>파트를 코드로 조작하기</h3>
-    <pre class="code-block lua"><span class="cm">-- Workspace에 있는 MyPart라는 파트의 색을 바꾸기</span>
-<span class="kw">local</span> part = workspace.MyPart
-
-part.Color = Color3.fromRGB(<span class="num">255</span>, <span class="num">0</span>, <span class="num">0</span>)  <span class="cm">-- 빨강</span>
-part.Material = Enum.Material.Neon
-part.Transparency = <span class="num">0.3</span></pre>
-
-    <h3>밟으면 반응하는 파트</h3>
-    <pre class="code-block lua"><span class="cm">-- 이 스크립트를 파트 안에 넣으세요</span>
-<span class="kw">local</span> part = script.Parent
-
-part.Touched:Connect(<span class="kw">function</span>(hit)
-    <span class="fn">print</span>(hit.Name .. <span class="str">"이(가) 밟았습니다"</span>)
-    part.Color = Color3.fromRGB(<span class="num">0</span>, <span class="num">255</span>, <span class="num">0</span>)
-<span class="kw">end</span>)</pre>
-
-    <div class="callout co-tip"><span class="ico">TIP</span><p>에러가 나면 Output 창에 빨간 글씨로 표시됩니다. 줄 번호를 클릭하면 해당 코드로 이동합니다. 에러 메시지를 읽는 습관이 실력을 가장 빨리 올립니다.</p></div>
+    <h3>Transparency와 Reflectance</h3>
+    <ul class="plain">
+      <li><b>Transparency (0~1):</b> 투명도. 유리창 0.5, 거의 안 보이는 가이드 0.9.</li>
+      <li><b>Reflectance (0~1):</b> 하늘 반사. 금속이나 물 느낌에 0.1~0.3 정도만 — 과하면 어색합니다.</li>
+    </ul>
   </div>
 </section>
 
@@ -377,7 +369,7 @@ part.Touched:Connect(<span class="kw">function</span>(hit)
 <section class="sec" id="test-publish">
   <div class="wrap">
     <h2><span class="num">09</span>테스트와 퍼블리시 <span class="lv lv-map">초급</span></h2>
-    <p class="sec-sub">만든 게임을 테스트하고 세상에 공개하는 방법.</p>
+    <p class="sec-sub">만든 맵을 테스트하고 세상에 공개하는 방법.</p>
 
     <h3>테스트 방법</h3>
     <div class="tbl-wrap"><table class="tbl">
@@ -421,8 +413,6 @@ part.Touched:Connect(<span class="kw">function</span>(hit)
         <tr><td><kbd>Ctrl</kbd>+<kbd>L</kbd></td><td>이동 축 기준 전환 (월드/로컬)</td></tr>
         <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd></td><td>Union (파트 합치기)</td></tr>
         <tr><td><kbd>Alt</kbd>+<kbd>P</kbd></td><td>Publish to Roblox</td></tr>
-        <tr><td><kbd>Ctrl</kbd>+<kbd>F</kbd></td><td>스크립트 안에서 검색</td></tr>
-        <tr><td><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>F</kbd></td><td>모든 스크립트에서 검색</td></tr>
       </tbody>
     </table></div>
   </div>
@@ -430,7 +420,7 @@ part.Touched:Connect(<span class="kw">function</span>(hit)
 
 <div class="wrap">
   <a class="next-level" href="studio-intermediate.html">
-    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Studio 중급 — Luau 스크립트 본격 입문</span></div>
+    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Studio 중급 — 본격 맵 제작</span></div>
     <span class="nl-arrow">&rarr;</span>
   </a>
 </div>
@@ -442,8 +432,7 @@ part.Touched:Connect(<span class="kw">function</span>(hit)
     <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
     <nav class="foot-nav">
       <a href="index.html">메인</a>
-      <a href="studio-intermediate.html">Studio 중급</a>
-      <a href="studio-advanced.html">Studio 고급</a>
+      <a href="studio-intermediate.html">중급으로 &rarr;</a>
     </nav>
   </div>
 </footer>
