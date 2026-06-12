@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Studio 중급 — Luau 스크립트, GUI, 이벤트</title>
+<title>Studio 중급 — 본격 맵 제작</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%235aa7ff'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%230a1520'>S</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
 <link rel="stylesheet" href="style.css">
@@ -25,7 +25,6 @@ h3::before{background:#5aa7ff}
 h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,255,.28)}
 .nav-link.active{background:rgba(90,167,255,.13);color:#7ec0ff;border-left-color:#5aa7ff}
 .nav-link.active .n{color:#5aa7ff}
-.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:var(--green)}.lua .cm{color:var(--muted)}.lua .num{color:var(--orange-2)}
 </style>
 </head>
 <body>
@@ -36,28 +35,24 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
 <nav id="sidebar">
   <div class="logo">
     <div class="logo-mark map">S</div>
-    <div><b>Studio 중급</b><small>SCRIPTING</small></div>
+    <div><b>Studio 중급</b><small>MAP BUILDING</small></div>
   </div>
   <a class="logo-home" href="index.html">&larr; 메인으로</a>
-  <div class="nav-group"><span>Luau 언어</span>
-    <a class="nav-link" href="#luau"><span class="n">11</span>Luau 문법 정리</a>
-    <a class="nav-link" href="#tables"><span class="n">12</span>테이블 완전 이해</a>
-    <a class="nav-link" href="#instances"><span class="n">13</span>인스턴스 다루기</a>
+  <div class="nav-group"><span>설계</span>
+    <a class="nav-link" href="#layout"><span class="n">11</span>맵 설계와 레이아웃</a>
+    <a class="nav-link" href="#terrain-pro"><span class="n">12</span>지형 에디터 심화</a>
   </div>
-  <div class="nav-group"><span>이벤트와 상호작용</span>
-    <a class="nav-link" href="#events"><span class="n">14</span>이벤트</a>
-    <a class="nav-link" href="#humanoid"><span class="n">15</span>캐릭터와 Humanoid</a>
+  <div class="nav-group"><span>건축</span>
+    <a class="nav-link" href="#building"><span class="n">13</span>파트 건축 기법</a>
+    <a class="nav-link" href="#import"><span class="n">14</span>외부 에셋 임포트</a>
+    <a class="nav-link" href="#surface"><span class="n">15</span>SurfaceAppearance 재질</a>
+    <a class="nav-link" href="#props"><span class="n">16</span>소품 배치와 디테일</a>
   </div>
-  <div class="nav-group"><span>UI</span>
-    <a class="nav-link" href="#gui"><span class="n">16</span>GUI 만들기</a>
-  </div>
-  <div class="nav-group"><span>구조</span>
-    <a class="nav-link" href="#client-server"><span class="n">17</span>클라이언트와 서버</a>
-    <a class="nav-link" href="#remote"><span class="n">18</span>RemoteEvent 통신</a>
-  </div>
-  <div class="nav-group"><span>연출</span>
-    <a class="nav-link" href="#tween"><span class="n">19</span>TweenService</a>
-    <a class="nav-link" href="#sound-light"><span class="n">20</span>사운드와 조명</a>
+  <div class="nav-group"><span>분위기</span>
+    <a class="nav-link" href="#lighting"><span class="n">17</span>조명과 Atmosphere</a>
+    <a class="nav-link" href="#water"><span class="n">18</span>물과 특수 지형</a>
+    <a class="nav-link" href="#sound"><span class="n">19</span>사운드 환경</a>
+    <a class="nav-link" href="#sky"><span class="n">20</span>스카이박스와 배경</a>
   </div>
 </nav>
 
@@ -67,500 +62,376 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
     <a class="page-tab tab-map" href="studio-intermediate.html">중급</a>
     <a class="page-tab" href="studio-advanced.html">고급</a>
   </nav>
-  <span style="font-size:12px;color:var(--muted);font-weight:600"><a href="index.html" style="color:var(--muted)">메인</a></span>
 </div>
 
 <main>
 <div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(90,167,255,.15),transparent 65%)">
   <div class="wrap">
-    <div class="hero-chip chip-map">ROBLOX STUDIO — LEVEL 2</div>
-    <h1>Studio 중급</h1>
-    <p class="lead">Luau 스크립트를 본격적으로. 이벤트, GUI, 클라이언트-서버 구조까지 게임 로직의 핵심.</p>
+    <div class="hero-chip chip-map">STUDIO INTERMEDIATE</div>
+    <h1>Studio 중급 — 본격 맵 제작</h1>
+    <p class="lead">맵 설계부터 지형, 건축, 임포트, 조명, 사운드까지. 진짜 게임처럼 보이는 맵을 만드는 모든 기술.</p>
     <div class="hero-tags">
       <span class="hero-tag"><b>10</b>챕터</span>
-      <span class="hero-tag">Luau 문법</span>
-      <span class="hero-tag">GUI</span>
-      <span class="hero-tag">RemoteEvent</span>
-      <span class="hero-tag">TweenService</span>
+      <span class="hero-tag">지형 심화</span>
+      <span class="hero-tag">건축 기법</span>
+      <span class="hero-tag">조명 연출</span>
     </div>
   </div>
 </div>
 
 <!-- 11 -->
-<section class="sec" id="luau">
+<section class="sec" id="layout">
   <div class="wrap">
-    <h2><span class="num">11</span>Luau 문법 정리 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">Roblox의 스크립트 언어 Luau. 핵심 문법을 한 번에 정리합니다.</p>
+    <h2><span class="num">11</span>맵 설계와 레이아웃 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">바로 만들기 시작하면 중간에 다 갈아엎게 됩니다. 종이 한 장 분량의 설계가 며칠을 아낍니다.</p>
 
-    <h3>변수와 타입</h3>
-    <pre class="code-block lua"><span class="kw">local</span> text = <span class="str">"문자열"</span>       <span class="cm">-- string</span>
-<span class="kw">local</span> count = <span class="num">42</span>            <span class="cm">-- number</span>
-<span class="kw">local</span> isOpen = <span class="kw">true</span>         <span class="cm">-- boolean</span>
-<span class="kw">local</span> nothing = <span class="kw">nil</span>         <span class="cm">-- 값 없음</span>
+    <h3>만들기 전에 정할 것</h3>
+    <ol class="steps">
+      <li><b>맵의 용도:</b> 탐험 맵인지, 전투 맵인지, 로비인지. 용도가 동선을 결정합니다.</li>
+      <li><b>크기:</b> 플레이어가 걸어서 끝에서 끝까지 몇 초 걸릴지. 로비는 20~30초, 오픈월드는 2~3분 이상.</li>
+      <li><b>테마:</b> 숲, 사막, 도시, 던전, 설원 등. 테마가 머티리얼과 색을 결정합니다.</li>
+      <li><b>랜드마크:</b> 멀리서도 보이는 큰 구조물 1~2개 (탑, 거목, 산). 플레이어가 길을 잃지 않게 하는 기준점.</li>
+    </ol>
 
-<span class="cm">-- 문자열 연결은 .. 사용</span>
-<span class="fn">print</span>(<span class="str">"개수: "</span> .. count)</pre>
+    <h3>탑뷰 스케치</h3>
+    <p>종이나 그림판에 위에서 본 맵을 대충 그립니다. 주요 구역(스폰, 중심 광장, 구역별 테마), 길의 연결만 표시하면 됩니다. 그 다음 Studio에서 색만 다른 큰 파트들을 깔아 구역을 잡는 것이 그레이박싱(grayboxing)입니다 — 디테일 없이 덩어리로 먼저 배치하고 걸어다녀 보며 크기를 검증합니다.</p>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>그레이박스 상태에서 F5로 직접 걸어보세요. 화면으로 볼 때와 캐릭터로 걸을 때의 크기 감각이 완전히 다릅니다. 대부분 처음 만든 맵은 생각보다 너무 큽니다.</p></div>
 
-    <h3>조건문</h3>
-    <pre class="code-block lua"><span class="kw">if</span> count > <span class="num">50</span> <span class="kw">then</span>
-    <span class="fn">print</span>(<span class="str">"많음"</span>)
-<span class="kw">elseif</span> count > <span class="num">10</span> <span class="kw">then</span>
-    <span class="fn">print</span>(<span class="str">"보통"</span>)
-<span class="kw">else</span>
-    <span class="fn">print</span>(<span class="str">"적음"</span>)
-<span class="kw">end</span>
-
-<span class="cm">-- 비교 연산자: ==, ~=(다름), <, >, <=, >=</span>
-<span class="cm">-- 논리 연산자: and, or, not</span></pre>
-
-    <h3>반복문</h3>
-    <pre class="code-block lua"><span class="cm">-- 숫자 반복: 1부터 10까지</span>
-<span class="kw">for</span> i = <span class="num">1</span>, <span class="num">10</span> <span class="kw">do</span>
-    <span class="fn">print</span>(i)
-<span class="kw">end</span>
-
-<span class="cm">-- 조건 반복</span>
-<span class="kw">local</span> hp = <span class="num">100</span>
-<span class="kw">while</span> hp > <span class="num">0</span> <span class="kw">do</span>
-    hp = hp - <span class="num">10</span>
-    task.wait(<span class="num">1</span>)  <span class="cm">-- 1초 대기. 없으면 게임이 멈춤!</span>
-<span class="kw">end</span></pre>
-
-    <h3>함수</h3>
-    <pre class="code-block lua"><span class="kw">local function</span> <span class="fn">add</span>(a, b)
-    <span class="kw">return</span> a + b
-<span class="kw">end</span>
-
-<span class="kw">local</span> result = <span class="fn">add</span>(<span class="num">3</span>, <span class="num">7</span>)  <span class="cm">-- 10</span></pre>
-
-    <div class="callout co-warn"><span class="ico">!!</span><p>while true do 같은 무한 루프 안에는 반드시 <code>task.wait()</code>를 넣으세요. 없으면 Studio가 멈춥니다.</p></div>
+    <h3>스케일 기준표</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>대상</th><th>권장 크기 (studs)</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>캐릭터 키</td><td>약 5</td><td>모든 크기의 기준</td></tr>
+        <tr><td>문</td><td>폭 7~8, 높이 10~12</td><td>실제 비율보다 크게 — 좁으면 답답함</td></tr>
+        <tr><td>1층 천장 높이</td><td>12~16</td><td>실내가 낮으면 카메라가 벽에 박힘</td></tr>
+        <tr><td>복도 폭</td><td>10 이상</td><td>두 명이 스쳐 지나갈 폭</td></tr>
+        <tr><td>계단 한 칸</td><td>높이 1, 깊이 2</td><td>점프 없이 걸어 올라가짐</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
 <!-- 12 -->
-<section class="sec" id="tables">
+<section class="sec" id="terrain-pro">
   <div class="wrap">
-    <h2><span class="num">12</span>테이블 완전 이해 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">Luau의 유일한 자료구조. 배열도, 딕셔너리도 전부 테이블입니다.</p>
+    <h2><span class="num">12</span>지형 에디터 심화 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">초급에서 배운 브러시를 넘어 — Generate, Sea Level, 자연스러운 지형을 빚는 테크닉.</p>
 
-    <h3>배열 형태</h3>
-    <pre class="code-block lua"><span class="kw">local</span> fruits = {<span class="str">"사과"</span>, <span class="str">"바나나"</span>, <span class="str">"포도"</span>}
+    <h3>Generate로 시작하기</h3>
+    <ol class="steps">
+      <li>Terrain Editor &gt; <code>Generate</code> 탭.</li>
+      <li>Biome 선택: Mountains(산), Canyons(협곡), Dunes(사막), Arctic(설원), Lavaflow(용암) 등 조합 가능.</li>
+      <li>Size를 맵 크기에 맞게, Seed를 바꿔가며 마음에 드는 형태가 나올 때까지 재생성.</li>
+      <li>생성된 지형을 기반으로 브러시로 다듬는 게 맨바닥부터 그리는 것보다 훨씬 빠릅니다.</li>
+    </ol>
 
-<span class="fn">print</span>(fruits[<span class="num">1</span>])        <span class="cm">-- 사과 (1부터 시작!)</span>
-<span class="fn">print</span>(#fruits)          <span class="cm">-- 3 (개수)</span>
+    <h3>자연스러운 지형 브러시 테크닉</h3>
+    <ul class="plain">
+      <li><b>큰 브러시 &rarr; 작은 브러시:</b> 큰 브러시로 산의 덩어리를 잡고, 점점 작은 브러시로 능선과 굴곡을 추가합니다. 처음부터 작은 브러시로 그리면 울퉁불퉁 지저분해집니다.</li>
+      <li><b>Strength는 낮게:</b> 0.3 이하로 여러 번 쌓는 것이 한 번에 솟구치게 하는 것보다 자연스럽습니다.</li>
+      <li><b>Smooth는 마지막에:</b> 형태를 다 잡은 뒤 Smooth로 정리. 중간중간 Smooth하면 디테일이 다 뭉개집니다.</li>
+      <li><b>Erode(침식):</b> 산비탈에 살짝 쓰면 빗물에 깎인 듯한 골이 생깁니다. 진짜 산처럼 보이게 하는 비밀.</li>
+      <li><b>재질 경계 흐리기:</b> Paint로 잔디와 바위 경계를 칠할 때 일직선이 아니라 들쭉날쭉하게. 자연엔 직선이 없습니다.</li>
+    </ul>
 
-table.insert(fruits, <span class="str">"수박"</span>)   <span class="cm">-- 끝에 추가</span>
-table.remove(fruits, <span class="num">1</span>)        <span class="cm">-- 1번 삭제</span>
+    <h3>Sea Level로 물 채우기</h3>
+    <ol class="steps">
+      <li>Terrain Editor &gt; <code>Sea Level</code>.</li>
+      <li>영역과 높이를 지정하고 Create — 그 높이 아래 빈 공간이 전부 물로 채워집니다.</li>
+      <li>호수를 만들려면 먼저 Subtract로 웅덩이를 파고 Sea Level을 적용.</li>
+    </ol>
 
-<span class="cm">-- 전체 순회</span>
-<span class="kw">for</span> i, fruit <span class="kw">in ipairs</span>(fruits) <span class="kw">do</span>
-    <span class="fn">print</span>(i, fruit)
-<span class="kw">end</span></pre>
-
-    <h3>딕셔너리 형태</h3>
-    <pre class="code-block lua"><span class="kw">local</span> player = {
-    name = <span class="str">"Kim"</span>,
-    level = <span class="num">12</span>,
-    isVip = <span class="kw">true</span>,
-}
-
-<span class="fn">print</span>(player.name)       <span class="cm">-- Kim</span>
-player.level = <span class="num">13</span>        <span class="cm">-- 수정</span>
-
-<span class="kw">for</span> key, value <span class="kw">in pairs</span>(player) <span class="kw">do</span>
-    <span class="fn">print</span>(key, value)
-<span class="kw">end</span></pre>
-
-    <h3>중첩 테이블 (실전 구조)</h3>
-    <pre class="code-block lua"><span class="kw">local</span> shop = {
-    {name = <span class="str">"검"</span>,   price = <span class="num">100</span>},
-    {name = <span class="str">"방패"</span>, price = <span class="num">150</span>},
-    {name = <span class="str">"물약"</span>, price = <span class="num">30</span>},
-}
-
-<span class="kw">for</span> _, item <span class="kw">in ipairs</span>(shop) <span class="kw">do</span>
-    <span class="fn">print</span>(item.name .. <span class="str">": "</span> .. item.price .. <span class="str">"원"</span>)
-<span class="kw">end</span></pre>
-
-    <div class="callout co-tip"><span class="ico">TIP</span><p>배열 순회는 <code>ipairs</code>, 딕셔너리 순회는 <code>pairs</code>. ipairs는 순서 보장, pairs는 순서 비보장입니다.</p></div>
+    <h3>지형 물 속성 (Terrain 선택 시 Properties)</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>속성</th><th>역할</th><th>추천</th></tr></thead>
+      <tbody>
+        <tr><td>WaterColor</td><td>물 색</td><td>열대: 청록 / 늪: 탁한 녹색 / 깊은 바다: 진한 남색</td></tr>
+        <tr><td>WaterTransparency</td><td>물 투명도</td><td>0.7~0.9 (맑은 물)</td></tr>
+        <tr><td>WaterWaveSize / Speed</td><td>파도 크기와 속도</td><td>호수: 0.05 / 바다: 0.15~0.3</td></tr>
+        <tr><td>WaterReflectance</td><td>하늘 반사</td><td>0.3~0.6</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
 <!-- 13 -->
-<section class="sec" id="instances">
+<section class="sec" id="building">
   <div class="wrap">
-    <h2><span class="num">13</span>인스턴스 다루기 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">월드의 모든 오브젝트(파트, 모델, 스크립트...)는 인스턴스입니다. 코드로 만들고, 찾고, 지우는 법.</p>
+    <h2><span class="num">13</span>파트 건축 기법 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">파트 몇 개로 건물, 계단, 아치, 다리를 만드는 실전 건축 기술.</p>
 
-    <h3>찾기</h3>
-    <pre class="code-block lua"><span class="cm">-- 직접 경로 (없으면 에러)</span>
-<span class="kw">local</span> part = workspace.MyPart
+    <h3>Union과 Negate 복습 + 실전</h3>
+    <ul class="plain">
+      <li><b>Union (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>G</kbd>):</b> 선택한 파트들을 하나로 합치기.</li>
+      <li><b>Negate (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>N</kbd>):</b> 파트를 "빼는 모양"으로 전환. 빨갛게 변한 Negate 파트와 일반 파트를 함께 Union하면 그 모양대로 구멍이 뚫립니다.</li>
+      <li><b>Separate (<kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>U</kbd>):</b> Union을 다시 분해.</li>
+    </ul>
+    <ol class="steps">
+      <li><b>창문 뚫기:</b> 벽 파트 + 창문 크기의 블록을 벽에 겹치게 배치 &gt; 블록 Negate &gt; 둘 다 선택 &gt; Union.</li>
+      <li><b>아치문:</b> 벽 + Negate한 원기둥(눕혀서) + Negate한 블록(아래 부분) &gt; Union.</li>
+      <li><b>터널:</b> 산 모양 파트에 Negate 원기둥을 관통시켜 Union.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>Union을 너무 많이 겹쳐 쓰면(Union의 Union의 Union...) 성능이 나빠지고 가끔 모양이 깨집니다. 복잡한 형태는 블렌더에서 만들어 임포트하는 게 낫습니다.</p></div>
 
-<span class="cm">-- 안전하게 찾기 (없으면 nil)</span>
-<span class="kw">local</span> part = workspace:FindFirstChild(<span class="str">"MyPart"</span>)
-<span class="kw">if</span> part <span class="kw">then</span>
-    <span class="fn">print</span>(<span class="str">"찾음"</span>)
-<span class="kw">end</span>
+    <h3>계단 만들기 3가지</h3>
+    <ul class="plain">
+      <li><b>블록 쌓기:</b> 높이 1, 깊이 2짜리 블록을 계단식으로 복제(<kbd>Ctrl</kbd>+<kbd>D</kbd> 후 이동 반복). 가장 확실.</li>
+      <li><b>WedgePart (경사면):</b> 파트 추가할 때 Wedge 선택. 계단 대신 경사로 — 캐릭터가 부드럽게 올라갑니다. 계단처럼 보이게 하려면 위에 얇은 블록들을 장식으로 얹기.</li>
+      <li><b>나선 계단:</b> 한 칸 만들고 복제하면서 위치 이동 + 회전(15도씩)을 반복. 중심축 파트를 기준으로 돌리면 정확합니다.</li>
+    </ul>
 
-<span class="cm">-- 생길 때까지 기다리기 (로딩 순서 문제 해결)</span>
-<span class="kw">local</span> part = workspace:WaitForChild(<span class="str">"MyPart"</span>)
-
-<span class="cm">-- 자식 전부 가져오기</span>
-<span class="kw">for</span> _, child <span class="kw">in ipairs</span>(workspace:GetChildren()) <span class="kw">do</span>
-    <span class="fn">print</span>(child.Name)
-<span class="kw">end</span></pre>
-
-    <h3>만들기와 복제</h3>
-    <pre class="code-block lua"><span class="cm">-- 새 파트 생성</span>
-<span class="kw">local</span> part = Instance.new(<span class="str">"Part"</span>)
-part.Size = Vector3.new(<span class="num">4</span>, <span class="num">1</span>, <span class="num">4</span>)
-part.Position = Vector3.new(<span class="num">0</span>, <span class="num">10</span>, <span class="num">0</span>)
-part.Anchored = <span class="kw">true</span>
-part.Parent = workspace  <span class="cm">-- Parent는 마지막에!</span>
-
-<span class="cm">-- 기존 모델 복제</span>
-<span class="kw">local</span> template = game.ServerStorage.TreeModel
-<span class="kw">local</span> copy = template:Clone()
-copy.Parent = workspace
-
-<span class="cm">-- 삭제</span>
-part:Destroy()</pre>
-
-    <div class="callout co-tip"><span class="ico">TIP</span><p>속성을 전부 설정한 뒤 마지막에 Parent를 지정하는 것이 성능상 좋습니다. Parent를 먼저 지정하면 속성을 바꿀 때마다 월드가 갱신됩니다.</p></div>
-
-    <h3>주요 클래스 확인</h3>
-    <pre class="code-block lua"><span class="kw">if</span> obj:IsA(<span class="str">"BasePart"</span>) <span class="kw">then</span>   <span class="cm">-- 파트 종류 전부</span>
-<span class="kw">if</span> obj:IsA(<span class="str">"Model"</span>) <span class="kw">then</span>
-<span class="kw">if</span> obj:IsA(<span class="str">"Humanoid"</span>) <span class="kw">then</span></pre>
+    <h3>건물 빠르게 짓는 순서</h3>
+    <ol class="steps">
+      <li>바닥 한 장 &gt; 벽 4면 (두께 1) &gt; 창문/문 Negate로 뚫기.</li>
+      <li>지붕: WedgePart 두 개를 맞대면 삼각 지붕.</li>
+      <li>벽 머티리얼(Brick/Wood)과 지붕 색을 먼저 정하고 시작 — 나중에 일괄 변경은 귀찮습니다.</li>
+      <li>완성되면 전체 선택 &gt; <kbd>Ctrl</kbd>+<kbd>G</kbd>로 Model로 묶고 이름 붙이기.</li>
+      <li>같은 건물이 여러 채 필요하면 Model째 복제 후 색/소품만 바꿔 변화 주기.</li>
+    </ol>
   </div>
 </section>
 
 <!-- 14 -->
-<section class="sec" id="events">
+<section class="sec" id="import">
   <div class="wrap">
-    <h2><span class="num">14</span>이벤트 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">"무언가 일어났을 때 실행"이 이벤트입니다. 게임 상호작용의 전부가 이벤트로 만들어집니다.</p>
+    <h2><span class="num">14</span>외부 에셋 임포트 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">블렌더에서 만든 모델을 맵에 들여오는 방법과 자주 터지는 문제들.</p>
 
-    <h3>Touched — 닿았을 때</h3>
-    <pre class="code-block lua"><span class="kw">local</span> part = script.Parent
-<span class="kw">local</span> debounce = <span class="kw">false</span>  <span class="cm">-- 중복 실행 방지</span>
+    <h3>Import 3D</h3>
+    <ol class="steps">
+      <li>Home 또는 Avatar 탭 &gt; <code>Import 3D</code>.</li>
+      <li>FBX 파일 선택 &gt; 임포트 미리보기 창에서 크기와 형태 확인.</li>
+      <li>블렌더 1m = 약 3.57 studs가 기본 환산입니다. 크기가 안 맞으면 미리보기 창에서 Scale 조절.</li>
+      <li>임포트하면 Workspace에 MeshPart(또는 Model)로 들어옵니다.</li>
+    </ol>
 
-part.Touched:Connect(<span class="kw">function</span>(hit)
-    <span class="kw">local</span> humanoid = hit.Parent:FindFirstChildOfClass(<span class="str">"Humanoid"</span>)
-    <span class="kw">if</span> humanoid <span class="kw">and not</span> debounce <span class="kw">then</span>
-        debounce = <span class="kw">true</span>
-        humanoid.Health = humanoid.Health - <span class="num">10</span>  <span class="cm">-- 데미지</span>
-        task.wait(<span class="num">1</span>)
-        debounce = <span class="kw">false</span>
-    <span class="kw">end</span>
-<span class="kw">end</span>)</pre>
+    <h3>자주 생기는 문제와 해결</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>증상</th><th>원인</th><th>해결</th></tr></thead>
+      <tbody>
+        <tr><td>크기가 이상함</td><td>블렌더 스케일 미적용</td><td>블렌더에서 <kbd>Ctrl</kbd>+<kbd>A</kbd> &gt; All Transforms 후 재내보내기</td></tr>
+        <tr><td>검은 면</td><td>노멀 뒤집힘</td><td>블렌더 에디트 모드 &gt; 전체 선택 &gt; <kbd>Shift</kbd>+<kbd>N</kbd></td></tr>
+        <tr><td>텍스처 사라짐</td><td>FBX에 텍스처 미포함</td><td>텍스처 PNG를 따로 업로드하고 MeshPart의 TextureID에 입력</td></tr>
+        <tr><td>모디파이어 무시됨</td><td>Apply 안 함</td><td>내보내기 옵션 Apply Modifiers 켜기</td></tr>
+        <tr><td>충돌이 이상함</td><td>CollisionFidelity 기본값</td><td>MeshPart &gt; CollisionFidelity를 Box(단순) 또는 PreciseConvexDecomposition(정밀)으로</td></tr>
+      </tbody>
+    </table></div>
 
-    <div class="callout co-warn"><span class="ico">!!</span><p>Touched는 1초에 수십 번 발생할 수 있습니다. 위처럼 <b>debounce(디바운스)</b> 변수로 중복 실행을 막는 패턴은 필수입니다.</p></div>
-
-    <h3>ClickDetector — 클릭했을 때</h3>
-    <pre class="code-block lua"><span class="cm">-- 파트 안에 ClickDetector를 추가하고 이 스크립트도 추가</span>
-<span class="kw">local</span> click = script.Parent.ClickDetector
-
-click.MouseClick:Connect(<span class="kw">function</span>(player)
-    <span class="fn">print</span>(player.Name .. <span class="str">"이(가) 클릭"</span>)
-<span class="kw">end</span>)</pre>
-
-    <h3>플레이어 입장/퇴장</h3>
-    <pre class="code-block lua"><span class="kw">local</span> Players = game:GetService(<span class="str">"Players"</span>)
-
-Players.PlayerAdded:Connect(<span class="kw">function</span>(player)
-    <span class="fn">print</span>(player.Name .. <span class="str">" 입장"</span>)
-<span class="kw">end</span>)
-
-Players.PlayerRemoving:Connect(<span class="kw">function</span>(player)
-    <span class="fn">print</span>(player.Name .. <span class="str">" 퇴장"</span>)
-<span class="kw">end</span>)</pre>
-
-    <h3>이벤트 연결 해제</h3>
-    <pre class="code-block lua"><span class="kw">local</span> connection = part.Touched:Connect(handler)
-connection:Disconnect()  <span class="cm">-- 더 이상 필요 없을 때</span></pre>
+    <h3>CollisionFidelity 선택</h3>
+    <ul class="plain">
+      <li><b>Box:</b> 박스 한 덩어리로 충돌. 가장 가볍습니다. 장식 소품에 권장.</li>
+      <li><b>Default (Hull):</b> 대략적인 외곽 충돌. 일반 용도.</li>
+      <li><b>PreciseConvexDecomposition:</b> 모양 그대로 정밀 충돌. 무겁습니다. 플레이어가 밟고 다니는 구조물에만.</li>
+    </ul>
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>텍스처 이미지는 Creator Hub(create.roblox.com) &gt; Development Items &gt; Decals에서 업로드합니다. 승인 후 받은 ID를 rbxassetid://ID 형태로 사용합니다.</p></div>
   </div>
 </section>
 
 <!-- 15 -->
-<section class="sec" id="humanoid">
+<section class="sec" id="surface">
   <div class="wrap">
-    <h2><span class="num">15</span>캐릭터와 Humanoid <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">플레이어 캐릭터를 코드로 제어합니다. 체력, 속도, 점프, 사망 처리.</p>
+    <h2><span class="num">15</span>SurfaceAppearance 재질 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">MeshPart에 노멀/러프니스 맵을 입혀 진짜 같은 표면을 만드는 기능. 맵 퀄리티가 한 단계 올라갑니다.</p>
 
-    <h3>캐릭터 구조</h3>
+    <h3>적용 방법</h3>
+    <ol class="steps">
+      <li>MeshPart 선택 &gt; Explorer에서 <code>+</code> &gt; <code>SurfaceAppearance</code> 추가.</li>
+      <li><b>ColorMap:</b> 기본 색 텍스처.</li>
+      <li><b>NormalMap:</b> 표면 요철 정보. 블렌더에서 베이킹한 노멀 맵 (블렌더 중급 15챕터 참고).</li>
+      <li><b>RoughnessMap:</b> 어디가 매끈하고 어디가 거친지.</li>
+      <li><b>MetalnessMap:</b> 금속 부분 지정.</li>
+    </ol>
+
+    <h3>언제 쓰고 언제 안 쓰나</h3>
     <ul class="plain">
-      <li><b>Player:</b> Players 서비스 안의 플레이어 정보 (이름, ID 등).</li>
-      <li><b>Character:</b> Workspace에 있는 실제 몸 (Model).</li>
-      <li><b>Humanoid:</b> Character 안에 있는 생명체 제어 인스턴스. 체력, 이동속도 담당.</li>
-      <li><b>HumanoidRootPart:</b> 캐릭터의 중심 파트. 위치 이동(텔레포트)에 사용.</li>
+      <li><b>쓰면 좋은 곳:</b> 플레이어가 가까이서 보는 핵심 구조물 — 바위, 나무 줄기, 건물 벽, 무기 거치대.</li>
+      <li><b>안 써도 되는 곳:</b> 멀리 있는 배경, 작은 소품, 로우폴리 스타일 맵 (단색이 컨셉이면 오히려 방해).</li>
+      <li>텍스처 4장씩 들어가므로 메모리를 먹습니다. 같은 SurfaceAppearance를 여러 메시가 공유하게 하면 효율적입니다.</li>
     </ul>
-
-    <h3>캐릭터 가져오기와 속성 변경</h3>
-    <pre class="code-block lua"><span class="kw">local</span> Players = game:GetService(<span class="str">"Players"</span>)
-
-Players.PlayerAdded:Connect(<span class="kw">function</span>(player)
-    player.CharacterAdded:Connect(<span class="kw">function</span>(character)
-        <span class="kw">local</span> humanoid = character:WaitForChild(<span class="str">"Humanoid"</span>)
-
-        humanoid.WalkSpeed = <span class="num">24</span>     <span class="cm">-- 기본 16</span>
-        humanoid.JumpPower = <span class="num">75</span>     <span class="cm">-- 기본 50</span>
-        humanoid.MaxHealth = <span class="num">200</span>
-        humanoid.Health = <span class="num">200</span>
-    <span class="kw">end</span>)
-<span class="kw">end</span>)</pre>
-
-    <h3>사망 감지</h3>
-    <pre class="code-block lua">humanoid.Died:Connect(<span class="kw">function</span>()
-    <span class="fn">print</span>(<span class="str">"사망"</span>)
-    <span class="cm">-- 점수 차감, 리스폰 메시지 등</span>
-<span class="kw">end</span>)</pre>
-
-    <h3>텔레포트</h3>
-    <pre class="code-block lua"><span class="kw">local</span> root = character:WaitForChild(<span class="str">"HumanoidRootPart"</span>)
-root.CFrame = CFrame.new(<span class="num">0</span>, <span class="num">50</span>, <span class="num">0</span>)  <span class="cm">-- 좌표로 순간이동</span></pre>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>AlphaMode를 Transparency로 바꾸면 ColorMap의 알파 채널로 구멍 뚫린 표면(철망, 나뭇잎)을 표현할 수 있습니다. 잎사귀 한 장 한 장을 모델링할 필요가 없어집니다.</p></div>
   </div>
 </section>
 
 <!-- 16 -->
-<section class="sec" id="gui">
+<section class="sec" id="props">
   <div class="wrap">
-    <h2><span class="num">16</span>GUI 만들기 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">화면에 표시되는 버튼, 점수판, 메뉴. StarterGui에 만듭니다.</p>
+    <h2><span class="num">16</span>소품 배치와 디테일 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">텅 빈 맵과 살아있는 맵의 차이는 소품입니다. 어디에 무엇을 어떻게 놓는가.</p>
 
-    <h3>GUI 기본 구조</h3>
-    <ol class="steps">
-      <li>StarterGui &gt; <code>+</code> &gt; <code>ScreenGui</code> 추가. 화면 전체를 덮는 보이지 않는 캔버스.</li>
-      <li>ScreenGui 안에 <code>Frame</code>(사각형 패널), <code>TextLabel</code>(글자), <code>TextButton</code>(버튼), <code>ImageLabel</code>(이미지)을 추가.</li>
-    </ol>
+    <h3>배치 원칙</h3>
+    <ul class="plain">
+      <li><b>군집 배치:</b> 나무 한 그루씩 띄엄띄엄보다, 3~5그루 모인 군집 + 빈 공간. 자연은 뭉쳐서 자랍니다.</li>
+      <li><b>크기/회전 변주:</b> 같은 소품도 Scale 0.9~1.2배, Y축 회전을 제각각. 복붙 티가 사라집니다.</li>
+      <li><b>스토리텔링:</b> 부서진 수레 + 흩어진 상자 + 바퀴 자국 = 사연 있는 장면. 소품 조합으로 이야기를 암시하면 맵이 살아납니다.</li>
+      <li><b>동선 방해 금지:</b> 플레이어가 자주 다니는 길엔 소품을 적게. 걸려서 끼는 순간 스트레스.</li>
+      <li><b>시선 유도:</b> 가야 할 방향에 밝은 색, 빛, 큰 소품 배치. 플레이어는 말 안 해줘도 그쪽으로 갑니다.</li>
+    </ul>
 
-    <h3>크기와 위치 — UDim2</h3>
-    <p>GUI의 Size와 Position은 <code>UDim2</code>로 표현합니다: <code>{X스케일, X픽셀}, {Y스케일, Y픽셀}</code>. 스케일은 화면 비율(0~1), 픽셀은 고정값입니다.</p>
-    <pre class="code-block lua"><span class="cm">-- 화면 가로 30%, 세로 10% 크기</span>
-frame.Size = UDim2.new(<span class="num">0.3</span>, <span class="num">0</span>, <span class="num">0.1</span>, <span class="num">0</span>)
+    <h3>빠른 배치 도구</h3>
+    <ul class="plain">
+      <li><kbd>Alt</kbd>+<kbd>드래그</kbd> — 이동하면서 복제. 같은 소품을 빠르게 흩뿌릴 때.</li>
+      <li><kbd>Ctrl</kbd>+<kbd>L</kbd> — 이동 축을 로컬/월드 전환. 기울어진 표면에 맞춰 놓을 때.</li>
+      <li>Model 탭 &gt; Snap to Grid 해제 — 소품은 그리드에 안 맞춰야 자연스럽습니다 (건축은 켜고, 소품은 끄고).</li>
+    </ul>
 
-<span class="cm">-- 화면 정중앙에 배치</span>
-frame.AnchorPoint = Vector2.new(<span class="num">0.5</span>, <span class="num">0.5</span>)
-frame.Position = UDim2.new(<span class="num">0.5</span>, <span class="num">0</span>, <span class="num">0.5</span>, <span class="num">0</span>)</pre>
-
-    <div class="callout co-tip"><span class="ico">TIP</span><p>모바일/PC 모두 대응하려면 픽셀보다 스케일을 위주로 쓰세요. 픽셀 고정값은 작은 화면에서 깨집니다. 모서리를 둥글게 하려면 <code>UICorner</code>를 자식으로 추가하면 됩니다.</p></div>
-
-    <h3>버튼 클릭 처리</h3>
-    <pre class="code-block lua"><span class="cm">-- LocalScript를 버튼 안에 넣으세요</span>
-<span class="kw">local</span> button = script.Parent
-<span class="kw">local</span> count = <span class="num">0</span>
-
-button.MouseButton1Click:Connect(<span class="kw">function</span>()
-    count = count + <span class="num">1</span>
-    button.Text = <span class="str">"클릭: "</span> .. count
-<span class="kw">end</span>)</pre>
-
-    <div class="callout co-warn"><span class="ico">!!</span><p>GUI를 다루는 스크립트는 <b>LocalScript</b>여야 합니다. 일반 Script는 서버에서 돌기 때문에 개인 화면의 GUI를 건드릴 수 없습니다. 다음 챕터에서 이 구분을 자세히 다룹니다.</p></div>
-
-    <h3>자주 쓰는 GUI 요소</h3>
+    <h3>소품 성능 설정 기본값</h3>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>요소</th><th>용도</th></tr></thead>
+      <thead><tr><th>소품 유형</th><th>CanCollide</th><th>CastShadow</th><th>CanQuery / CanTouch</th></tr></thead>
       <tbody>
-        <tr><td>Frame</td><td>배경 패널, 컨테이너</td></tr>
-        <tr><td>TextLabel</td><td>점수, 제목 등 글자 표시</td></tr>
-        <tr><td>TextButton</td><td>클릭 가능한 버튼</td></tr>
-        <tr><td>ImageLabel / ImageButton</td><td>이미지 표시 / 이미지 버튼</td></tr>
-        <tr><td>ScrollingFrame</td><td>스크롤 가능한 목록</td></tr>
-        <tr><td>UIListLayout</td><td>자식들을 자동 정렬</td></tr>
-        <tr><td>UICorner / UIStroke</td><td>둥근 모서리 / 테두리</td></tr>
+        <tr><td>큰 나무, 바위, 건물</td><td>true</td><td>true</td><td>true</td></tr>
+        <tr><td>풀, 꽃, 돌멩이, 잡동사니</td><td>false</td><td>false</td><td>false</td></tr>
+        <tr><td>먼 배경 전용</td><td>false</td><td>false</td><td>false</td></tr>
       </tbody>
     </table></div>
   </div>
 </section>
 
 <!-- 17 -->
-<section class="sec" id="client-server">
+<section class="sec" id="lighting">
   <div class="wrap">
-    <h2><span class="num">17</span>클라이언트와 서버 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">Roblox 게임의 가장 중요한 개념. 이걸 이해해야 멀티플레이 게임을 만들 수 있습니다.</p>
+    <h2><span class="num">17</span>조명과 Atmosphere <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">같은 맵도 조명에 따라 천국과 폐허가 됩니다. Lighting 서비스 완전 정리.</p>
 
-    <h3>두 개의 세계</h3>
+    <h3>Lighting 핵심 속성</h3>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>구분</th><th>서버</th><th>클라이언트</th></tr></thead>
+      <thead><tr><th>속성</th><th>역할</th><th>분위기별 추천</th></tr></thead>
       <tbody>
-        <tr><td>무엇</td><td>게임을 운영하는 Roblox 컴퓨터</td><td>각 플레이어의 기기</td></tr>
-        <tr><td>스크립트</td><td>Script</td><td>LocalScript</td></tr>
-        <tr><td>두는 곳</td><td>ServerScriptService</td><td>StarterPlayerScripts, StarterGui, StarterCharacterScripts</td></tr>
-        <tr><td>담당</td><td>게임 규칙, 점수, 데이터 저장</td><td>GUI, 카메라, 입력, 개인 연출</td></tr>
-        <tr><td>신뢰도</td><td>신뢰 가능</td><td>해킹 가능 — 절대 신뢰 금지</td></tr>
+        <tr><td>ClockTime</td><td>시간 (0~24). 태양 위치와 하늘색</td><td>낮 14 / 황혼 17.5 / 밤 22 / 새벽 5.5</td></tr>
+        <tr><td>Brightness</td><td>태양광 세기</td><td>낮 2~3 / 밤 0.3~0.8</td></tr>
+        <tr><td>Ambient</td><td>그림자 속 최소 밝기</td><td>실내·동굴 맵에서 중요. 너무 검으면 안 보임</td></tr>
+        <tr><td>OutdoorAmbient</td><td>야외 환경광 색</td><td>황혼이면 주황 기, 설원이면 푸른 기</td></tr>
+        <tr><td>ColorShift_Top</td><td>위에서 내리쬐는 빛의 색조</td><td>노을 연출에 주황~분홍</td></tr>
+        <tr><td>EnvironmentDiffuseScale</td><td>하늘이 사물을 물들이는 정도</td><td>0.5~1 — 켜면 색이 풍부해짐</td></tr>
+        <tr><td>Technology</td><td>렌더 방식</td><td>Future(최고 화질) / ShadowMap(균형)</td></tr>
       </tbody>
     </table></div>
 
-    <h3>판단 기준</h3>
+    <h3>Atmosphere</h3>
+    <p>Lighting 안에 <code>Atmosphere</code> 인스턴스를 추가하면 공기 자체를 연출합니다:</p>
     <ul class="plain">
-      <li><b>모든 플레이어에게 영향:</b> 서버 (Script). 예: 문 열기, 점수 변경, 적 스폰.</li>
-      <li><b>한 플레이어 화면에만:</b> 클라이언트 (LocalScript). 예: 버튼 UI, 카메라 흔들림, 효과음.</li>
+      <li><b>Density (0~1):</b> 공기 농도. 0.3 산뜻 / 0.45 보통 / 0.6+ 안개 낀 느낌.</li>
+      <li><b>Haze:</b> 지평선의 뿌연 정도. 2~4면 원근감이 생겨 맵이 넓어 보입니다.</li>
+      <li><b>Color / Decay:</b> 대기 색과 소실 색. 노을엔 주황/보라 조합.</li>
+      <li><b>Glare:</b> 태양 번짐. 0.5~1.</li>
     </ul>
 
-    <h3>전용 저장소</h3>
+    <h3>후처리 이펙트 (Lighting에 추가)</h3>
     <ul class="plain">
-      <li><b>ServerStorage:</b> 서버만 접근. 적 템플릿, 보상 아이템 원본 보관.</li>
-      <li><b>ReplicatedStorage:</b> 양쪽 다 접근. RemoteEvent, 공용 모듈 보관.</li>
+      <li><b>BloomEffect:</b> 밝은 것이 빛나 보임. Neon과 세트. Intensity 0.5~1, Threshold 1~2.</li>
+      <li><b>ColorCorrectionEffect:</b> 전체 색감 보정. Saturation -0.1이면 차분, +0.15면 쨍한 만화풍. TintColor로 맵 전체에 색조.</li>
+      <li><b>DepthOfFieldEffect:</b> 멀리 흐림. 로비처럼 좁은 공간에서 분위기용. 게임플레이 맵에선 끄는 게 보통.</li>
+      <li><b>SunRaysEffect:</b> 태양 광선 줄기. Intensity 0.05~0.15만 — 과하면 눈아픔.</li>
     </ul>
 
-    <div class="callout co-warn"><span class="ico">!!</span><p>클라이언트에서 바꾼 것(파트 색, 위치 등)은 그 플레이어 화면에만 보입니다. 다른 사람에게도 보이게 하려면 서버에서 바꿔야 합니다. "왜 나한테만 보이지?"의 원인 대부분이 이것입니다.</p></div>
+    <h3>개별 조명</h3>
+    <ul class="plain">
+      <li><b>PointLight:</b> 전구처럼 사방으로. 횃불, 램프 안에. Range 8~16, Brightness 1~3.</li>
+      <li><b>SpotLight:</b> 원뿔 방향광. 가로등, 무대 조명. Face로 방향, Angle로 퍼짐 조절.</li>
+      <li><b>SurfaceLight:</b> 면 전체에서 빛. 모니터, 창문, 간판 발광에 자연스럽습니다.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>밤 맵의 공식: ClockTime 22 + Brightness 0.5 + 따뜻한 색(255,180,110) PointLight를 길 따라 배치. 어두운 배경과 따뜻한 불빛의 대비가 분위기를 만듭니다.</p></div>
   </div>
 </section>
 
 <!-- 18 -->
-<section class="sec" id="remote">
+<section class="sec" id="water">
   <div class="wrap">
-    <h2><span class="num">18</span>RemoteEvent 통신 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">클라이언트와 서버가 대화하는 방법. 버튼을 눌러 서버에 요청하는 구조를 만듭니다.</p>
+    <h2><span class="num">18</span>물과 특수 지형 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">강, 폭포, 용암, 동굴 — 평범한 맵을 특별하게 만드는 지형 요소들.</p>
 
-    <h3>구조</h3>
+    <h3>강 만들기</h3>
     <ol class="steps">
-      <li>ReplicatedStorage에 <code>RemoteEvent</code> 추가. 이름: BuyItem.</li>
-      <li>클라이언트(LocalScript)에서 <code>FireServer()</code>로 요청.</li>
-      <li>서버(Script)에서 <code>OnServerEvent</code>로 받기.</li>
+      <li>Subtract 브러시로 강줄기 골을 팝니다. 일직선이 아니라 구불구불하게.</li>
+      <li>Sea Level로 물 채우기 — 또는 강 구간만 Fill 도구에서 Water 재질로 채우기.</li>
+      <li>강가에 모래(Sand)를 Paint로 칠해 물가 느낌. 바위 소품을 강 중간중간에.</li>
     </ol>
 
-    <h3>클라이언트 쪽 (LocalScript, 버튼 안)</h3>
-    <pre class="code-block lua"><span class="kw">local</span> RS = game:GetService(<span class="str">"ReplicatedStorage"</span>)
-<span class="kw">local</span> buyEvent = RS:WaitForChild(<span class="str">"BuyItem"</span>)
-<span class="kw">local</span> button = script.Parent
+    <h3>폭포</h3>
+    <ol class="steps">
+      <li>절벽 위 물과 아래 물을 만들어 두고, 떨어지는 부분은 <b>파트</b>로 표현합니다 (Terrain 물은 수직으로 못 섭니다).</li>
+      <li>흰색~하늘색 반투명 파트(Transparency 0.4, Glass 또는 SmoothPlastic)를 절벽에 세우기.</li>
+      <li>떨어지는 지점에 흰색 반투명 파트를 겹쳐 물보라 표현. ParticleEmitter(흰 연기 텍스처)를 추가하면 물안개까지.</li>
+    </ol>
 
-button.MouseButton1Click:Connect(<span class="kw">function</span>()
-    buyEvent:FireServer(<span class="str">"Sword"</span>)  <span class="cm">-- 서버에 요청</span>
-<span class="kw">end</span>)</pre>
+    <h3>용암</h3>
+    <ul class="plain">
+      <li>Terrain 재질 <code>CrackedLava</code>로 칠하면 갈라진 틈에서 빛나는 용암 지형이 됩니다.</li>
+      <li>흐르는 용암 호수는 주황 Neon 파트 + 위에 검붉은 반투명 파트를 겹쳐 표면 막 표현.</li>
+      <li>주변 Lighting Ambient에 붉은 기 + 주황 PointLight 여러 개 = 열기 연출.</li>
+    </ul>
 
-    <h3>서버 쪽 (Script, ServerScriptService)</h3>
-    <pre class="code-block lua"><span class="kw">local</span> RS = game:GetService(<span class="str">"ReplicatedStorage"</span>)
-<span class="kw">local</span> buyEvent = RS:WaitForChild(<span class="str">"BuyItem"</span>)
-
-buyEvent.OnServerEvent:Connect(<span class="kw">function</span>(player, itemName)
-    <span class="cm">-- 첫 인자는 항상 요청한 player가 자동으로 들어옴</span>
-
-    <span class="cm">-- 서버에서 검증! 클라이언트가 보낸 값은 신뢰 금지</span>
-    <span class="kw">if</span> itemName ~= <span class="str">"Sword"</span> <span class="kw">and</span> itemName ~= <span class="str">"Shield"</span> <span class="kw">then</span>
-        <span class="kw">return</span>  <span class="cm">-- 이상한 값이면 무시</span>
-    <span class="kw">end</span>
-
-    <span class="fn">print</span>(player.Name .. <span class="str">"이(가) "</span> .. itemName .. <span class="str">" 구매"</span>)
-<span class="kw">end</span>)</pre>
-
-    <h3>서버 &rarr; 클라이언트 방향</h3>
-    <pre class="code-block lua"><span class="cm">-- 서버에서</span>
-event:FireClient(player, <span class="str">"알림 메시지"</span>)     <span class="cm">-- 한 명에게</span>
-event:FireAllClients(<span class="str">"전체 공지"</span>)            <span class="cm">-- 전원에게</span>
-
-<span class="cm">-- 클라이언트에서 받기</span>
-event.OnClientEvent:Connect(<span class="kw">function</span>(msg)
-    <span class="fn">print</span>(msg)
-<span class="kw">end</span>)</pre>
-
-    <div class="callout co-warn"><span class="ico">!!</span><p>클라이언트가 보내는 데이터는 익스플로잇(핵)으로 조작될 수 있습니다. "돈이 충분한지", "그 아이템이 존재하는지" 같은 검증은 반드시 서버에서 하세요.</p></div>
+    <h3>동굴</h3>
+    <ol class="steps">
+      <li>산을 만들고 Subtract 브러시로 안을 파냅니다. 입구는 좁고 안은 넓게.</li>
+      <li>동굴 안은 햇빛이 안 드므로 Ambient만으로는 깜깜합니다 — 발광 버섯(Neon), 크리스탈, 횃불 PointLight를 광원으로 배치.</li>
+      <li>천장에서 떨어지는 종유석: 블렌더 원뿔 메시 or Wedge 조합.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>Terrain의 Water는 진짜 수영 가능한 물입니다. 파트로 만든 가짜 물(반투명 파란 파트)은 수영이 안 되고 그냥 통과하거나 막힙니다. 들어갈 수 있는 물은 반드시 Terrain Water로.</p></div>
   </div>
 </section>
 
 <!-- 19 -->
-<section class="sec" id="tween">
+<section class="sec" id="sound">
   <div class="wrap">
-    <h2><span class="num">19</span>TweenService <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">속성을 부드럽게 변화시키는 애니메이션 도구. 문 열림, UI 슬라이드, 색 변화 전부 Tween으로.</p>
+    <h2><span class="num">19</span>사운드 환경 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">눈 감고도 숲인지 동굴인지 알 수 있어야 좋은 맵입니다. 소리는 코드 없이 배치만으로 됩니다.</p>
 
-    <h3>기본 사용법</h3>
-    <pre class="code-block lua"><span class="kw">local</span> TweenService = game:GetService(<span class="str">"TweenService"</span>)
-<span class="kw">local</span> part = workspace.Door
+    <h3>환경음 (Ambient) 배치</h3>
+    <ol class="steps">
+      <li>소리 낼 위치의 파트(또는 Attachment)에 <code>Sound</code> 인스턴스 추가.</li>
+      <li>SoundId에 사운드 에셋 ID. Toolbox &gt; Audio 탭에서 무료 사운드 검색 가능 (새소리, 물소리, 바람).</li>
+      <li><code>Looped: true</code>, <code>Playing: true</code> 체크 — 코드 없이 게임 시작부터 무한 재생됩니다.</li>
+      <li><b>RollOffMaxDistance:</b> 소리가 들리는 최대 거리. 모닥불 30, 폭포 150.</li>
+      <li><b>RollOffMode:</b> InverseTapered가 자연스럽게 멀어질수록 작아집니다.</li>
+    </ul>
 
-<span class="cm">-- 1) 어떻게 움직일지 (시간, 가감속 스타일)</span>
-<span class="kw">local</span> info = TweenInfo.new(
-    <span class="num">2</span>,                          <span class="cm">-- 2초 동안</span>
-    Enum.EasingStyle.Quad,      <span class="cm">-- 가감속 곡선</span>
-    Enum.EasingDirection.Out    <span class="cm">-- 끝에서 감속</span>
-)
-
-<span class="cm">-- 2) 어떤 속성을 어떤 값으로</span>
-<span class="kw">local</span> goal = {
-    Position = part.Position + Vector3.new(<span class="num">0</span>, <span class="num">8</span>, <span class="num">0</span>),
-    Transparency = <span class="num">0.5</span>,
-}
-
-<span class="cm">-- 3) 생성하고 실행</span>
-<span class="kw">local</span> tween = TweenService:Create(part, info, goal)
-tween:Play()
-
-tween.Completed:Wait()  <span class="cm">-- 끝날 때까지 대기 (선택)</span></pre>
-
-    <h3>EasingStyle 종류</h3>
+    <h3>구역별 사운드 설계</h3>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>스타일</th><th>느낌</th><th>용도</th></tr></thead>
+      <thead><tr><th>구역</th><th>소리</th><th>Volume</th></tr></thead>
       <tbody>
-        <tr><td>Linear</td><td>일정한 속도</td><td>기계적 움직임</td></tr>
-        <tr><td>Quad / Sine</td><td>자연스러운 가감속</td><td>대부분의 상황. 기본 추천</td></tr>
-        <tr><td>Back</td><td>살짝 넘어갔다 돌아옴</td><td>탱탱한 UI 팝업</td></tr>
-        <tr><td>Bounce</td><td>바닥에 튕기는 느낌</td><td>떨어지는 연출</td></tr>
-        <tr><td>Elastic</td><td>고무줄처럼 진동</td><td>과장된 연출</td></tr>
+        <tr><td>숲</td><td>새소리 + 바람 잎사귀</td><td>0.3~0.5</td></tr>
+        <tr><td>강/폭포</td><td>물 흐름 (폭포는 가까울수록 큼)</td><td>0.4~0.8</td></tr>
+        <tr><td>동굴</td><td>물방울 + 낮은 울림</td><td>0.3</td></tr>
+        <tr><td>마을</td><td>웅성거림 + 대장간 망치질</td><td>0.2~0.4</td></tr>
+        <tr><td>전체 BGM</td><td>SoundService에 Sound 추가 (위치 무관 재생)</td><td>0.15~0.3</td></tr>
       </tbody>
     </table></div>
-
-    <h3>GUI에도 동일하게</h3>
-    <pre class="code-block lua"><span class="cm">-- 패널이 화면 밖에서 미끄러져 들어오는 연출</span>
-<span class="kw">local</span> tween = TweenService:Create(frame,
-    TweenInfo.new(<span class="num">0.4</span>, Enum.EasingStyle.Back, Enum.EasingDirection.Out),
-    {Position = UDim2.new(<span class="num">0.5</span>, <span class="num">0</span>, <span class="num">0.5</span>, <span class="num">0</span>)}
-)
-tween:Play()</pre>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>BGM은 작게, 환경음은 위치별로. 플레이어가 이동하면서 소리가 자연스럽게 교차되면 맵이 진짜 공간처럼 느껴집니다.</p></div>
   </div>
 </section>
 
 <!-- 20 -->
-<section class="sec" id="sound-light">
+<section class="sec" id="sky">
   <div class="wrap">
-    <h2><span class="num">20</span>사운드와 조명 <span class="lv lv-map">중급</span></h2>
-    <p class="sec-sub">게임의 분위기를 만드는 두 축. 소리와 빛.</p>
+    <h2><span class="num">20</span>스카이박스와 배경 <span class="lv lv-map">중급</span></h2>
+    <p class="sec-sub">맵의 끝은 어디인가 — 하늘과 먼 배경으로 세계가 이어지는 착각을 만듭니다.</p>
 
-    <h3>사운드 재생</h3>
+    <h3>Skybox 교체</h3>
     <ol class="steps">
-      <li>파트(또는 Workspace)에 <code>Sound</code> 인스턴스 추가.</li>
-      <li>SoundId에 <code>rbxassetid://사운드ID</code> 입력. Toolbox &gt; Audio에서 검색 가능.</li>
-      <li>파트 안에 넣으면 3D 사운드(가까울수록 크게), Workspace 직속이면 전역 사운드.</li>
+      <li>Lighting에 <code>Sky</code> 인스턴스 추가.</li>
+      <li>SkyboxBk/Dn/Ft/Lf/Rt/Up 6면에 하늘 이미지 ID 입력. Toolbox에서 "skybox" 검색하면 완성된 세트를 구할 수 있습니다.</li>
+      <li>SunAngularSize / MoonAngularSize로 해와 달 크기, StarCount로 밤하늘 별 개수 조절.</li>
     </ol>
-    <pre class="code-block lua"><span class="kw">local</span> sound = script.Parent.Sound
-sound.Volume = <span class="num">0.5</span>
-sound.Looped = <span class="kw">true</span>   <span class="cm">-- 배경음악용</span>
-sound:Play()
-<span class="cm">-- sound:Stop(), sound:Pause()</span></pre>
 
-    <h3>Lighting 핵심 속성</h3>
-    <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>속성</th><th>역할</th></tr></thead>
-      <tbody>
-        <tr><td>ClockTime</td><td>0~24 시간. 태양 위치와 하늘색 결정</td></tr>
-        <tr><td>Brightness</td><td>전체 밝기</td></tr>
-        <tr><td>Ambient / OutdoorAmbient</td><td>그림자 영역 / 야외 최소 밝기</td></tr>
-        <tr><td>FogEnd / FogColor</td><td>안개 거리와 색</td></tr>
-        <tr><td>Technology</td><td>렌더링 방식. Future가 가장 고품질</td></tr>
-      </tbody>
-    </table></div>
-
-    <h3>Atmosphere와 후처리 효과</h3>
-    <p>Lighting 안에 추가하는 인스턴스들:</p>
+    <h3>먼 배경 산 (스카이라인)</h3>
     <ul class="plain">
-      <li><b>Atmosphere:</b> 대기 산란, 안개, 노을. Density 0.3~0.5가 자연스러움.</li>
-      <li><b>BloomEffect:</b> 밝은 부분이 빛나는 효과. Neon과 조합하면 화려함.</li>
-      <li><b>ColorCorrectionEffect:</b> 전체 색감 보정. 채도, 대비, 색조.</li>
-      <li><b>BlurEffect:</b> 화면 흐림. 메뉴 열렸을 때 배경 흐림 등.</li>
+      <li>맵 가장자리 너머에 큰 산 모양 파트나 로우폴리 산 메시를 배치합니다. 단색에 가깝게, 안개 색과 비슷한 톤으로.</li>
+      <li>Atmosphere의 Haze 덕분에 멀리 있는 것은 자동으로 뿌옇게 — 배경 산은 대충 만들어도 그럴듯해집니다.</li>
+      <li>배경 파트는 CanCollide false, CastShadow false, CanQuery false.</li>
     </ul>
 
-    <h3>개별 조명</h3>
-    <pre class="code-block lua"><span class="cm">-- 파트에 PointLight 추가 (코드로)</span>
-<span class="kw">local</span> light = Instance.new(<span class="str">"PointLight"</span>)
-light.Color = Color3.fromRGB(<span class="num">255</span>, <span class="num">180</span>, <span class="num">80</span>)  <span class="cm">-- 따뜻한 빛</span>
-light.Range = <span class="num">16</span>
-light.Brightness = <span class="num">2</span>
-light.Parent = workspace.Lamp</pre>
+    <h3>맵 경계 처리</h3>
+    <ul class="plain">
+      <li><b>자연 경계:</b> 절벽, 바다, 산맥으로 못 가게 막기 — 보이지 않는 벽보다 납득됩니다.</li>
+      <li><b>투명 벽:</b> 어쩔 수 없을 땐 Transparency 1, CanCollide true 파트. 단, 보이는 길이 벽으로 막혀 있으면 플레이어가 답답해합니다 — 경계는 시각적으로도 끝나 보이게.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>중급을 마쳤으면 작은 테마 맵 하나를 처음부터 끝까지 완성해 보세요 — 설계, 지형, 건물 두세 채, 조명, 소리까지. 다음 단계인 고급에서 이 맵을 최적화하고 완성도를 끌어올립니다.</p></div>
   </div>
 </section>
 
 <div class="wrap">
   <a class="next-level" href="studio-advanced.html">
-    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Studio 고급 — 모듈, 데이터 저장, 최적화, 수익화</span></div>
+    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Studio 고급 — 맵 최적화와 완성도</span></div>
     <span class="nl-arrow">&rarr;</span>
   </a>
 </div>
@@ -571,9 +442,9 @@ light.Parent = workspace.Lamp</pre>
   <div class="wrap">
     <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
     <nav class="foot-nav">
+      <a href="studio-beginner.html">&larr; 초급</a>
       <a href="index.html">메인</a>
-      <a href="studio-beginner.html">Studio 초급</a>
-      <a href="studio-advanced.html">Studio 고급</a>
+      <a href="studio-advanced.html">고급으로 &rarr;</a>
     </nav>
   </div>
 </footer>
