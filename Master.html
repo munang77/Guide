@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블렌더 초고급 — OSL, 커스텀 애드온, 렌더팜, VFX 파이프라인</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23e040fb'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23fff'>B</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px)}
+.next-beg:hover{border-color:rgba(90,208,138,.4)}.next-beg:hover .nl-arrow{color:var(--green)}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark mas">B</div>
+    <div><b>초고급 강좌</b><small>MASTER</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <div class="nav-group"><span>셰이더 마스터</span>
+    <a class="nav-link" href="#osl"><span class="n">31</span>OSL 셰이더 프로그래밍</a>
+    <a class="nav-link" href="#custom-shader"><span class="n">32</span>커스텀 BSDF 설계</span></a>
+    <a class="nav-link" href="#matlib"><span class="n">33</span>재질 라이브러리 구축</a>
+  </div>
+  <div class="nav-group"><span>파이프라인</span>
+    <a class="nav-link" href="#render-farm"><span class="n">34</span>렌더팜 & 배치 렌더링</a>
+    <a class="nav-link" href="#vfx-pipeline"><span class="n">35</span>VFX 파이프라인</a>
+    <a class="nav-link" href="#alembic"><span class="n">36</span>Alembic / USD 교환</a>
+  </div>
+  <div class="nav-group"><span>고급 모델링</span>
+    <a class="nav-link" href="#retopo-adv"><span class="n">37</span>프로덕션 리토폴로지</a>
+    <a class="nav-link" href="#nurbs"><span class="n">38</span>NURBS / 서피스</a>
+    <a class="nav-link" href="#cloth-sim"><span class="n">39</span>의상/천 시뮬 마스터</a>
+  </div>
+  <div class="nav-group"><span>애드온 개발</span>
+    <a class="nav-link" href="#addon-dev"><span class="n">40</span>커스텀 애드온 제작</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="beginner.html">입문</a>
+    <a class="page-tab" href="intermediate.html">중급</a>
+    <a class="page-tab" href="advanced.html">고급</a>
+    <a class="page-tab tab-mas" href="master.html">초고급</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 65% -10%,rgba(224,64,251,.18),transparent 65%),radial-gradient(400px 300px at 10% 75%,rgba(90,167,255,.07),transparent 60%)">
+  <div class="wrap">
+    <div class="hero-chip chip-mas">MASTER</div>
+    <h1>블렌더 초고급</h1>
+    <p class="lead">OSL 셰이더 코딩, 커스텀 애드온 제작, VFX 파이프라인, 렌더팜, Alembic/USD. 블렌더를 도구가 아닌 언어로 다루는 단계.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">OSL 셰이더</span>
+      <span class="hero-tag">애드온 개발</span>
+      <span class="hero-tag">VFX 파이프라인</span>
+    </div>
+  </div>
+</div>
+
+<!-- 31 -->
+<section class="sec" id="osl">
+  <div class="wrap">
+    <h2><span class="num-mas">31</span>OSL 셰이더 프로그래밍 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">Open Shading Language로 노드로는 만들 수 없는 재질을 코드로 직접 작성합니다. Cycles 전용.</p>
+
+    <h3>OSL이란?</h3>
+    <p>OSL(Open Shading Language)은 픽사, 소니픽처스 등 VFX 스튜디오에서 사용하는 셰이더 언어입니다. 블렌더 Cycles에서 Script 노드를 통해 사용할 수 있습니다. 노드로는 표현하기 어려운 복잡한 수학 기반 패턴이나 물리 모델을 코드로 직접 작성합니다.</p>
+
+    <h3>사용 조건</h3>
+    <ul class="plain">
+      <li>렌더 엔진: <b>Cycles 전용</b>. EEVEE에서는 작동하지 않습니다.</li>
+      <li>Render Properties &gt; Sampling &gt; <code>Open Shading Language</code> 켜기.</li>
+      <li>CPU 렌더링만 지원합니다(GPU OSL은 실험적).</li>
+      <li>Shader Editor에서 <b>Script 노드</b> 추가 &gt; .osl 파일 연결.</li>
+    </ul>
+
+    <h3>OSL 기본 문법</h3>
+    <pre class="code-block"><span class="cm">// 체커보드 패턴 예시 OSL 셰이더</span>
+<span class="kw">shader</span> <span class="fn">MyChecker</span>(
+    point UVW = P,        <span class="cm">// 입력: 좌표</span>
+    float Scale = <span class="num">4.0</span>,   <span class="cm">// 입력: 크기</span>
+    color Color1 = <span class="num">0</span>,    <span class="cm">// 입력: 색상1 (검정)</span>
+    color Color2 = <span class="num">1</span>,    <span class="cm">// 입력: 색상2 (흰색)</span>
+    output color Out = <span class="num">0</span>  <span class="cm">// 출력: 결과 색상</span>
+) {
+    <span class="cm">// 좌표를 Scale로 나눈 나머지로 체커 계산</span>
+    point p = UVW * Scale;
+    int xi = (int)floor(p[<span class="num">0</span>]) % <span class="num">2</span>;
+    int yi = (int)floor(p[<span class="num">1</span>]) % <span class="num">2</span>;
+    int zi = (int)floor(p[<span class="num">2</span>]) % <span class="num">2</span>;
+
+    <span class="kw">if</span> ((xi + yi + zi) % <span class="num">2</span> == <span class="num">0</span>)
+        Out = Color1;
+    <span class="kw">else</span>
+        Out = Color2;
+}</pre>
+
+    <h3>OSL 주요 내장 함수</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>함수</th><th>설명</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>noise(p)</td><td>Perlin 노이즈 (0~1)</td><td>float n = noise("perlin", P*4)</td></tr>
+        <tr><td>cellnoise(p)</td><td>셀 노이즈. Voronoi 기반</td><td>float c = cellnoise(P)</td></tr>
+        <tr><td>mix(a,b,t)</td><td>두 값 사이 선형 보간</td><td>mix(Color1, Color2, 0.5)</td></tr>
+        <tr><td>clamp(x,a,b)</td><td>값을 a~b 범위로 고정</td><td>clamp(n, 0, 1)</td></tr>
+        <tr><td>smoothstep(e0,e1,x)</td><td>부드러운 0~1 전환</td><td>smoothstep(0.4, 0.6, n)</td></tr>
+        <tr><td>transform(space,p)</td><td>좌표계 변환</td><td>transform("world","object",P)</td></tr>
+        <tr><td>emission()</td><td>발광 클로저 반환</td><td>Ci = emission() * Color * Strength</td></tr>
+        <tr><td>diffuse(N)</td><td>Lambertian 디퓨즈 클로저</td><td>Ci = diffuse(N) * Color</td></tr>
+        <tr><td>reflection(N)</td><td>완전 반사 클로저</td><td>Ci = reflection(N)</td></tr>
+        <tr><td>refraction(N,eta)</td><td>굴절 클로저</td><td>Ci = refraction(N, 1.45)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>OSL vs 노드 선택 기준</h3>
+    <ul class="plain">
+      <li><b>노드 사용:</b> 일반 PBR 재질, 표준 텍스처 조합, 팀원과 공유하는 재질.</li>
+      <li><b>OSL 사용:</b> 수학적으로 복잡한 패턴, 절차적 기하학 패턴, 커스텀 BSDF 모델, 노드로 만들기 비효율적인 경우.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 32 -->
+<section class="sec" id="custom-shader">
+  <div class="wrap">
+    <h2><span class="num-mas">32</span>커스텀 BSDF 설계 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">Principled BSDF 안에서 해결 안 되는 특수 재질을 기본 클로저를 조합해 직접 설계합니다.</p>
+
+    <h3>BSDF란?</h3>
+    <p>BSDF(Bidirectional Scattering Distribution Function)는 빛이 표면에서 어떻게 산란되는지를 수학적으로 정의한 함수입니다. Principled BSDF는 가장 일반적인 재질을 커버하지만, 특수한 재질(레이스, 벨벳 광섬유, 결정체 등)은 기본 클로저를 조합해 직접 만들어야 합니다.</p>
+
+    <h3>기본 클로저 종류</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>클로저</th><th>물리 의미</th><th>재질</th></tr></thead>
+      <tbody>
+        <tr><td>diffuse(N)</td><td>완전 무광 산란 (Lambertian)</td><td>분필, 무광 페인트</td></tr>
+        <tr><td>oren_nayar(N, sigma)</td><td>거친 표면 산란</td><td>천, 흙, 콘크리트</td></tr>
+        <tr><td>microfacet(dist, N, ag)</td><td>미세면 반사 (GGX/Beckmann)</td><td>금속, 광택면</td></tr>
+        <tr><td>translucent(N)</td><td>반투과 (반대면 산란)</td><td>종이, 얇은 천</td></tr>
+        <tr><td>transparent()</td><td>완전 투과</td><td>유리, 물</td></tr>
+        <tr><td>ashikhmin_shirley(N,T,nu,nv)</td><td>비등방성(Anisotropic) 반사</td><td>브러시 금속, 새틴</td></tr>
+        <tr><td>emission()</td><td>발광</td><td>LED, 화면, 용암</td></tr>
+        <tr><td>subsurface(N,r)</td><td>내부 산란</td><td>피부, 밀랍, 옥석</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>커스텀 벨벳 OSL 예시</h3>
+    <pre class="code-block"><span class="cm">// 벨벳: 시선과 수직인 방향이 밝아지는 특성</span>
+<span class="kw">shader</span> <span class="fn">VelvetBSDF</span>(
+    color FiberColor = color(<span class="num">0.5</span>, <span class="num">0.05</span>, <span class="num">0.2</span>),
+    float Roughness = <span class="num">0.8</span>,
+    output closure <span class="fn">color</span> BSDF = <span class="num">0</span>
+) {
+    normal Nf = faceforward(N, I, N);
+
+    <span class="cm">// 시선 방향과 노멀의 각도 계산</span>
+    float facing = <span class="num">1.0</span> - fabs(dot(-I, Nf));
+
+    <span class="cm">// 외곽에서 밝아지는 산란 + 기본 디퓨즈</span>
+    closure color rim    = emission() * FiberColor * pow(facing, <span class="num">2</span>);
+    closure color body   = diffuse(Nf) * FiberColor * (<span class="num">1</span> - facing * <span class="num">0.7</span>);
+    closure color spec   = microfacet(<span class="str">"ggx"</span>, Nf, Roughness, <span class="num">1.0</span>, <span class="num">0</span>);
+
+    BSDF = body * <span class="num">0.7</span> + rim * <span class="num">0.2</span> + spec * <span class="num">0.1</span>;
+}</pre>
+  </div>
+</section>
+
+<!-- 33 -->
+<section class="sec" id="matlib">
+  <div class="wrap">
+    <h2><span class="num-mas">33</span>재질 라이브러리 구축 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">여러 프로젝트에서 재사용할 수 있는 재질 라이브러리를 체계적으로 관리합니다.</p>
+
+    <h3>Asset Library 설정</h3>
+    <ol class="steps">
+      <li>Edit &gt; Preferences &gt; File Paths &gt; Asset Libraries &gt; <code>+</code>.</li>
+      <li>라이브러리 폴더 경로 지정 (예: C:/BlenderAssets/).</li>
+      <li>재질을 만든 뒤 Shader Editor에서 재질 이름 옆 <code>Mark as Asset</code> 클릭.</li>
+      <li>Asset Browser(Editor Type: Asset Browser)에서 드래그&amp;드롭으로 오브젝트에 적용.</li>
+    </ol>
+
+    <h3>재질 명명 규칙</h3>
+    <pre class="code-block"><span class="cm"># 카테고리_세부이름_변형</span>
+<span class="str">Metal_Steel_Brushed</span>
+<span class="str">Metal_Steel_Rusty</span>
+<span class="str">Stone_Marble_White</span>
+<span class="str">Organic_Skin_Young</span>
+<span class="str">Fabric_Velvet_Red</span>
+<span class="str">Glass_Clear_IOR145</span></pre>
+
+    <h3>재질 카탈로그 (Catalog)</h3>
+    <p>Asset Library 폴더에 <code>blender_assets.cats.txt</code> 파일을 만들어 카탈로그 구조를 정의합니다:</p>
+    <pre class="code-block"><span class="cm"># blender_assets.cats.txt</span>
+<span class="cm"># UUID    Path    Name</span>
+<span class="str">aaaaa-001</span>  <span class="fn">Materials/Metal</span>      Metal
+<span class="str">aaaaa-002</span>  <span class="fn">Materials/Stone</span>      Stone
+<span class="str">aaaaa-003</span>  <span class="fn">Materials/Organic</span>    Organic
+<span class="str">aaaaa-004</span>  <span class="fn">Materials/Fabric</span>     Fabric</pre>
+
+    <h3>Link vs Append</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>방식</th><th>특징</th><th>언제 쓰나</th></tr></thead>
+      <tbody>
+        <tr><td>Append (File &gt; Append)</td><td>복사해서 가져옴. 원본과 독립</td><td>한 번만 쓸 때, 수정이 필요할 때</td></tr>
+        <tr><td>Link (File &gt; Link)</td><td>원본 파일과 연결 유지</td><td>팀 작업, 원본 수정 시 자동 반영</td></tr>
+        <tr><td>Override Library</td><td>Link로 가져온 것을 로컬에서 부분 수정</td><td>팀 공용 캐릭터를 씬에서 포즈만 수정</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 34 -->
+<section class="sec" id="render-farm">
+  <div class="wrap">
+    <h2><span class="num-mas">34</span>렌더팜 &amp; 배치 렌더링 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">긴 애니메이션을 여러 컴퓨터에 분산하거나 자동화된 배치 작업으로 렌더링합니다.</p>
+
+    <h3>Render Farm이란?</h3>
+    <p>여러 대의 컴퓨터(노드)가 한 장면의 다른 프레임을 동시에 렌더링하는 시스템입니다. 100프레임짜리 애니메이션을 10대가 나눠 처리하면 이론상 10배 빨라집니다.</p>
+
+    <h3>CLI 배치 렌더링 (명령줄)</h3>
+    <pre class="code-block"><span class="cm"># Windows PowerShell / macOS Terminal</span>
+<span class="cm"># 프레임 1~100을 PNG로 렌더링</span>
+<span class="str">blender</span> -b scene.blend -E CYCLES -o //output/frame_#### \
+         -F PNG -s 1 -e 100 -a
+
+<span class="cm"># 옵션 설명</span>
+<span class="cm"># -b  : 백그라운드 (GUI 없이)</span>
+<span class="cm"># -E  : 렌더 엔진 (CYCLES / BLENDER_EEVEE)</span>
+<span class="cm"># -o  : 출력 경로 (####은 프레임 번호)</span>
+<span class="cm"># -F  : 파일 포맷</span>
+<span class="cm"># -s / -e : 시작/끝 프레임</span>
+<span class="cm"># -a  : 애니메이션 렌더</span></pre>
+
+    <h3>배치 렌더링 Python 스크립트</h3>
+    <pre class="code-block"><span class="kw">import</span> bpy
+
+scene = bpy.context.scene
+scene.render.engine = <span class="str">'CYCLES'</span>
+scene.cycles.samples = <span class="num">256</span>
+scene.render.filepath = <span class="str">"//renders/frame_"</span>
+scene.render.image_settings.file_format = <span class="str">'OPEN_EXR'</span>
+scene.frame_start = <span class="num">1</span>
+scene.frame_end   = <span class="num">240</span>
+
+bpy.ops.render.render(animation=<span class="kw">True</span>, write_still=<span class="kw">True</span>)</pre>
+
+    <h3>분산 렌더링 옵션</h3>
+    <ul class="plain">
+      <li><b>Flamenco (공식 무료):</b> Blender Foundation에서 만든 오픈소스 렌더팜. blender.org/flamenco. 로컬 네트워크의 여러 컴퓨터를 묶을 수 있습니다.</li>
+      <li><b>SheepIt Render Farm:</b> 무료 클라우드 렌더팜. 포인트 시스템. 자신도 다른 사람 렌더링을 도와주면 포인트를 얻습니다.</li>
+      <li><b>Google Colab / Cloud:</b> Python 스크립트를 짜서 클라우드 VM에서 headless 렌더. 기술적 설정이 필요합니다.</li>
+    </ul>
+
+    <h3>EXR 렌더 + 후반 합성 워크플로우</h3>
+    <p>현장에서는 각 패스(Diffuse, Specular, AO, Shadow, Emission 등)를 별도로 EXR에 저장한 뒤, DaVinci Resolve나 Nuke, 또는 블렌더 컴포지터에서 합성합니다. 한 번 렌더한 뒤 색보정이나 효과를 바꿔도 재렌더링이 필요 없습니다.</p>
+  </div>
+</section>
+
+<!-- 35 -->
+<section class="sec" id="vfx-pipeline">
+  <div class="wrap">
+    <h2><span class="num-mas">35</span>VFX 파이프라인 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">모델링, 리깅, 애니메이션, 시뮬레이션, 렌더링, 합성까지 하나의 파이프라인으로 연결합니다.</p>
+
+    <h3>VFX 파이프라인 개요</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>단계</th><th>도구</th><th>산출물</th></tr></thead>
+      <tbody>
+        <tr><td>1. 에셋 제작</td><td>블렌더 (모델링/텍스처)</td><td>FBX / OBJ / USD 에셋</td></tr>
+        <tr><td>2. 리깅</td><td>블렌더 (Armature / Rigify)</td><td>뼈대 있는 FBX</td></tr>
+        <tr><td>3. 애니메이션</td><td>블렌더 (Dope Sheet / NLA)</td><td>Alembic (.abc) 캐시</td></tr>
+        <tr><td>4. 시뮬레이션</td><td>블렌더 (Cloth / Fluid / Particles)</td><td>Alembic 캐시</td></tr>
+        <tr><td>5. 렌더링</td><td>블렌더 Cycles / EEVEE</td><td>EXR 시퀀스 (패스 분리)</td></tr>
+        <tr><td>6. 합성</td><td>블렌더 컴포지터 / Nuke / DaVinci</td><td>최종 영상</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>에셋 버전 관리</h3>
+    <ul class="plain">
+      <li><b>파일 명명:</b> <code>asset_name_v001.blend</code> 식으로 버전 번호. 덮어쓰기 금지.</li>
+      <li><b>Git LFS:</b> 대용량 .blend 파일도 Git으로 버전 관리 가능. Git LFS(Large File Storage) 설정 필요.</li>
+      <li><b>Kitsu / Zou:</b> 오픈소스 프로덕션 트래커. 블렌더와 연동되는 전용 애드온이 있습니다.</li>
+    </ul>
+
+    <h3>Multi-Layer EXR 워크플로우</h3>
+    <p>렌더 시 Output Properties &gt; Output &gt; File Format을 <code>OpenEXR MultiLayer</code>로 설정합니다. 단일 EXR 파일 안에 모든 렌더 패스가 레이어로 저장됩니다. 컴포지터나 Nuke에서 각 레이어를 독립적으로 불러올 수 있습니다.</p>
+  </div>
+</section>
+
+<!-- 36 -->
+<section class="sec" id="alembic">
+  <div class="wrap">
+    <h2><span class="num-mas">36</span>Alembic / USD 교환 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">다른 DCC 툴(Maya, Houdini, Cinema 4D 등)과 애니메이션/시뮬레이션 데이터를 교환합니다.</p>
+
+    <h3>Alembic (.abc)</h3>
+    <p>애니메이션된 메시, 카메라, 파티클 경로를 프레임별로 저장하는 캐시 포맷입니다. 뼈대 없이 메시 자체가 움직이는 정보(Vertex Cache)를 저장합니다.</p>
+    <ul class="plain">
+      <li><b>내보내기:</b> File &gt; Export &gt; Alembic. 프레임 범위, XForm, Curves, Hair 포함 여부 선택.</li>
+      <li><b>가져오기:</b> File &gt; Import &gt; Alembic. 시뮬레이션 결과를 다른 프로그램에서 가져올 때.</li>
+      <li><b>캐시 모디파이어:</b> 오브젝트에 <code>Mesh Sequence Cache</code> 모디파이어 추가로 .abc 파일 연결. 실시간 스트리밍.</li>
+    </ul>
+
+    <h3>USD (Universal Scene Description)</h3>
+    <p>픽사가 만든 씬 기술 포맷. 거대한 씬을 여러 파일로 분리해서 관리하고, 여러 팀이 동시에 작업하는 파이프라인에 적합합니다. 블렌더 4.x에서 USD 지원이 대폭 강화됐습니다.</p>
+    <ul class="plain">
+      <li><b>Stage:</b> 여러 Layer로 이루어진 씬 전체. 레이어 간 Override 지원.</li>
+      <li><b>Prim:</b> 씬 계층 구조의 각 요소 (Mesh, Camera, Light 등).</li>
+      <li><b>블렌더 지원:</b> File &gt; Import/Export &gt; Universal Scene Description(.usd, .usda, .usdc, .usdz).</li>
+    </ul>
+
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Houdini에서 유체/파이어 시뮬레이션을 한 뒤 Alembic으로 블렌더에서 렌더링하는 파이프라인이 인디 VFX에서 흔히 쓰입니다. 각 소프트웨어의 강점을 활용하는 방식입니다.</p></div>
+  </div>
+</section>
+
+<!-- 37 -->
+<section class="sec" id="retopo-adv">
+  <div class="wrap">
+    <h2><span class="num-mas">37</span>프로덕션 리토폴로지 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">게임/애니메이션 프로덕션 기준의 정밀한 리토폴로지 기법.</p>
+
+    <h3>프로덕션 토폴로지 규칙</h3>
+    <ul class="plain">
+      <li><b>엣지 루프 흐름:</b> 관절(어깨, 무릎, 손목, 입)을 따라 엣지 루프가 돌아야 합니다. 변형 시 메시가 찢어지지 않는 유일한 방법.</li>
+      <li><b>폴 위치:</b> 5방향 폴(5-pole)은 덜 움직이는 부위(정수리, 귀 뒤)에. 3방향 폴(3-pole)은 엣지를 줄여야 하는 전환점에.</li>
+      <li><b>균일한 폴리곤 밀도:</b> 얼굴처럼 디테일이 필요한 곳은 조밀하게, 배처럼 단순한 부분은 성기게. 하지만 인접한 두 영역의 밀도 차이가 4배를 넘지 않도록.</li>
+      <li><b>삼각형 최소화:</b> 변형 영역에는 절대 삼각형이 없어야 합니다. 외곽선, 움직이지 않는 딱딱한 부분에만 허용.</li>
+    </ul>
+
+    <h3>리토폴로지 워크플로우</h3>
+    <ol class="steps">
+      <li>스컬프트로 완성한 고해상도 메시를 레퍼런스로 유지.</li>
+      <li>새 오브젝트를 추가하고 <b>Shrinkwrap 모디파이어</b>로 고해상도 표면에 자동으로 달라붙게 설정.</li>
+      <li><b>Mirror 모디파이어</b>를 Shrinkwrap 위에 추가. 한쪽만 리토폴로지하면 됩니다.</li>
+      <li>에디트 모드에서 면을 하나씩 추가하며 루프 흐름을 따라 메시를 만들어 나갑니다.</li>
+      <li>완성 후 모디파이어 Apply. 고해상도에서 노멀맵 베이킹.</li>
+    </ol>
+
+    <h3>폴리곤 수 기준 (캐릭터)</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>용도</th><th>얼굴 삼각형</th><th>전신 삼각형</th></tr></thead>
+      <tbody>
+        <tr><td>모바일 게임</td><td>500~800</td><td>1,500~3,000</td></tr>
+        <tr><td>PC 게임</td><td>1,500~3,000</td><td>5,000~15,000</td></tr>
+        <tr><td>AAA 게임</td><td>5,000~12,000</td><td>20,000~80,000</td></tr>
+        <tr><td>CG 영화</td><td>제한 없음</td><td>수백만 (서브디비전 포함)</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- 38 -->
+<section class="sec" id="nurbs">
+  <div class="wrap">
+    <h2><span class="num-mas">38</span>NURBS / 서피스 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">산업 디자인, 자동차, 제품 디자인에서 쓰이는 수학 기반 곡면 모델링.</p>
+
+    <h3>NURBS란?</h3>
+    <p>NURBS(Non-Uniform Rational B-Spline)는 점이 아닌 수학 함수로 정의되는 곡선과 곡면입니다. 어떤 해상도로 확대해도 완벽하게 매끄럽습니다. 자동차 차체, 병, 안경, 항공기 동체 같은 산업 제품 설계에 사용됩니다.</p>
+
+    <h3>블렌더에서 NURBS</h3>
+    <p><span class="keys"><kbd>Shift</kbd><span class="plus">+</span><kbd>A</kbd></span> &gt; Curve &gt; <code>NURBS Curve</code> 또는 Surface &gt; <code>NURBS Surface</code>.</p>
+    <ul class="plain">
+      <li><b>컨트롤 포인트:</b> 곡선/곡면을 당기는 점. Bezier와 달리 점이 곡선 위에 있지 않습니다.</li>
+      <li><b>Order:</b> 차수. 높을수록 부드럽지만 무거워짐. 3~5가 일반적.</li>
+      <li><b>Weight:</b> 컨트롤 포인트의 영향력. 높을수록 곡선이 그 점에 더 가깝게 당겨짐.</li>
+      <li><b>Knot:</b> 각 구간의 파라미터 값. Endpoint(시작/끝에 고정), Bezier, Cyclic.</li>
+    </ul>
+
+    <h3>NURBS 서피스 만들기</h3>
+    <ol class="steps">
+      <li>NURBS Curve 두 개를 단면 모양으로 만들기.</li>
+      <li>Loft: Surface &gt; Surfaces 패널에서 두 커브 선택 후 Fill 또는 Skin 적용. 두 커브를 이어 붙이는 서피스가 생성.</li>
+      <li>Birail: 두 경계 커브와 하나의 프로파일 커브로 서피스 생성.</li>
+      <li>완성 후 Object &gt; Convert &gt; Mesh로 변환해 일반 메시 작업 가능.</li>
+    </ol>
+
+    <div class="callout co-adv"><span class="ico">ADV</span><p>블렌더의 NURBS 지원은 Rhino, CATIA에 비해 제한적입니다. 산업 수준의 NURBS 모델링이 필요하다면 FreeCAD(무료)나 Rhino(유료)와 조합하고, STEP/IGES 포맷으로 교환 후 블렌더에서 렌더링하는 워크플로우를 쓰는 것이 현실적입니다.</p></div>
+  </div>
+</section>
+
+<!-- 39 -->
+<section class="sec" id="cloth-sim">
+  <div class="wrap">
+    <h2><span class="num-mas">39</span>의상/천 시뮬레이션 마스터 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">프로덕션 수준의 의상 시뮬레이션. 여러 천 레이어, 충돌, 핀닝 고급 기법.</p>
+
+    <h3>의상 시뮬레이션 순서</h3>
+    <ol class="steps">
+      <li><b>레스트 포즈 제작:</b> 캐릭터를 A-포즈 또는 T-포즈 상태에서 의상 메시를 만듭니다. 이 형태가 시뮬레이션의 기준 상태가 됩니다.</li>
+      <li><b>Collision 추가:</b> 캐릭터 본체(피부 메시)에 Physics &gt; Collision. Thickness Inner를 0.005 정도로 낮게 설정.</li>
+      <li><b>Cloth 추가:</b> 의상 메시에 Physics &gt; Cloth. Presets에서 Cotton, Silk, Leather 등 시작점 선택 후 커스터마이즈.</li>
+      <li><b>Pinning:</b> 어깨, 허리 등 고정될 버텍스를 선택 &gt; 버텍스 그룹 만들기 &gt; Cloth &gt; Shape &gt; Pin Group에 연결.</li>
+      <li><b>시뮬 품질:</b> Cloth &gt; Quality Steps를 10~20으로. 기본 5보다 안정적.</li>
+      <li><b>캐시 베이크:</b> Cloth 캐시 탭 &gt; Bake. 전 프레임을 미리 계산해 저장.</li>
+    </ol>
+
+    <h3>여러 레이어 천 처리</h3>
+    <p>티셔츠 위에 재킷을 입히는 것처럼 여러 겹의 천을 처리할 때는 안쪽 레이어가 먼저 시뮬되어야 합니다. 또는 안쪽 천을 Proxy(저해상도)로 시뮬한 뒤 그 결과를 바깥 천의 충돌면으로 쓰는 방식을 씁니다.</p>
+
+    <h3>시뮬레이션 안정화 팁</h3>
+    <ul class="plain">
+      <li>초기 프레임에서 폭발이 생기면 <b>Shrink Factor</b>를 0.05~0.1로 설정. 시뮬 시작 시 의상이 약간 수축해서 충돌면 안으로 들어가지 않습니다.</li>
+      <li>Self Collision은 성능을 많이 씁니다. 반드시 필요한 경우에만 켜고, Distance를 최소한으로.</li>
+      <li>Vertex Mass를 줄이면 가벼워지고 흔들림이 심해집니다. 무거운 의상은 높게.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 40 -->
+<section class="sec" id="addon-dev">
+  <div class="wrap">
+    <h2><span class="num-mas">40</span>커스텀 애드온 제작 <span class="lv lv-mas">초고급</span></h2>
+    <p class="sec-sub">반복 작업을 버튼 하나로 만드는 커스텀 애드온. 팀에 배포하거나 오픈소스로 공유 가능.</p>
+
+    <h3>애드온 최소 구조</h3>
+    <pre class="code-block"><span class="cm"># my_addon/__init__.py</span>
+<span class="kw">import</span> bpy
+
+bl_info = {
+    <span class="str">"name"</span>:        <span class="str">"My Addon"</span>,
+    <span class="str">"author"</span>:      <span class="str">"내 이름"</span>,
+    <span class="str">"version"</span>:     (<span class="num">1</span>, <span class="num">0</span>, <span class="num">0</span>),
+    <span class="str">"blender"</span>:     (<span class="num">4</span>, <span class="num">0</span>, <span class="num">0</span>),
+    <span class="str">"category"</span>:    <span class="str">"Mesh"</span>,
+    <span class="str">"description"</span>: <span class="str">"내가 만든 도구"</span>,
+}
+
+<span class="cm"># Operator: 실제로 실행되는 작업</span>
+<span class="kw">class</span> <span class="fn">MESH_OT_my_tool</span>(bpy.types.Operator):
+    bl_idname      = <span class="str">"mesh.my_tool"</span>
+    bl_label       = <span class="str">"내 도구 실행"</span>
+    bl_description = <span class="str">"선택한 오브젝트를 처리합니다"</span>
+    bl_options     = {<span class="str">'REGISTER'</span>, <span class="str">'UNDO'</span>}
+
+    <span class="cm"># 속성 (UI에서 입력받는 값)</span>
+    scale: bpy.props.FloatProperty(name=<span class="str">"Scale"</span>, default=<span class="num">2.0</span>, min=<span class="num">0.1</span>)
+
+    <span class="kw">def</span> <span class="fn">execute</span>(self, context):
+        <span class="kw">for</span> obj <span class="kw">in</span> context.selected_objects:
+            obj.scale *= self.scale
+        <span class="kw">return</span> {<span class="str">'FINISHED'</span>}
+
+
+<span class="cm"># Panel: 사이드바(N 패널)에 버튼 추가</span>
+<span class="kw">class</span> <span class="fn">VIEW3D_PT_my_panel</span>(bpy.types.Panel):
+    bl_label       = <span class="str">"내 애드온"</span>
+    bl_idname      = <span class="str">"VIEW3D_PT_my_panel"</span>
+    bl_space_type  = <span class="str">'VIEW_3D'</span>
+    bl_region_type = <span class="str">'UI'</span>
+    bl_category    = <span class="str">"My Tools"</span>
+
+    <span class="kw">def</span> <span class="fn">draw</span>(self, context):
+        self.layout.operator(<span class="str">"mesh.my_tool"</span>)
+
+
+classes = [MESH_OT_my_tool, VIEW3D_PT_my_panel]
+
+<span class="kw">def</span> <span class="fn">register</span>():
+    <span class="kw">for</span> cls <span class="kw">in</span> classes:
+        bpy.utils.register_class(cls)
+
+<span class="kw">def</span> <span class="fn">unregister</span>():
+    <span class="kw">for</span> cls <span class="kw">in</span> reversed(classes):
+        bpy.utils.unregister_class(cls)
+
+<span class="kw">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="fn">register</span>()</pre>
+
+    <h3>배포 방법</h3>
+    <ol class="steps">
+      <li>애드온 폴더 전체를 .zip으로 압축.</li>
+      <li>Preferences &gt; Add-ons &gt; Install &gt; zip 파일 선택.</li>
+      <li>GitHub에 올리면 다른 사람도 쓸 수 있습니다.</li>
+    </ol>
+
+    <h3>bpy.props 타입</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>타입</th><th>UI 표시</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td>FloatProperty</td><td>슬라이더/숫자 입력</td><td>크기, 강도, 비율</td></tr>
+        <tr><td>IntProperty</td><td>정수 입력</td><td>개수, 반복 수</td></tr>
+        <tr><td>BoolProperty</td><td>체크박스</td><td>ON/OFF 옵션</td></tr>
+        <tr><td>StringProperty</td><td>텍스트 입력</td><td>이름, 경로</td></tr>
+        <tr><td>EnumProperty</td><td>드롭다운</td><td>모드 선택</td></tr>
+        <tr><td>FloatVectorProperty</td><td>XYZ 또는 색상 입력</td><td>벡터, 색상</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level next-beg" href="index.html">
+    <div><span class="nl-label">COMPLETE</span><span class="nl-title">모든 블렌더 강좌 완료 — 메인으로 돌아가기</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Blender 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="advanced.html">&larr; 고급</a>
+      <a href="index.html">메인</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+</body>
+</html>
