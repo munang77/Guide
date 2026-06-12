@@ -40,6 +40,7 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
     <div><b>Studio 초급</b><small>MAP BASICS</small></div>
   </div>
   <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
   <div class="nav-group"><span>시작</span>
     <a class="nav-link" href="#install"><span class="n">01</span>설치와 화면 구성</a>
     <a class="nav-link" href="#camera"><span class="n">02</span>카메라 조작</a>
@@ -107,7 +108,7 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
         <tr><td>Explorer</td><td>월드 안 모든 오브젝트의 목록. 폴더 구조처럼 표시</td><td>View &gt; Explorer</td></tr>
         <tr><td>Properties</td><td>선택한 오브젝트의 속성(크기, 색, 재질 등) 편집</td><td>View &gt; Properties</td></tr>
         <tr><td>Output</td><td>스크립트 출력과 에러 메시지 표시</td><td>View &gt; Output</td></tr>
-        <tr><td>Toolbox</td><td>다른 사람이 만든 무료 에셋 검색/사용</td><td>View &gt; Toolbox</td></tr>
+        <tr><td>Toolbox</td><td>다른 사람이 만든 무료 <span class="term" tabindex="0" data-tip="모델, 그림, 소리처럼 게임을 만들 때 쓰는 재료 파일을 통틀어 부르는 말">에셋</span> 검색/사용</td><td>View &gt; Toolbox</td></tr>
       </tbody>
     </table></div>
 
@@ -313,9 +314,9 @@ Workspace
     </ul>
 
     <h3>외부 3D 에셋 임포트 (Import 3D)</h3>
-    <p>블렌더 등에서 만든 FBX/OBJ 파일은 Home 탭 &gt; <code>Import 3D</code>로 가져옵니다. MeshPart로 변환되어 Workspace에 추가됩니다. 크기가 이상하면 임포트 창에서 Scale을 조절하세요.</p>
+    <p>블<span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그려내는 것">렌더</span> 등에서 만든 <span class="term" tabindex="0" data-tip="3D 모델을 프로그램끼리 주고받을 때 쓰는 파일 형식 (.fbx)">FBX</span>/OBJ 파일은 Home 탭 &gt; <code>Import 3D</code>로 가져옵니다. MeshPart로 변환되어 Workspace에 추가됩니다. 크기가 이상하면 <span class="term" tabindex="0" data-tip="외부에서 만든 파일을 프로그램 안으로 가져오는 것">임포트</span> 창에서 Scale을 조절하세요.</p>
 
-    <div class="callout co-rbx"><span class="ico">RBX</span><p>이미지(데칼, 텍스처)를 쓰려면 create.roblox.com의 Creator Hub에서 업로드한 뒤 발급된 Asset ID를 <code>rbxassetid://숫자</code> 형식으로 입력합니다.</p></div>
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>이미지(데칼, <span class="term" tabindex="0" data-tip="3D 모델 표면에 입히는 그림(이미지). 옷에 프린트된 무늬 같은 것">텍스처</span>)를 쓰려면 create.roblox.com의 Creator Hub에서 업로드한 뒤 발급된 Asset ID를 <code>rbxassetid://숫자</code> 형식으로 입력합니다.</p></div>
   </div>
 </section>
 
@@ -327,7 +328,7 @@ Workspace
 
     <h3>머티리얼 종류</h3>
     <div class="tbl-wrap"><table class="tbl">
-      <thead><tr><th>머티리얼</th><th>느낌</th><th>맵 활용</th></tr></thead>
+      <thead><tr><th><span class="term" tabindex="0" data-tip="표면의 재질. 나무, 금속, 유리처럼 무엇으로 만들어진 느낌인지">머티리얼</span></th><th>느낌</th><th>맵 활용</th></tr></thead>
       <tbody>
         <tr><td>Plastic / SmoothPlastic</td><td>매끈, 무광</td><td>기본값. 로우폴리 스타일 맵의 표준</td></tr>
         <tr><td>Wood / WoodPlanks</td><td>나무 결</td><td>집, 다리, 울타리, 부두</td></tr>
@@ -375,7 +376,7 @@ Workspace
     <div class="tbl-wrap"><table class="tbl">
       <thead><tr><th>방법</th><th>단축키</th><th>용도</th></tr></thead>
       <tbody>
-        <tr><td>Play</td><td><kbd>F5</kbd></td><td>스폰 지점에서 캐릭터로 플레이</td></tr>
+        <tr><td>Play</td><td><kbd>F5</kbd></td><td><span class="term" tabindex="0" data-tip="캐릭터나 오브젝트가 게임 안에 나타나는 것. 또는 나타나는 위치">스폰</span> 지점에서 캐릭터로 플레이</td></tr>
         <tr><td>Play Here</td><td>-</td><td>현재 카메라 위치에서 플레이</td></tr>
         <tr><td>Run</td><td><kbd>F8</kbd></td><td>캐릭터 없이 서버만 실행. 물리/스크립트 확인</td></tr>
         <tr><td>Stop</td><td><kbd>Shift</kbd>+<kbd>F5</kbd></td><td>테스트 종료</td></tr>
@@ -388,7 +389,7 @@ Workspace
     <ol class="steps">
       <li><b>로컬 저장:</b> File &gt; Save to File. 내 컴퓨터에 .rbxl 파일로 저장.</li>
       <li><b>클라우드 저장:</b> File &gt; Save to Roblox. 계정에 저장되어 어디서든 열 수 있음.</li>
-      <li><b>퍼블리시:</b> File &gt; Publish to Roblox (<kbd>Alt</kbd>+<kbd>P</kbd>). 이름, 설명, 장르 입력.</li>
+      <li><b><span class="term" tabindex="0" data-tip="내가 만든 맵/게임을 Roblox 서버에 올려서 다른 사람들도 들어와 플레이할 수 있게 공개하는 것">퍼블리시</span>:</b> File &gt; Publish to Roblox (<kbd>Alt</kbd>+<kbd>P</kbd>). 이름, 설명, 장르 입력.</li>
       <li>퍼블리시 후 Game Settings &gt; Permissions에서 <code>Public</code>으로 바꿔야 다른 사람이 플레이할 수 있습니다.</li>
     </ol>
   </div>
@@ -432,6 +433,7 @@ Workspace
     <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
     <nav class="foot-nav">
       <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
       <a href="studio-intermediate.html">중급으로 &rarr;</a>
     </nav>
   </div>
