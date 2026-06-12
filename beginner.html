@@ -63,6 +63,7 @@
     <a class="page-tab tab-beg" href="beginner.html">입문</a>
     <a class="page-tab" href="intermediate.html">중급</a>
     <a class="page-tab" href="advanced.html">고급</a>
+    <a class="page-tab" href="master.html">초고급</a>
   </nav>
 </div>
 
@@ -71,7 +72,7 @@
   <div class="wrap">
     <div class="hero-chip chip-beg">BEGINNER</div>
     <h1>블렌더 입문</h1>
-    <p class="lead">설치 첫날부터 로블록스에 올리는 FBX까지. 타워 하나를 완성하는 것이 목표.</p>
+    <p class="lead">설치 첫날부터 FBX 내보내기까지. 내 손으로 첫 3D 모델을 완성하는 것이 목표.</p>
     <div class="hero-tags">
       <span class="hero-tag"><b>10</b>챕터</span>
       <span class="hero-tag">설치부터 FBX까지</span>
@@ -342,7 +343,7 @@
     </ul>
 
     <h3>인셋 (Inset)</h3>
-    <p>선택한 면 안쪽에 새 면을 만드는 기능. <span class="keys"><kbd>I</kbd></span>를 누르고 드래그. 건물 창문, 타워 패널, 구멍 뚫기 전처리에 씁니다.</p>
+    <p>선택한 면 안쪽에 새 면을 만드는 기능. <span class="keys"><kbd>I</kbd></span>를 누르고 드래그. 건물 창문, 패널 디테일, 구멍 뚫기 전처리에 씁니다.</p>
 
     <h3>루프컷 (Loop Cut)</h3>
     <p>메시 전체를 가로로 자르는 선을 추가합니다. <span class="keys"><kbd>Ctrl</kbd><span class="plus">+</span><kbd>R</kbd></span>을 누르고 엣지 위에 마우스를 올리면 노란 선이 미리보기로 나옵니다. 클릭해서 확정하면 추가됩니다. 휠 스크롤로 개수를 늘릴 수 있습니다.</p>
@@ -476,14 +477,16 @@
     </ol>
 
     <h3>팔레트 텍스처 방식 (로블록스 권장)</h3>
-    <p>로블록스 타워디펜스 에셋에서 자주 쓰는 방식입니다. 여러 색상이 격자로 배치된 팔레트 이미지 하나를 만들고, UV를 그 위에 배치해서 색을 입힙니다.</p>
+    <p>로우폴리 게임 에셋에서 자주 쓰는 방식입니다. 여러 색상이 격자로 배치된 팔레트 이미지 하나를 만들고, UV를 그 위에 배치해서 색을 입힙니다.</p>
     <ul class="plain">
       <li>팔레트 이미지는 Photoshop, Aseprite, 또는 블렌더 Texture Paint로 직접 제작.</li>
       <li>해상도는 256x256 또는 512x512면 충분합니다. 그 이상은 불필요.</li>
       <li>UV 에디터에서 각 Island(서로 연결된 채로 펼쳐진 면 덩어리)를 원하는 색상 영역 위로 옮깁니다. Island 위에 마우스를 두고 <kbd>L</kbd>을 누르면 통째로 선택됩니다.</li>
     </ul>
   </div>
-</section>
+
+    <div class="callout co-tip"><span class="ico">TIP</span><p>UV는 게임 이펙트의 핵심이기도 합니다. 킹 레가시 같은 게임의 검기 이펙트가 바로 호 모양 메시 + UV 그라데이션 텍스처로 만들어집니다. 만드는 법은 Studio 고급 강좌의 "검기 VFX 만들기" 챕터에서 다룹니다.</p></div>
+  </section>
 
 <!-- 09 -->
 <section class="sec" id="export">
