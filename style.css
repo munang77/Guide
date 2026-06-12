@@ -295,3 +295,11 @@ h3.mas-h::before{background:#e040fb}
 
 /* lua 코드 */
 .lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:var(--green)}.lua .cm{color:var(--muted)}.lua .num{color:var(--orange-2)}.lua .type{color:#ffc44d}
+
+/* ===== 용어 툴팁 ===== */
+.term{border-bottom:1.5px dotted rgba(245,164,92,.55);cursor:help;position:relative;outline:none}
+.term:hover,.term:focus{border-bottom-color:#ffa45c}
+.term::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 9px);left:50%;transform:translateX(-50%) translateY(4px);background:#26262e;border:1px solid #3f3f4b;padding:9px 13px;border-radius:9px;font-size:12.5px;color:#ececf1;width:max-content;max-width:min(270px,80vw);z-index:99;line-height:1.55;font-weight:500;white-space:normal;letter-spacing:-.01em;opacity:0;visibility:hidden;transition:opacity .15s,transform .15s;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.45);text-align:left}
+.term::before{content:"";position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#3f3f4b;opacity:0;visibility:hidden;transition:opacity .15s;z-index:99}
+.term:hover::after,.term:focus::after{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
+.term:hover::before,.term:focus::before{opacity:1;visibility:visible}
