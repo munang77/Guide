@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luau 고급 — 구조와 데이터</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23ffc44d'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>L</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none;border-color:rgba(255,196,77,0.4)}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px);color:#ffc44d}
+#progress{background:linear-gradient(90deg,#ffc44d,#ffd57e)}
+h3::before{background:#ffc44d}
+h2 .num{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.nav-link.active{background:rgba(255,196,77,0.13);color:#ffd57e;border-left-color:#ffc44d}
+.nav-link.active .n{color:#ffc44d}
+.logo-mark.pg{background:linear-gradient(150deg,#ffd57e,#ffc44d)}
+.chip-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border:1px solid rgba(255,196,77,0.4)}
+.tab-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.lv-pg{color:#ffd57e;border-color:rgba(255,196,77,0.4);background:rgba(255,196,77,0.13)}
+.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:#5ad08a}.lua .cm{color:var(--muted)}.lua .num{color:#ffa45c}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark pg">L</div>
+    <div><b>Luau 고급</b><small>ARCHITECTURE</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
+  <div class="nav-group"><span>코드 구조</span>
+    <a class="nav-link" href="#modules"><span class="n">21</span>ModuleScript</a>
+    <a class="nav-link" href="#oop"><span class="n">22</span>OOP와 메타테이블</a>
+  </div>
+  <div class="nav-group"><span>데이터와 수학</span>
+    <a class="nav-link" href="#datastore"><span class="n">23</span>DataStore 저장</a>
+    <a class="nav-link" href="#cframe"><span class="n">24</span>CFrame 정복</a>
+    <a class="nav-link" href="#raycast"><span class="n">25</span>Raycast</a>
+  </div>
+  <div class="nav-group"><span>확장 기술</span>
+    <a class="nav-link" href="#tags"><span class="n">26</span>CollectionService와 Attribute</a>
+    <a class="nav-link" href="#anim"><span class="n">27</span>애니메이션 재생</a>
+  </div>
+  <div class="nav-group"><span>품질</span>
+    <a class="nav-link" href="#debug"><span class="n">28</span>디버깅 심화</a>
+    <a class="nav-link" href="#cleanup"><span class="n">29</span>메모리와 연결 정리</a>
+    <a class="nav-link" href="#project3"><span class="n">30</span>종합 — 상점 시스템</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="lua-beginner.html">초급</a>
+    <a class="page-tab" href="lua-intermediate.html">중급</a>
+    <a class="page-tab tab-pg" href="lua-advanced.html">고급</a>
+    <a class="page-tab" href="lua-master.html">초고급</a>
+    <a class="page-tab" href="lua-expert.html">전문가</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(255,196,77,0.15),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-pg">LUAU ADVANCED</div>
+    <h1>Luau 고급 — 구조와 데이터</h1>
+    <p class="lead">모듈, OOP, DataStore, CFrame, Raycast. 코드를 시스템으로 조직하고 데이터를 영구 보존하는 단계.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">모듈/OOP</span>
+      <span class="hero-tag">DataStore</span>
+      <span class="hero-tag">CFrame</span>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="modules">
+  <div class="wrap">
+    <h2><span class="num">21</span>ModuleScript — 코드 정리의 시작 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">스크립트 한 파일이 500줄을 넘어가면 끝입니다. 기능별로 쪼개서 부품화합니다.</p>
+    <pre class="code-block lua"><span class="cm">-- CoinManager (ModuleScript, ServerScriptService 안)</span>
+<span class="kw">local</span> CoinManager = {}
+
+<span class="kw">function</span> CoinManager.<span class="fn">give</span>(player, amount)
+    player.leaderstats.Coins.Value += amount
+<span class="kw">end</span>
+
+<span class="kw">function</span> CoinManager.<span class="fn">canAfford</span>(player, price)
+    <span class="kw">return</span> player.leaderstats.Coins.Value &gt;= price
+<span class="kw">end</span>
+
+<span class="kw">return</span> CoinManager   <span class="cm">-- 반드시 무언가를 return</span></pre>
+    <pre class="code-block lua"><span class="cm">-- 다른 스크립트에서 사용</span>
+<span class="kw">local</span> CoinManager = require(game.ServerScriptService.CoinManager)
+CoinManager.give(player, <span class="num">50</span>)</pre>
+    <ul class="plain">
+      <li>require는 <b>한 번만 실행되고 캐시</b>됩니다 — 여러 스크립트가 require해도 같은 테이블을 공유. 이 성질로 모듈이 공유 상태 저장소가 됩니다.</li>
+      <li>서버 전용 모듈은 ServerScriptService, 서버·클라 공용은 ReplicatedStorage에.</li>
+      <li>설계 기준: 한 모듈 = 한 책임 (CoinManager는 코인만, ShopManager는 상점만).</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="oop">
+  <div class="wrap">
+    <h2><span class="num">22</span>OOP와 메타테이블 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">"몬스터 100마리"를 만들 때 — 설계도(클래스) 하나로 인스턴스를 찍어내는 방법.</p>
+    <pre class="code-block lua"><span class="cm">-- Monster (ModuleScript)</span>
+<span class="kw">local</span> Monster = {}
+Monster.__index = Monster
+
+<span class="kw">function</span> Monster.<span class="fn">new</span>(name, hp)
+    <span class="kw">local</span> self = setmetatable({}, Monster)
+    self.name = name
+    self.hp = hp
+    self.maxHp = hp
+    <span class="kw">return</span> self
+<span class="kw">end</span>
+
+<span class="kw">function</span> Monster:<span class="fn">takeDamage</span>(amount)   <span class="cm">-- 콜론 = self 자동 전달</span>
+    self.hp = math.max(<span class="num">0</span>, self.hp - amount)
+    <span class="kw">if</span> self.hp == <span class="num">0</span> <span class="kw">then</span> self:<span class="fn">die</span>() <span class="kw">end</span>
+<span class="kw">end</span>
+
+<span class="kw">function</span> Monster:<span class="fn">die</span>()
+    <span class="fn">print</span>(self.name .. <span class="str">" 사망"</span>)
+<span class="kw">end</span>
+
+<span class="kw">return</span> Monster</pre>
+    <pre class="code-block lua"><span class="kw">local</span> Monster = require(RS.Monster)
+<span class="kw">local</span> goblin = Monster.new(<span class="str">"고블린"</span>, <span class="num">50</span>)
+goblin:takeDamage(<span class="num">30</span>)   <span class="cm">-- hp 20</span></pre>
+    <h3>원리</h3>
+    <ul class="plain">
+      <li><b><span class="term" tabindex="0" data-tip="테이블에 없는 키를 어디서 대신 찾을지 정하는 장치. OOP의 토대">메타테이블</span></b>은 "테이블에 없는 키를 찾으면 어디서 대신 찾을지" 정하는 장치. <code>__index = Monster</code> 덕분에 goblin에 없는 takeDamage를 Monster에서 찾아 씁니다.</li>
+      <li><code>:</code> 호출은 <code>goblin.takeDamage(goblin, 30)</code>의 줄임 — self가 자동으로 들어갑니다.</li>
+      <li>상속도 가능 (Boss의 __index를 Monster로) — 단, 깊은 상속은 디버깅 지옥. 1단계까지만 권장.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="datastore">
+  <div class="wrap">
+    <h2><span class="num">23</span>DataStore — 데이터 영구 저장 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">게임을 껐다 켜도 코인이 남아있게. 서버 전용이며, 실패할 수 있다는 전제로 짭니다.</p>
+    <pre class="code-block lua"><span class="kw">local</span> DSS = game:GetService(<span class="str">"DataStoreService"</span>)
+<span class="kw">local</span> store = DSS:GetDataStore(<span class="str">"PlayerData_v1"</span>)
+<span class="kw">local</span> Players = game:GetService(<span class="str">"Players"</span>)
+
+Players.PlayerAdded:Connect(<span class="kw">function</span>(player)
+    <span class="kw">local</span> ok, data = pcall(<span class="kw">function</span>()
+        <span class="kw">return</span> store:GetAsync(<span class="str">"p_"</span> .. player.UserId)
+    <span class="kw">end</span>)
+    <span class="kw">local</span> coins = (ok <span class="kw">and</span> data <span class="kw">and</span> data.coins) <span class="kw">or</span> <span class="num">0</span>
+    <span class="cm">-- leaderstats 생성 후 coins 적용...</span>
+<span class="kw">end</span>)
+
+Players.PlayerRemoving:Connect(<span class="kw">function</span>(player)
+    pcall(<span class="kw">function</span>()
+        store:SetAsync(<span class="str">"p_"</span> .. player.UserId, {
+            coins = player.leaderstats.Coins.Value,
+        })
+    <span class="kw">end</span>)
+<span class="kw">end</span>)</pre>
+    <h3>반드시 지킬 것</h3>
+    <ul class="plain">
+      <li><b><span class="term" tabindex="0" data-tip="실패할 수 있는 코드를 감싸 에러가 나도 전체가 죽지 않게 보호">pcall</span> 필수:</b> <span class="term" tabindex="0" data-tip="게임을 껐다 켜도 데이터가 남게 영구 저장하는 서버 기능">DataStore</span>는 네트워크 호출 — 실패할 수 있습니다. pcall 없이 에러가 나면 스크립트 전체가 죽습니다.</li>
+      <li><b>키는 UserId로:</b> 닉네임은 바뀝니다.</li>
+      <li><b>BindToClose:</b> 서버가 닫힐 때 마지막 저장 — <code>game:BindToClose(saveAll)</code>.</li>
+      <li><b>UpdateAsync &gt; SetAsync:</b> 경쟁 상황(두 서버 동시 저장)에선 기존 값을 받아 갱신하는 UpdateAsync가 안전.</li>
+      <li>Studio에서 테스트하려면 Game Settings &gt; Security &gt; Enable Studio Access to API Services 켜기.</li>
+    </ul>
+    <div class="callout co-warn"><span class="ico">!!</span><p>저장 구조를 바꿀 땐 스토어 이름의 버전(_v1)을 올리거나 마이그레이션 코드를 — 옛 데이터와 새 코드가 충돌하면 유저 데이터가 날아갑니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="cframe">
+  <div class="wrap">
+    <h2><span class="num">24</span>CFrame — 위치와 회전의 수학 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">Position은 위치만, <span class="term" tabindex="0" data-tip="위치 + 바라보는 방향을 함께 담는 3D 좌표. 3D 조작의 만능 도구">CFrame</span>은 위치 + 바라보는 방향. 3D 조작의 만능 도구.</p>
+    <pre class="code-block lua"><span class="cm">-- 기본</span>
+part.CFrame = CFrame.new(<span class="num">0</span>, <span class="num">10</span>, <span class="num">0</span>)                  <span class="cm">-- 위치</span>
+part.CFrame = CFrame.new(pos) * CFrame.Angles(<span class="num">0</span>, math.rad(<span class="num">45</span>), <span class="num">0</span>)  <span class="cm">-- + Y축 45도</span>
+part.CFrame = CFrame.lookAt(pos, target.Position)    <span class="cm">-- target을 바라보게</span>
+
+<span class="cm">-- 곱셈 = "기준으로 상대 이동"</span>
+part.CFrame = part.CFrame * CFrame.new(<span class="num">0</span>, <span class="num">0</span>, <span class="num">-5</span>)   <span class="cm">-- 자기가 보는 방향으로 5 전진</span>
+part.CFrame = part.CFrame * CFrame.Angles(<span class="num">0</span>, math.rad(<span class="num">10</span>), <span class="num">0</span>)  <span class="cm">-- 제자리 10도 회전</span></pre>
+    <h3>핵심 직관</h3>
+    <ul class="plain">
+      <li><code>A * B</code>는 "A의 입장에서 B만큼" — 순서가 중요합니다. 회전 먼저 곱하면 결과가 다릅니다.</li>
+      <li><code>cf.LookVector</code> = 앞 방향, <code>RightVector</code>, <code>UpVector</code> — "앞으로 쏘기"는 <code>pos + cf.LookVector * 50</code>.</li>
+      <li><code>cf:ToObjectSpace(other)</code> / <code>ToWorldSpace</code> — 상대 좌표 변환. 탈것에 붙은 포탑 같은 것.</li>
+      <li>보간: <code>cf1:Lerp(cf2, 0.1)</code> — 매 프레임 10%씩 따라가는 부드러운 추적 카메라.</li>
+    </ul>
+    <pre class="code-block lua"><span class="cm">-- 실전: 플레이어 주위를 도는 오브젝트</span>
+<span class="kw">local</span> angle = <span class="num">0</span>
+RunService.Heartbeat:Connect(<span class="kw">function</span>(dt)
+    angle += dt * <span class="num">2</span>
+    orb.CFrame = root.CFrame
+        * CFrame.Angles(<span class="num">0</span>, angle, <span class="num">0</span>)
+        * CFrame.new(<span class="num">5</span>, <span class="num">2</span>, <span class="num">0</span>)      <span class="cm">-- 반경 5, 높이 2</span>
+<span class="kw">end</span>)</pre>
+  </div>
+</section>
+
+<section class="sec" id="raycast">
+  <div class="wrap">
+    <h2><span class="num">25</span>Raycast — 보이지 않는 광선 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">총알 판정, 바닥 감지, 시야 체크 — "이 방향에 뭐가 있나"를 묻는 도구.</p>
+    <pre class="code-block lua"><span class="kw">local</span> params = RaycastParams.new()
+params.FilterType = Enum.RaycastFilterType.Exclude
+params.FilterDescendantsInstances = {character}   <span class="cm">-- 자기 몸은 제외</span>
+
+<span class="kw">local</span> origin = root.Position
+<span class="kw">local</span> direction = root.CFrame.LookVector * <span class="num">100</span>   <span class="cm">-- 앞으로 100</span>
+
+<span class="kw">local</span> result = workspace:Raycast(origin, direction, params)
+<span class="kw">if</span> result <span class="kw">then</span>
+    <span class="fn">print</span>(<span class="str">"맞은 것:"</span>, result.Instance.Name)
+    <span class="fn">print</span>(<span class="str">"위치:"</span>, result.Position)
+    <span class="fn">print</span>(<span class="str">"면 방향:"</span>, result.Normal)
+    <span class="fn">print</span>(<span class="str">"거리:"</span>, result.Distance)
+<span class="kw">end</span></pre>
+    <h3>활용 패턴</h3>
+    <ul class="plain">
+      <li><b>총/마법 명중:</b> 발사 위치에서 조준 방향으로 — result.Instance의 부모에서 <span class="term" tabindex="0" data-tip="캐릭터 안의 생명 <span class="term" tabindex="0" data-tip="게임 안에 존재하는 모든 것 하나하나 (파트, 조명, 소리)">인스턴스</span>. 체력·이동속도·점프·사망 담당">Humanoid</span>를 찾아 데미지.</li>
+      <li><b>바닥 감지:</b> 발 밑으로 짧게 (0,-5,0) — result.Instance.Material로 "잔디 위에선 발소리 다르게".</li>
+      <li><b>시야 체크:</b> 몬스터→플레이어 레이가 벽에 막히면 "안 보임".</li>
+      <li><b>벽 통과 배치 방지:</b> 설치 위치까지 레이를 쏴 막히는지 확인.</li>
+      <li>Normal 방향으로 이펙트를 정렬하면(<code>CFrame.lookAt(pos, pos + normal)</code>) 벽에 딱 붙는 총알 자국.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>장식 파트의 CanQuery를 false로 해두면 레이가 무시합니다 — 맵 가이드의 충돌 설정과 만나는 지점입니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="tags">
+  <div class="wrap">
+    <h2><span class="num">26</span>CollectionService와 Attribute <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">"용암 파트 200개에 스크립트 200개"를 끝내는 법 — 태그 하나, 스크립트 하나.</p>
+    <h3>태그</h3>
+    <pre class="code-block lua"><span class="kw">local</span> CS = game:GetService(<span class="str">"CollectionService"</span>)
+
+<span class="kw">local function</span> <span class="fn">setupLava</span>(part)
+    part.Touched:Connect(<span class="kw">function</span>(hit)
+        <span class="kw">local</span> h = hit.Parent:FindFirstChildOfClass(<span class="str">"Humanoid"</span>)
+        <span class="kw">if</span> h <span class="kw">then</span> h.Health = <span class="num">0</span> <span class="kw">end</span>
+    <span class="kw">end</span>)
+<span class="kw">end</span>
+
+<span class="kw">for</span> _, part <span class="kw">in ipairs</span>(CS:GetTagged(<span class="str">"Lava"</span>)) <span class="kw">do</span>
+    <span class="fn">setupLava</span>(part)            <span class="cm">-- 이미 있는 것들</span>
+<span class="kw">end</span>
+CS:GetInstanceAddedSignal(<span class="str">"Lava"</span>):Connect(setupLava)   <span class="cm">-- 나중에 생기는 것들</span></pre>
+    <p>파트에 태그를 붙이는 법: Properties 창 하단 Tags 섹션에 <code>Lava</code> 입력. 맵 어디의 파트든 태그만 붙이면 자동으로 용암이 됩니다 — 맵 제작과 코드의 깔끔한 분업.</p>
+    <h3>Attribute — 인스턴스에 변수 달기</h3>
+    <pre class="code-block lua"><span class="cm">-- Properties 하단 Attributes에서 추가하거나 코드로:</span>
+door:SetAttribute(<span class="str">"RequiredKey"</span>, <span class="str">"GoldKey"</span>)
+<span class="kw">local</span> key = door:GetAttribute(<span class="str">"RequiredKey"</span>)
+door:GetAttributeChangedSignal(<span class="str">"Locked"</span>):Connect(update)</pre>
+    <p>태그 = "이건 무엇이다", Attribute = "이것의 설정값". 둘을 합치면 <b>맵에서 값만 바꿔 동작이 달라지는 데이터 주도 설계</b>가 됩니다 — 문마다 다른 열쇠, 점프대마다 다른 높이.</p>
+  </div>
+</section>
+
+<section class="sec" id="anim">
+  <div class="wrap">
+    <h2><span class="num">27</span>애니메이션 재생 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">만든 애니메이션을 코드로 재생하고, 타이밍에 맞춰 이벤트를 발사합니다.</p>
+    <ol class="steps">
+      <li>Animation Editor(Avatar 탭)로 애니메이션 제작 &gt; Publish — Asset ID 획득. (블렌더에서 만들어 임포트도 가능)</li>
+      <li>재생:</li>
+    </ol>
+    <pre class="code-block lua"><span class="kw">local</span> animation = Instance.new(<span class="str">"Animation"</span>)
+animation.AnimationId = <span class="str">"rbxassetid://123456789"</span>
+
+<span class="kw">local</span> animator = humanoid:FindFirstChildOfClass(<span class="str">"Animator"</span>)
+<span class="kw">local</span> track = animator:LoadAnimation(animation)
+
+track:Play()
+track:AdjustSpeed(<span class="num">1.5</span>)            <span class="cm">-- 1.5배속</span>
+track.Looped = <span class="kw">false</span>
+track.Stopped:Wait()              <span class="cm">-- 끝날 때까지</span></pre>
+    <h3>핵심 개념</h3>
+    <ul class="plain">
+      <li><b>Priority:</b> Idle &lt; Movement &lt; Action &lt; Action4. 공격 모션은 Action으로 — 걷기를 덮어쓰게.</li>
+      <li><b>애니메이션 <span class="term" tabindex="0" data-tip="무언가 닿거나 들어왔을 때 함수를 실행하도록 예약하는 것">이벤트</span>:</b> 에디터에서 특정 프레임에 이벤트 마커 추가 &gt; <code>track:GetMarkerReachedSignal("Hit"):Connect(...)</code> — 칼이 휘둘러지는 정확한 프레임에 판정/이펙트 발사. 액션 게임의 표준 기법.</li>
+      <li>서버에서 Play하면 모두에게 복제 — 일반적으로 서버에서 재생합니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="debug">
+  <div class="wrap">
+    <h2><span class="num">28</span>디버깅 심화 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">print 졸업. 중단점, 워치, 로그 전략으로 버그를 체계적으로 추적합니다.</p>
+    <h3>중단점 (Breakpoint)</h3>
+    <ol class="steps">
+      <li>코드 줄 번호 왼쪽 클릭 — 빨간 점. 실행이 거기서 멈춥니다.</li>
+      <li>멈춘 상태에서 변수에 마우스를 올리면 현재 값이 보입니다. Watch 창에 식을 등록하면 계속 추적.</li>
+      <li><kbd>F10</kbd> 한 줄씩 / <kbd>F11</kbd> <span class="term" tabindex="0" data-tip="자주 하는 작업을 묶어 이름 붙인 것. 이름만 부르면 실행됨">함수</span> 안으로 / <kbd>F5</kbd> 계속.</li>
+    </ol>
+    <h3>에러를 다루는 코드</h3>
+    <pre class="code-block lua"><span class="kw">local</span> ok, err = pcall(<span class="kw">function</span>()
+    riskyThing()
+<span class="kw">end</span>)
+<span class="kw">if not</span> ok <span class="kw">then</span>
+    warn(<span class="str">"실패:"</span>, err)       <span class="cm">-- warn = 노란 출력, 죽지 않음</span>
+<span class="kw">end</span>
+
+assert(player, <span class="str">"player가 nil입니다"</span>)   <span class="cm">-- 조건 거짓이면 즉시 에러</span></pre>
+    <h3>고급 디버깅 수칙</h3>
+    <ul class="plain">
+      <li><b>이분 탐색:</b> 코드 절반을 주석 처리 — 버그가 남으면 남은 절반에, 사라지면 주석 친 절반에. 반복하면 몇 번 만에 범인 도달.</li>
+      <li><b>재현 조건 고정:</b> "가끔 발생"은 추적 불가. 항상 발생하는 최소 조건을 먼저 찾는 것이 일의 절반.</li>
+      <li><b>최근 변경 의심:</b> 어제까지 됐다면 범인은 오늘 바꾼 곳 — 버전 관리가 디버깅 도구인 이유.</li>
+      <li>Output에서 에러 줄 클릭 = 해당 코드로 점프. 호출 스택(Call Stack)으로 "누가 이 함수를 불렀나" 역추적.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="cleanup">
+  <div class="wrap">
+    <h2><span class="num">29</span>메모리와 연결 정리 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">오래 켜둔 서버가 느려지는 이유 — 끊지 않은 연결과 지우지 않은 참조. 누수를 막는 습관.</p>
+    <h3>누수의 전형</h3>
+    <pre class="code-block lua"><span class="cm">-- 나쁨: 캐릭터가 리스폰할 때마다 연결이 쌓임</span>
+player.CharacterAdded:Connect(<span class="kw">function</span>(char)
+    RunService.Heartbeat:Connect(<span class="kw">function</span>() ... <span class="kw">end</span>)  <span class="cm">-- 영원히 안 끊김!</span>
+<span class="kw">end</span>)</pre>
+    <pre class="code-block lua"><span class="cm">-- 좋음: 수명에 맞춰 정리</span>
+player.CharacterAdded:Connect(<span class="kw">function</span>(char)
+    <span class="kw">local</span> conn = RunService.Heartbeat:Connect(<span class="kw">function</span>() ... <span class="kw">end</span>)
+    char.AncestryChanged:Connect(<span class="kw">function</span>(_, parent)
+        <span class="kw">if not</span> parent <span class="kw">then</span> conn:Disconnect() <span class="kw">end</span>  <span class="cm">-- 캐릭터 제거 시 해제</span>
+    <span class="kw">end</span>)
+<span class="kw">end</span>)</pre>
+    <h3>정리 규칙</h3>
+    <ul class="plain">
+      <li>만든 연결은 수명이 끝날 때 Disconnect — "누가 언제 이 연결을 끊는가"를 만들 때 정합니다.</li>
+      <li>Destroy()는 인스턴스의 연결을 함께 끊어줍니다 — 인스턴스 기반이면 Destroy가 정리의 기본.</li>
+      <li>테이블에 플레이어를 키로 저장했다면 PlayerRemoving에서 <code>data[player] = nil</code> — 안 지우면 나간 유저가 메모리에 영원히.</li>
+      <li>연결과 인스턴스를 테이블에 모아뒀다 한 번에 정리하는 패턴(Maid/Janitor/Trove)이 커뮤니티 표준 — 초고급에서 구조화합니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="project3">
+  <div class="wrap">
+    <h2><span class="num">30</span>종합 프로젝트 — 상점 시스템 <span class="lv lv-pg">고급</span></h2>
+    <p class="sec-sub">고급 전체 조합: 모듈 + <span class="term" tabindex="0" data-tip="클라이언트와 서버가 대화하는 공식 통로">RemoteEvent</span> + DataStore + 검증. 실제 게임의 축소판.</p>
+    <h3>설계 먼저</h3>
+    <pre class="code-block"><span class="cm">ReplicatedStorage
+  Remotes/BuyItem (RemoteEvent)
+  ItemData (ModuleScript)        -- 아이템 정의 (공용: 클라가 가격 표시에도 씀)
+ServerScriptService
+  DataManager (ModuleScript)     -- 저장/로드 (챕터 23)
+  ShopServer (Script)            -- 구매 검증 처리</span></pre>
+    <pre class="code-block lua"><span class="cm">-- ItemData (ModuleScript)</span>
+<span class="kw">return</span> {
+    Sword  = {price = <span class="num">100</span>, type = <span class="str">"weapon"</span>},
+    Shield = {price = <span class="num">150</span>, type = <span class="str">"armor"</span>},
+}</pre>
+    <pre class="code-block lua"><span class="cm">-- ShopServer (Script) — 서버 검증이 핵심</span>
+<span class="kw">local</span> ItemData = require(RS.ItemData)
+RS.Remotes.BuyItem.OnServerEvent:Connect(<span class="kw">function</span>(player, itemName)
+    <span class="kw">local</span> item = ItemData[itemName]
+    <span class="kw">if not</span> item <span class="kw">then return end</span>                       <span class="cm">-- 1. 존재 검증</span>
+    <span class="kw">if</span> DataManager.getCoins(player) &lt; item.price <span class="kw">then return end</span>  <span class="cm">-- 2. 잔액</span>
+    <span class="kw">if</span> DataManager.hasItem(player, itemName) <span class="kw">then return end</span>      <span class="cm">-- 3. 중복</span>
+    DataManager.addCoins(player, -item.price)
+    DataManager.giveItem(player, itemName)
+<span class="kw">end</span>)</pre>
+    <ol class="steps">
+      <li>GUI(LocalScript)는 ItemData를 require해 목록과 가격을 그리고, 버튼 클릭 시 FireServer만.</li>
+      <li>도전 과제: 구매 결과를 FireClient로 돌려보내 성공/실패 알림 띄우기, 장착 시스템 추가.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>"클라이언트는 그리기와 요청만, 서버는 검증과 변경만" — 이 한 줄이 고급의 전부입니다. 초고급에서는 이 구조를 게임 전체 규모로 키우는 아키텍처를 다룹니다.</p></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level" href="lua-master.html">
+    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Luau 초고급 — 성능과 보안</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="lua-intermediate.html">&larr; 중급</a>
+      <a href="index.html">메인</a>
+      <a href="lua-master.html">초고급으로 &rarr;</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+<script src="assistant.js"></script>
+</body>
+</html>
