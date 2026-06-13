@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>가이드 허브 — 블렌더 + Roblox Studio 완전 가이드</title>
+<title>가이드 허브 — 블렌더 · Luau · Roblox Studio 완전 가이드</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23f5792a'/><text x='50' y='70' font-size='58' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>G</text></svg>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
 <style>
@@ -13,11 +13,12 @@
   --text:#ececf1;--text-2:#bdbdc9;--muted:#8b8b98;
   --orange:#f5792a;--orange-2:#ffa45c;--orange-dim:rgba(245,121,42,.13);
   --blue:#5aa7ff;--blue-2:#7ec0ff;--blue-dim:rgba(90,167,255,.13);
+  --yellow:#ffc44d;--yellow-2:#ffd57e;--yellow-dim:rgba(255,196,77,.13);
   --teal:#4dd6c1;--teal-dim:rgba(77,214,193,.1);
   --indigo:#8a9bff;--indigo-dim:rgba(138,155,255,.1);
   --green:#5ad08a;--green-dim:rgba(90,208,138,.12);
   --purple:#b580ff;--purple-dim:rgba(181,128,255,.12);
-  --pink:#e040fb;
+  --pink:#e040fb;--red:#ff5470;--red-dim:rgba(255,84,112,.12);
   --sans:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
   --mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,monospace;
 }
@@ -29,80 +30,74 @@ a:hover{text-decoration:underline}
 ::-webkit-scrollbar{width:10px}::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:#33333d;border-radius:99px;border:2px solid var(--bg)}
 
-/* header */
 header{position:sticky;top:0;z-index:50;background:rgba(19,19,22,.9);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid var(--border-soft);padding:0 clamp(16px,4vw,40px);display:flex;align-items:center;justify-content:space-between;height:58px}
 .hd-logo{display:flex;align-items:center;gap:10px}
 .hd-mark{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--orange-2),var(--orange));display:grid;place-items:center;font-family:var(--mono);font-weight:900;font-size:17px;color:#131316;flex:none}
 .hd-title{font-size:14.5px;font-weight:700;letter-spacing:-.02em}
 .hd-sub{font-size:11.5px;color:var(--muted);margin-left:6px;display:none}
-@media(min-width:640px){.hd-sub{display:inline}}
-.hd-nav{display:flex;gap:4px;flex-wrap:wrap}
-.hd-nav a{padding:5px 11px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);transition:all .14s}
+@media(min-width:700px){.hd-sub{display:inline}}
+.hd-nav{display:flex;gap:2px;flex-wrap:wrap;align-items:center}
+.hd-nav a{padding:5px 10px;border-radius:8px;font-size:13px;font-weight:600;color:var(--muted);transition:all .14s}
 .hd-nav a:hover{background:var(--panel);color:var(--text);text-decoration:none}
-.hd-nav .sep{color:var(--border);padding:5px 3px;font-size:12px}
+.hd-nav .sep{color:var(--border);padding:0 1px;font-size:12px}
 
-/* hero */
-.hero{padding:clamp(72px,12vw,120px) clamp(16px,5vw,48px) clamp(60px,10vw,100px);text-align:center;position:relative;overflow:hidden;
-  background:radial-gradient(700px 400px at 35% -10%,rgba(245,121,42,.13),transparent 65%),
-             radial-gradient(700px 400px at 65% -10%,rgba(90,167,255,.11),transparent 65%),
-             radial-gradient(400px 300px at 85% 70%,rgba(224,64,251,.05),transparent 60%)}
+.hero{padding:clamp(72px,12vw,118px) clamp(16px,5vw,48px) clamp(56px,9vw,92px);text-align:center;position:relative;overflow:hidden;
+  background:radial-gradient(640px 400px at 25% -10%,rgba(245,121,42,.13),transparent 64%),
+             radial-gradient(640px 400px at 50% -10%,rgba(255,196,77,.10),transparent 64%),
+             radial-gradient(640px 400px at 75% -10%,rgba(90,167,255,.12),transparent 64%)}
 .hero::before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.02) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(760px 480px at 50% 0%,#000 15%,transparent 70%);-webkit-mask-image:radial-gradient(760px 480px at 50% 0%,#000 15%,transparent 70%)}
-.hero-inner{position:relative;max-width:820px;margin:0 auto}
-.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.18em;color:var(--orange-2);background:var(--orange-dim);border:1px solid rgba(245,121,42,.3);border-radius:99px;padding:5px 14px;margin-bottom:26px}
+.hero-inner{position:relative;max-width:860px;margin:0 auto}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;font-family:var(--mono);font-size:10.5px;font-weight:700;letter-spacing:.16em;color:var(--orange-2);background:var(--orange-dim);border:1px solid rgba(245,121,42,.3);border-radius:99px;padding:5px 14px;margin-bottom:26px}
 .hero-eyebrow::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange)}
-.hero h1{font-size:clamp(32px,7vw,60px);font-weight:900;line-height:1.12;letter-spacing:-.05em;margin-bottom:18px}
+.hero h1{font-size:clamp(30px,6.5vw,58px);font-weight:900;line-height:1.12;letter-spacing:-.05em;margin-bottom:18px}
 .hero h1 em.bl{background:linear-gradient(100deg,var(--orange-2),var(--orange));-webkit-background-clip:text;background-clip:text;color:transparent;font-style:normal}
+.hero h1 em.lu{background:linear-gradient(100deg,var(--yellow-2),var(--yellow));-webkit-background-clip:text;background-clip:text;color:transparent;font-style:normal}
 .hero h1 em.st{background:linear-gradient(100deg,var(--blue-2),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;font-style:normal}
-.hero p{font-size:clamp(15px,2.4vw,17.5px);color:var(--text-2);margin-bottom:40px;line-height:1.7;max-width:600px;margin-left:auto;margin-right:auto}
-.hero-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(16px,4vw,32px)}
-.stat .n{display:block;font-size:clamp(24px,4vw,36px);font-weight:900;letter-spacing:-.04em;color:var(--orange-2);font-family:var(--mono)}
+.hero p{font-size:clamp(15px,2.4vw,17.5px);color:var(--text-2);margin-bottom:40px;line-height:1.7;max-width:640px;margin-left:auto;margin-right:auto}
+.hero-stats{display:flex;justify-content:center;flex-wrap:wrap;gap:clamp(14px,3vw,26px)}
+.stat .n{display:block;font-size:clamp(22px,3.6vw,32px);font-weight:900;letter-spacing:-.04em;color:var(--orange-2);font-family:var(--mono)}
+.stat.st-lu .n{color:var(--yellow)}
 .stat.st-bl .n{color:var(--blue-2)}
-.stat .l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.stat .l{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.05em;text-transform:uppercase}
 .stat-div{width:1px;height:40px;background:var(--border);margin:4px 0}
 
-/* sections */
-.sections-wrap{max-width:1160px;margin:0 auto;padding:clamp(56px,8vw,88px) clamp(16px,4vw,40px)}
+.sections-wrap{max-width:1200px;margin:0 auto;padding:clamp(52px,8vw,84px) clamp(16px,4vw,40px)}
 .sec-divider{display:flex;align-items:center;gap:16px;margin-bottom:14px}
 .sec-divider-line{flex:1;height:1px;background:var(--border-soft)}
-.sec-divider-label{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.18em;text-transform:uppercase;white-space:nowrap;padding:5px 14px;border-radius:99px;border:1px solid}
+.sec-divider-label{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;padding:5px 14px;border-radius:99px;border:1px solid}
 .sdl-blender{color:var(--orange-2);background:var(--orange-dim);border-color:rgba(245,121,42,.3)}
+.sdl-lua{color:var(--yellow);background:var(--yellow-dim);border-color:rgba(255,196,77,.32)}
 .sdl-studio{color:var(--blue);background:var(--blue-dim);border-color:rgba(90,167,255,.3)}
 .sdl-dot{width:6px;height:6px;border-radius:50%;flex:none}
 .sdl-blender .sdl-dot{background:var(--orange)}
+.sdl-lua .sdl-dot{background:var(--yellow)}
 .sdl-studio .sdl-dot{background:var(--blue)}
-.sec-intro{text-align:center;color:var(--muted);font-size:14px;margin-bottom:36px}
+.sec-intro{text-align:center;color:var(--muted);font-size:14px;margin-bottom:34px;max-width:680px;margin-left:auto;margin-right:auto}
 
-/* card grids */
-.card-grid{display:grid;gap:16px;margin-bottom:clamp(48px,8vw,80px)}
-.blender-grid{grid-template-columns:repeat(4,1fr)}
-.studio-grid{grid-template-columns:repeat(3,1fr);margin-bottom:0}
+.card-grid{display:grid;gap:14px;margin-bottom:clamp(46px,7vw,74px);grid-template-columns:repeat(5,1fr)}
+.card-grid.last{margin-bottom:0}
 
-/* level cards */
-.lcard{background:var(--panel);border:1px solid var(--border-soft);border-radius:18px;padding:clamp(20px,2.5vw,28px);position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s}
+.lcard{background:var(--panel);border:1px solid var(--border-soft);border-radius:16px;padding:clamp(16px,1.6vw,20px);position:relative;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s,box-shadow .2s}
 .lcard::before{content:"";position:absolute;top:0;left:0;right:0;height:3px}
-.lcard:hover{transform:translateY(-4px);box-shadow:0 18px 50px rgba(0,0,0,.4)}
-.lcard.beg::before{background:linear-gradient(90deg,var(--green),#3ab868)}.lcard.beg:hover{border-color:rgba(90,208,138,.38)}
-.lcard.int::before{background:linear-gradient(90deg,var(--orange-2),var(--orange))}.lcard.int:hover{border-color:rgba(245,121,42,.38)}
-.lcard.adv::before{background:linear-gradient(90deg,var(--purple),#8044cc)}.lcard.adv:hover{border-color:rgba(181,128,255,.38)}
-.lcard.mas::before{background:linear-gradient(90deg,var(--pink),var(--purple))}.lcard.mas:hover{border-color:rgba(224,64,251,.38)}
-.lcard.sbeg::before{background:linear-gradient(90deg,var(--teal),#2eb89f)}.lcard.sbeg:hover{border-color:rgba(77,214,193,.38)}
-.lcard.sint::before{background:linear-gradient(90deg,var(--blue-2),var(--blue))}.lcard.sint:hover{border-color:rgba(90,167,255,.38)}
-.lcard.sadv::before{background:linear-gradient(90deg,var(--indigo),#5f6fd8)}.lcard.sadv:hover{border-color:rgba(138,155,255,.38)}
-.lv-chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.12em;padding:3px 10px;border-radius:99px;border:1px solid;margin-bottom:14px}
+.lcard:hover{transform:translateY(-4px);box-shadow:0 16px 44px rgba(0,0,0,.4)}
+.lcard.c-beg::before{background:linear-gradient(90deg,var(--green),#3ab868)}.lcard.c-beg:hover{border-color:rgba(90,208,138,.38)}
+.lcard.c-int::before{background:linear-gradient(90deg,var(--orange-2),var(--orange))}.lcard.c-int:hover{border-color:rgba(245,121,42,.38)}
+.lcard.c-adv::before{background:linear-gradient(90deg,var(--purple),#8044cc)}.lcard.c-adv:hover{border-color:rgba(181,128,255,.38)}
+.lcard.c-mas::before{background:linear-gradient(90deg,var(--pink),var(--purple))}.lcard.c-mas:hover{border-color:rgba(224,64,251,.38)}
+.lcard.c-exp::before{background:linear-gradient(90deg,var(--red),#cc3354)}.lcard.c-exp:hover{border-color:rgba(255,84,112,.4)}
+.lv-chip{display:inline-flex;align-items:center;font-family:var(--mono);font-size:9.5px;font-weight:800;letter-spacing:.1em;padding:3px 9px;border-radius:99px;border:1px solid;margin-bottom:12px;white-space:nowrap}
 .lv-beg{color:var(--green);border-color:rgba(90,208,138,.4);background:rgba(90,208,138,.09)}
 .lv-int{color:var(--orange-2);border-color:rgba(245,121,42,.4);background:var(--orange-dim)}
 .lv-adv{color:var(--purple);border-color:rgba(181,128,255,.35);background:var(--purple-dim)}
 .lv-mas{color:var(--pink);border-color:rgba(224,64,251,.35);background:rgba(224,64,251,.08)}
-.lv-sbeg{color:var(--teal);border-color:rgba(77,214,193,.4);background:var(--teal-dim)}
-.lv-sint{color:var(--blue-2);border-color:rgba(90,167,255,.4);background:var(--blue-dim)}
-.lv-sadv{color:var(--indigo);border-color:rgba(138,155,255,.4);background:var(--indigo-dim)}
-.lcard h3{font-size:17px;font-weight:800;letter-spacing:-.025em;margin-bottom:8px}
-.lcard .desc{color:var(--text-2);font-size:13.5px;line-height:1.65;margin-bottom:18px;flex:1}
-.ch-list{list-style:none;margin-bottom:20px}
-.ch-list li{display:flex;align-items:baseline;gap:8px;padding:4.5px 0;border-bottom:1px solid var(--border-soft);font-size:12.5px;color:var(--text-2)}
+.lv-exp{color:var(--red);border-color:rgba(255,84,112,.4);background:var(--red-dim)}
+.lcard h3{font-size:15.5px;font-weight:800;letter-spacing:-.025em;margin-bottom:7px}
+.lcard .desc{color:var(--text-2);font-size:12.5px;line-height:1.6;margin-bottom:15px;flex:1}
+.ch-list{list-style:none;margin-bottom:16px}
+.ch-list li{display:flex;align-items:baseline;gap:7px;padding:4px 0;border-bottom:1px solid var(--border-soft);font-size:11.5px;color:var(--text-2)}
 .ch-list li:last-child{border-bottom:none}
-.ch-list .cn{font-family:var(--mono);font-size:10px;color:var(--muted);width:20px;flex:none}
-.lcard-btn{display:block;text-align:center;padding:10px 14px;border-radius:10px;font-weight:700;font-size:14px;transition:opacity .15s,transform .15s;margin-top:auto}
+.ch-list .cn{font-family:var(--mono);font-size:9.5px;color:var(--muted);width:18px;flex:none}
+.lcard-btn{display:block;text-align:center;padding:9px 12px;border-radius:9px;font-weight:700;font-size:13px;transition:opacity .15s,transform .15s;margin-top:auto}
 .lcard-btn:hover{opacity:.88;transform:translateY(-1px);text-decoration:none}
 .lcard-btn .arr{display:inline-block;transition:transform .18s}
 .lcard-btn:hover .arr{transform:translateX(4px)}
@@ -110,24 +105,21 @@ header{position:sticky;top:0;z-index:50;background:rgba(19,19,22,.9);backdrop-fi
 .btn-int{background:linear-gradient(135deg,var(--orange-2),var(--orange));color:#1a1208}
 .btn-adv{background:linear-gradient(135deg,var(--purple),#8044cc);color:#fff}
 .btn-mas{background:linear-gradient(135deg,var(--pink),var(--purple));color:#fff}
-.btn-sbeg{background:linear-gradient(135deg,#6fe8d2,var(--teal));color:#08201b}
-.btn-sint{background:linear-gradient(135deg,var(--blue-2),var(--blue));color:#0a1520}
-.btn-sadv{background:linear-gradient(135deg,var(--indigo),#5f6fd8);color:#fff}
+.btn-exp{background:linear-gradient(135deg,var(--red),#cc3354);color:#fff}
 
-/* features */
 .features{border-top:1px solid var(--border-soft);padding:clamp(48px,7vw,72px) clamp(16px,4vw,40px)}
 .feat-inner{max-width:1160px;margin:0 auto}
 .feat-title{text-align:center;font-size:clamp(20px,4vw,28px);font-weight:850;letter-spacing:-.04em}
 .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:36px}
 .feat-card{background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px;transition:transform .18s,border-color .18s}
 .feat-card:hover{transform:translateY(-3px);border-color:#3a3a46}
-.feat-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:11px;font-family:var(--mono);font-size:13px;font-weight:800}
+.feat-icon{width:38px;height:38px;border-radius:10px;display:grid;place-items:center;margin-bottom:11px;font-family:var(--mono);font-size:12px;font-weight:800}
 .fi-or{background:var(--orange-dim);border:1px solid rgba(245,121,42,.28);color:var(--orange-2)}
 .fi-bl{background:var(--blue-dim);border:1px solid rgba(90,167,255,.28);color:var(--blue)}
+.fi-yl{background:var(--yellow-dim);border:1px solid rgba(255,196,77,.3);color:var(--yellow)}
 .fi-gr{background:rgba(90,208,138,.1);border:1px solid rgba(90,208,138,.28);color:var(--green)}
 .fi-pu{background:var(--purple-dim);border:1px solid rgba(181,128,255,.28);color:var(--purple)}
-.fi-pk{background:rgba(224,64,251,.08);border:1px solid rgba(224,64,251,.28);color:var(--pink)}
-.fi-tl{background:var(--teal-dim);border:1px solid rgba(77,214,193,.28);color:var(--teal)}
+.fi-rd{background:var(--red-dim);border:1px solid rgba(255,84,112,.28);color:var(--red)}
 .feat-card h3{font-size:14.5px;font-weight:700;margin-bottom:5px}
 .feat-card p{font-size:13px;color:var(--muted);line-height:1.6;margin:0}
 
@@ -144,10 +136,9 @@ footer p{color:var(--muted);font-size:12px;margin-bottom:14px}
 .hero-stats{animation:fadeUp .65s .18s ease both}
 @media(prefers-reduced-motion:reduce){.hero-eyebrow,.hero h1,.hero p,.hero-stats{animation:none}}
 
-@media(max-width:1100px){.blender-grid{grid-template-columns:repeat(2,1fr)}.studio-grid{grid-template-columns:repeat(3,1fr)}}
-@media(max-width:900px){.studio-grid{grid-template-columns:1fr}}
-@media(max-width:760px){.blender-grid{grid-template-columns:1fr}.feat-grid{grid-template-columns:repeat(2,1fr)}.stat-div{display:none}}
-@media(max-width:480px){.feat-grid{grid-template-columns:1fr}.hd-nav a{padding:4px 8px;font-size:12px}}
+@media(max-width:1080px){.card-grid{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:760px){.card-grid{grid-template-columns:repeat(2,1fr)}.feat-grid{grid-template-columns:repeat(2,1fr)}.stat-div{display:none}}
+@media(max-width:480px){.card-grid{grid-template-columns:1fr}.feat-grid{grid-template-columns:1fr}.hd-nav a{padding:4px 7px;font-size:12px}}
 </style>
 </head>
 <body>
@@ -156,30 +147,32 @@ footer p{color:var(--muted);font-size:12px;margin-bottom:14px}
   <div class="hd-logo">
     <div class="hd-mark">G</div>
     <span class="hd-title">가이드 허브</span>
-    <span class="hd-sub">/ 블렌더 + Roblox Studio</span>
+    <span class="hd-sub">/ 블렌더 · Luau · Studio</span>
   </div>
   <nav class="hd-nav">
     <a href="beginner.html">블렌더</a>
-    <span class="sep">|</span>
-    <a href="studio-beginner.html" style="color:var(--blue)">Studio 맵 제작</a>
-    <span class="sep">|</span>
+    <span class="sep">·</span>
+    <a href="lua-beginner.html" style="color:var(--yellow)">Luau</a>
+    <span class="sep">·</span>
+    <a href="studio-beginner.html" style="color:var(--blue)">Studio</a>
+    <span class="sep">·</span>
     <a href="glossary.html">용어 사전</a>
   </nav>
 </header>
 
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-eyebrow">BLENDER + ROBLOX STUDIO GUIDE HUB</div>
-    <h1><em class="bl">블렌더</em> &amp; <em class="st">Studio</em><br>완전 가이드</h1>
-    <p>두 개의 독립된 가이드. 블렌더는 입문부터 초고급까지 4단계, Roblox Studio 맵 제작은 초급부터 고급까지 3단계. 원하는 쪽만 골라서 봐도 됩니다.</p>
+    <div class="hero-eyebrow">BLENDER · LUAU · ROBLOX STUDIO</div>
+    <h1><em class="bl">블렌더</em> · <em class="lu">Luau</em> · <em class="st">Studio</em><br>완전 가이드</h1>
+    <p>세 개의 독립된 코스. 3D 모델링(블렌더), 게임 스크립트(Luau), 맵 제작(Studio)을 각각 입문부터 전문가까지. 원하는 코스만 골라서 봐도 됩니다.</p>
     <div class="hero-stats">
-      <div class="stat"><span class="n">4</span><span class="l">블렌더 단계</span></div>
+      <div class="stat"><span class="n">50+</span><span class="l">블렌더 챕터</span></div>
       <div class="stat-div"></div>
-      <div class="stat"><span class="n">40</span><span class="l">블렌더 챕터</span></div>
+      <div class="stat st-lu"><span class="n">50</span><span class="l">Luau 챕터</span></div>
       <div class="stat-div"></div>
-      <div class="stat st-bl"><span class="n">3</span><span class="l">Studio 단계</span></div>
+      <div class="stat st-bl"><span class="n">50</span><span class="l">Studio 챕터</span></div>
       <div class="stat-div"></div>
-      <div class="stat st-bl"><span class="n">30</span><span class="l">Studio 챕터</span></div>
+      <div class="stat"><span class="n">15</span><span class="l">단계 전체</span></div>
     </div>
   </div>
 </section>
@@ -189,154 +182,228 @@ footer p{color:var(--muted);font-size:12px;margin-bottom:14px}
   <!-- ============ 블렌더 ============ -->
   <div class="sec-divider">
     <div class="sec-divider-line"></div>
-    <div class="sec-divider-label sdl-blender"><span class="sdl-dot"></span>BLENDER 강좌</div>
+    <div class="sec-divider-label sdl-blender"><span class="sdl-dot"></span>BLENDER · 3D 모델링</div>
     <div class="sec-divider-line"></div>
   </div>
-  <p class="sec-intro">3D 모델링 툴 블렌더 그 자체를 통달하는 4단계 강좌. 모델링, 셰이더, 시뮬레이션, 코드까지.</p>
+  <p class="sec-intro">3D 모델링 툴 블렌더 그 자체를 통달하는 5단계. 모델링, 셰이더, 시뮬레이션, 코드, 그리고 프로덕션 파이프라인까지.</p>
 
-  <div class="card-grid blender-grid">
-    <div class="lcard beg">
+  <div class="card-grid">
+    <div class="lcard c-beg">
       <div class="lv-chip lv-beg">BEGINNER</div>
       <h3>입문</h3>
-      <p class="desc">설치 첫날부터 모델 내보내기까지. 블렌더가 처음이라면 여기서 시작합니다.</p>
+      <p class="desc">설치 첫날부터 모델 내보내기까지. 블렌더가 처음이라면 여기서.</p>
       <ul class="ch-list">
         <li><span class="cn">01</span>설치와 화면 구성</li>
-        <li><span class="cn">02</span>화면 돌리고 이동하기</li>
-        <li><span class="cn">03</span>오브젝트 추가/이동/복제</li>
-        <li><span class="cn">04</span>메시 직접 편집하기</li>
-        <li><span class="cn">05</span>자주 쓰는 편집 도구</li>
+        <li><span class="cn">04</span>메시 편집</li>
         <li><span class="cn">06</span>모디파이어</li>
-        <li><span class="cn">07</span>색상과 재질</li>
         <li><span class="cn">08</span>UV와 텍스처</li>
-        <li><span class="cn">09</span>FBX로 내보내기</li>
-        <li><span class="cn">10</span>단축키 전체 목록</li>
+        <li><span class="cn">09</span>FBX 내보내기</li>
       </ul>
       <a href="beginner.html" class="lcard-btn btn-beg">시작하기 <span class="arr">&rarr;</span></a>
     </div>
-
-    <div class="lcard int">
+    <div class="lcard c-int">
       <div class="lv-chip lv-int">INTERMEDIATE</div>
       <h3>중급</h3>
-      <p class="desc">퀄리티를 올리고 싶을 때. 셰이더 노드, 베이킹, 리깅, 애니메이션.</p>
+      <p class="desc">퀄리티를 올리는 단계. 셰이더 노드, 베이킹, 리깅, 애니메이션.</p>
       <ul class="ch-list">
-        <li><span class="cn">11</span>깔끔한 메시 구조</li>
         <li><span class="cn">12</span>스컬프트 조각</li>
-        <li><span class="cn">13</span>커브 활용</li>
         <li><span class="cn">14</span>셰이더 노드</li>
-        <li><span class="cn">15</span>텍스처 페인팅 + 베이킹</li>
-        <li><span class="cn">16</span>조명과 렌더링</li>
+        <li><span class="cn">15</span>텍스처 + 베이킹</li>
         <li><span class="cn">17</span>리깅과 웨이트</li>
         <li><span class="cn">18</span>애니메이션</li>
-        <li><span class="cn">19</span>씬 정리 습관</li>
-        <li><span class="cn">20</span>유용한 애드온</li>
       </ul>
       <a href="intermediate.html" class="lcard-btn btn-int">시작하기 <span class="arr">&rarr;</span></a>
     </div>
-
-    <div class="lcard adv">
+    <div class="lcard c-adv">
       <div class="lv-chip lv-adv">ADVANCED</div>
       <h3>고급</h3>
-      <p class="desc">파티클, 물리/유체 시뮬레이션, Geometry Nodes, Python 자동화.</p>
+      <p class="desc">시뮬레이션, Geometry Nodes, Python. EX 챕터로 게임 스킬 이펙트 메시까지.</p>
       <ul class="ch-list">
-        <li><span class="cn">21</span>파티클 시스템 심화</li>
         <li><span class="cn">22</span>물리 시뮬레이션</li>
-        <li><span class="cn">23</span>유체 시뮬레이션</li>
-        <li><span class="cn">24</span>Cycles 렌더링 심화</li>
-        <li><span class="cn">25</span>컴포지터</li>
-        <li><span class="cn">26</span>EEVEE 차세대 설정</li>
-        <li><span class="cn">27</span>Geometry Nodes 심화</li>
-        <li><span class="cn">28</span>프로시저럴 텍스처링</li>
-        <li><span class="cn">29</span>셰이더 노드 고급</li>
+        <li><span class="cn">27</span>Geometry Nodes</li>
         <li><span class="cn">30</span>Python 자동화</li>
-        <li><span class="cn">EX</span>게임 스킬 이펙트 메시</li>
+        <li><span class="cn">EX</span>스킬 이펙트 메시</li>
+        <li><span class="cn">EX</span>검기·빔·마법진</li>
       </ul>
       <a href="advanced.html" class="lcard-btn btn-adv">시작하기 <span class="arr">&rarr;</span></a>
     </div>
-
-    <div class="lcard mas">
+    <div class="lcard c-mas">
       <div class="lv-chip lv-mas">MASTER</div>
       <h3>초고급</h3>
-      <p class="desc">OSL 셰이더 코딩, 커스텀 애드온 개발, 렌더팜, VFX 파이프라인. 블렌더를 언어처럼.</p>
+      <p class="desc">OSL 셰이더 코딩, 커스텀 애드온, 렌더팜, VFX 파이프라인.</p>
       <ul class="ch-list">
-        <li><span class="cn">31</span>OSL 셰이더 프로그래밍</li>
-        <li><span class="cn">32</span>커스텀 BSDF 설계</li>
-        <li><span class="cn">33</span>재질 라이브러리 구축</li>
-        <li><span class="cn">34</span>렌더팜 &amp; 배치 렌더링</li>
+        <li><span class="cn">31</span>OSL 셰이더 코딩</li>
+        <li><span class="cn">34</span>렌더팜 / 배치</li>
         <li><span class="cn">35</span>VFX 파이프라인</li>
-        <li><span class="cn">36</span>Alembic / USD 교환</li>
         <li><span class="cn">37</span>프로덕션 리토폴로지</li>
-        <li><span class="cn">38</span>NURBS / 서피스</li>
-        <li><span class="cn">39</span>의상 / 천 시뮬 마스터</li>
-        <li><span class="cn">40</span>커스텀 애드온 제작</li>
+        <li><span class="cn">40</span>커스텀 애드온</li>
       </ul>
       <a href="master.html" class="lcard-btn btn-mas">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-exp">
+      <div class="lv-chip lv-exp">EXPERT</div>
+      <h3>전문가</h3>
+      <p class="desc">스튜디오 파이프라인, 대규모 씬, 도구 제작, 색 관리, 협업과 납품.</p>
+      <ul class="ch-list">
+        <li><span class="cn">41</span>파이프라인 설계</li>
+        <li><span class="cn">45</span>애드온 아키텍처</li>
+        <li><span class="cn">48</span>색 관리 (AgX/ACES)</li>
+        <li><span class="cn">49</span>협업과 납품 규격</li>
+        <li><span class="cn">50</span>포트폴리오</li>
+      </ul>
+      <a href="expert.html" class="lcard-btn btn-exp">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+  </div>
+
+  <!-- ============ LUAU ============ -->
+  <div class="sec-divider">
+    <div class="sec-divider-line"></div>
+    <div class="sec-divider-label sdl-lua"><span class="sdl-dot"></span>LUAU · 게임 스크립트</div>
+    <div class="sec-divider-line"></div>
+  </div>
+  <p class="sec-intro">Roblox의 프로그래밍 언어 Luau. 코딩이 처음이어도 변수부터 시작해, 라이브 게임을 운영하는 전문가 수준까지 5단계.</p>
+
+  <div class="card-grid">
+    <div class="lcard c-beg">
+      <div class="lv-chip lv-beg">BEGINNER</div>
+      <h3>초급</h3>
+      <p class="desc">코딩 첫걸음. 변수, 조건, 반복, 함수 — 스크립트의 알파벳.</p>
+      <ul class="ch-list">
+        <li><span class="cn">01</span>스크립트란</li>
+        <li><span class="cn">02</span>변수</li>
+        <li><span class="cn">04</span>조건문</li>
+        <li><span class="cn">06</span>함수</li>
+        <li><span class="cn">09</span>실습 — 자동문</li>
+      </ul>
+      <a href="lua-beginner.html" class="lcard-btn btn-beg">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-int">
+      <div class="lv-chip lv-int">INTERMEDIATE</div>
+      <h3>중급</h3>
+      <p class="desc">진짜 게임 기능. 테이블, 이벤트, 서버/클라이언트, GUI, Tween.</p>
+      <ul class="ch-list">
+        <li><span class="cn">11</span>테이블</li>
+        <li><span class="cn">13</span>이벤트</li>
+        <li><span class="cn">15</span>클라이언트/서버</li>
+        <li><span class="cn">17</span>GUI 만들기</li>
+        <li><span class="cn">20</span>코인 줍기 게임</li>
+      </ul>
+      <a href="lua-intermediate.html" class="lcard-btn btn-int">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-adv">
+      <div class="lv-chip lv-adv">ADVANCED</div>
+      <h3>고급</h3>
+      <p class="desc">구조와 데이터. 모듈, OOP, DataStore 저장, CFrame, Raycast.</p>
+      <ul class="ch-list">
+        <li><span class="cn">21</span>ModuleScript</li>
+        <li><span class="cn">22</span>OOP·메타테이블</li>
+        <li><span class="cn">23</span>DataStore 저장</li>
+        <li><span class="cn">24</span>CFrame</li>
+        <li><span class="cn">30</span>상점 시스템</li>
+      </ul>
+      <a href="lua-advanced.html" class="lcard-btn btn-adv">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-mas">
+      <div class="lv-chip lv-mas">MASTER</div>
+      <h3>초고급</h3>
+      <p class="desc">성능과 보안. 아키텍처, 타입, 네트워크 최적화, 안티 익스플로잇.</p>
+      <ul class="ch-list">
+        <li><span class="cn">31</span>게임 아키텍처</li>
+        <li><span class="cn">34</span>안티 익스플로잇</li>
+        <li><span class="cn">35</span>프로파일링</li>
+        <li><span class="cn">36</span>병렬 Luau</li>
+        <li><span class="cn">40</span>Rojo·Wally</li>
+      </ul>
+      <a href="lua-master.html" class="lcard-btn btn-mas">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-exp">
+      <div class="lv-chip lv-exp">EXPERT</div>
+      <h3>전문가</h3>
+      <p class="desc">라이브 게임 운영. ECS, 커스텀 리플리케이션, 서버 권위, 대규모 데이터.</p>
+      <ul class="ch-list">
+        <li><span class="cn">41</span>ECS 설계</li>
+        <li><span class="cn">42</span>커스텀 리플리케이션</li>
+        <li><span class="cn">43</span>서버 권위·히트검증</li>
+        <li><span class="cn">47</span>라이브 운영</li>
+        <li><span class="cn">48</span>Luau 내부 동작</li>
+      </ul>
+      <a href="lua-expert.html" class="lcard-btn btn-exp">시작하기 <span class="arr">&rarr;</span></a>
     </div>
   </div>
 
   <!-- ============ STUDIO ============ -->
   <div class="sec-divider">
     <div class="sec-divider-line"></div>
-    <div class="sec-divider-label sdl-studio"><span class="sdl-dot"></span>ROBLOX STUDIO 강좌</div>
+    <div class="sec-divider-label sdl-studio"><span class="sdl-dot"></span>ROBLOX STUDIO · 맵 제작</div>
     <div class="sec-divider-line"></div>
   </div>
-  <p class="sec-intro">Roblox Studio 맵 제작 3단계 강좌. 파트와 지형부터 건축, 조명, 대형 맵 최적화까지. 블렌더와는 완전히 독립된 강좌입니다.</p>
+  <p class="sec-intro">스크립트 없이 맵 제작에만 집중하는 5단계. 파트와 지형부터 레벨 디자인, 상업 규모의 팀 제작과 라이브 운영까지.</p>
 
-  <div class="card-grid studio-grid">
-    <div class="lcard sbeg">
-      <div class="lv-chip lv-sbeg">STUDIO BEGINNER</div>
-      <h3>Studio 초급</h3>
-      <p class="desc">Studio 설치부터 첫 퍼블리시까지. 파트, 지형, Toolbox, 머티리얼 — 맵의 기초.</p>
+  <div class="card-grid last">
+    <div class="lcard c-beg">
+      <div class="lv-chip lv-beg">BEGINNER</div>
+      <h3>초급</h3>
+      <p class="desc">설치부터 첫 퍼블리시까지. 파트, 지형, Toolbox, 머티리얼.</p>
       <ul class="ch-list">
-        <li><span class="cn">01</span>설치와 화면 구성</li>
-        <li><span class="cn">02</span>카메라 조작</li>
-        <li><span class="cn">03</span>파트 추가와 변형</li>
-        <li><span class="cn">04</span>파트 속성</li>
-        <li><span class="cn">05</span>모델과 Explorer 정리</li>
+        <li><span class="cn">01</span>설치와 화면</li>
+        <li><span class="cn">03</span>파트 추가·변형</li>
         <li><span class="cn">06</span>지형 에디터</li>
-        <li><span class="cn">07</span>Toolbox와 에셋</li>
         <li><span class="cn">08</span>머티리얼과 색</li>
-        <li><span class="cn">09</span>테스트와 퍼블리시</li>
-        <li><span class="cn">10</span>단축키 모음</li>
+        <li><span class="cn">09</span>테스트·퍼블리시</li>
       </ul>
-      <a href="studio-beginner.html" class="lcard-btn btn-sbeg">시작하기 <span class="arr">&rarr;</span></a>
+      <a href="studio-beginner.html" class="lcard-btn btn-beg">시작하기 <span class="arr">&rarr;</span></a>
     </div>
-
-    <div class="lcard sint">
-      <div class="lv-chip lv-sint">STUDIO INTERMEDIATE</div>
-      <h3>Studio 중급</h3>
-      <p class="desc">본격 맵 제작. 설계, 지형 심화, 건축, 임포트, 조명, 사운드 — 진짜 게임 같은 맵.</p>
+    <div class="lcard c-int">
+      <div class="lv-chip lv-int">INTERMEDIATE</div>
+      <h3>중급</h3>
+      <p class="desc">본격 맵 제작. 설계, 지형 심화, 건축, 임포트, 조명, 사운드.</p>
       <ul class="ch-list">
-        <li><span class="cn">11</span>맵 설계와 레이아웃</li>
-        <li><span class="cn">12</span>지형 에디터 심화</li>
+        <li><span class="cn">11</span>맵 설계</li>
         <li><span class="cn">13</span>파트 건축 기법</li>
-        <li><span class="cn">14</span>외부 에셋 임포트</li>
-        <li><span class="cn">15</span>SurfaceAppearance 재질</li>
-        <li><span class="cn">16</span>소품 배치와 디테일</li>
-        <li><span class="cn">17</span>조명과 Atmosphere</li>
-        <li><span class="cn">18</span>물과 특수 지형</li>
-        <li><span class="cn">19</span>사운드 환경</li>
-        <li><span class="cn">20</span>스카이박스와 배경</li>
+        <li><span class="cn">14</span>에셋 임포트</li>
+        <li><span class="cn">17</span>조명·Atmosphere</li>
+        <li><span class="cn">20</span>스카이박스</li>
       </ul>
-      <a href="studio-intermediate.html" class="lcard-btn btn-sint">시작하기 <span class="arr">&rarr;</span></a>
+      <a href="studio-intermediate.html" class="lcard-btn btn-int">시작하기 <span class="arr">&rarr;</span></a>
     </div>
-
-    <div class="lcard sadv">
-      <div class="lv-chip lv-sadv">STUDIO ADVANCED</div>
-      <h3>Studio 고급</h3>
-      <p class="desc">출시 수준의 맵. 대형 맵 설계, 스트리밍, 최적화, 테마 연출, 모바일 대응.</p>
+    <div class="lcard c-adv">
+      <div class="lv-chip lv-adv">ADVANCED</div>
+      <h3>고급</h3>
+      <p class="desc">출시 수준의 맵. 대형 맵, 스트리밍, 최적화, 테마 연출, 모바일.</p>
       <ul class="ch-list">
-        <li><span class="cn">21</span>대형 맵 설계 전략</li>
+        <li><span class="cn">21</span>대형 맵 설계</li>
         <li><span class="cn">22</span>StreamingEnabled</li>
-        <li><span class="cn">23</span>파트 수 최적화</li>
-        <li><span class="cn">24</span>그림자와 렌더 최적화</li>
-        <li><span class="cn">25</span>충돌과 물리 설정</li>
-        <li><span class="cn">26</span>패키지와 에셋 관리</li>
-        <li><span class="cn">27</span>테마별 맵 연출</li>
+        <li><span class="cn">24</span>렌더 최적화</li>
         <li><span class="cn">28</span>이펙트 메시 배치</li>
-        <li><span class="cn">29</span>모바일 대응</li>
-        <li><span class="cn">30</span>맵 점검 체크리스트</li>
+        <li><span class="cn">30</span>점검 체크리스트</li>
       </ul>
-      <a href="studio-advanced.html" class="lcard-btn btn-sadv">시작하기 <span class="arr">&rarr;</span></a>
+      <a href="studio-advanced.html" class="lcard-btn btn-adv">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-mas">
+      <div class="lv-chip lv-mas">MASTER</div>
+      <h3>초고급</h3>
+      <p class="desc">레벨 디자인. 모듈러 키트, 환경 스토리텔링, 동선과 페이싱, 사운드스케이프.</p>
+      <ul class="ch-list">
+        <li><span class="cn">31</span>모듈러 키트</li>
+        <li><span class="cn">34</span>환경 스토리텔링</li>
+        <li><span class="cn">36</span>수직 레벨 디자인</li>
+        <li><span class="cn">37</span>동선과 페이싱</li>
+        <li><span class="cn">40</span>맵 리뷰·반복</li>
+      </ul>
+      <a href="studio-master.html" class="lcard-btn btn-mas">시작하기 <span class="arr">&rarr;</span></a>
+    </div>
+    <div class="lcard c-exp">
+      <div class="lv-chip lv-exp">EXPERT</div>
+      <h3>전문가</h3>
+      <p class="desc">상업 규모. 아트 디렉션, 성능 예산, 초대형 월드, 팀 협업, 라이브 운영.</p>
+      <ul class="ch-list">
+        <li><span class="cn">41</span>아트 디렉션</li>
+        <li><span class="cn">42</span>퍼포먼스 버짓</li>
+        <li><span class="cn">45</span>Team Create 협업</li>
+        <li><span class="cn">48</span>라이브 맵 운영</li>
+        <li><span class="cn">50</span>포트폴리오</li>
+      </ul>
+      <a href="studio-expert.html" class="lcard-btn btn-exp">시작하기 <span class="arr">&rarr;</span></a>
     </div>
   </div>
 
@@ -347,11 +414,11 @@ footer p{color:var(--muted);font-size:12px;margin-bottom:14px}
     <h2 class="feat-title">이 가이드의 특징</h2>
     <div class="feat-grid">
       <div class="feat-card"><div class="feat-icon fi-gr">BEG</div><h3>진짜 처음부터</h3><p>설치하는 법부터 시작합니다. 사전 지식이 전혀 없어도 따라올 수 있습니다.</p></div>
-      <div class="feat-card"><div class="feat-icon fi-pk">MAS</div><h3>블렌더 초고급까지</h3><p>OSL 셰이더, 커스텀 애드온 개발, VFX 파이프라인, 렌더팜. 블렌더를 도구가 아닌 언어로.</p></div>
-      <div class="feat-card"><div class="feat-icon fi-bl">STU</div><h3>Studio 맵 제작 3단계</h3><p>블렌더와 별개로 Studio 맵 제작만 배울 수 있습니다. 지형, 건축, 조명, 최적화까지.</p></div>
+      <div class="feat-card"><div class="feat-icon fi-rd">EXP</div><h3>전문가 수준까지</h3><p>세 코스 모두 입문부터 전문가까지 5단계. 프로덕션 파이프라인, 라이브 운영, 상업 제작을 진짜 깊이로.</p></div>
+      <div class="feat-card"><div class="feat-icon fi-yl">SEP</div><h3>완전히 분리된 3코스</h3><p>모델링·스크립트·맵 제작이 독립된 코스. 필요한 것만, 원하는 순서로.</p></div>
       <div class="feat-card"><div class="feat-icon fi-or">DIC</div><h3>용어 즉석 설명</h3><p>본문의 점선 밑줄 용어에 마우스를 올리면 뜻이 바로 뜹니다. 용어 사전 페이지에서 한눈에 찾아볼 수도 있습니다.</p></div>
-      <div class="feat-card"><div class="feat-icon fi-tl">COD</div><h3>실전 예시 중심</h3><p>설정값과 추천 수치를 표로 정리 — 따라 하면 바로 결과가 나오게.</p></div>
-      <div class="feat-card"><div class="feat-icon fi-pu">REF</div><h3>레퍼런스로도 활용</h3><p>단축키 표, 속성 표, 체크리스트. 다 본 뒤에도 사전처럼 찾아볼 수 있습니다.</p></div>
+      <div class="feat-card"><div class="feat-icon fi-bl">COD</div><h3>실전 예시 중심</h3><p>설정값과 추천 수치, 실제 코드를 표와 예제로 — 따라 하면 바로 결과가 나오게.</p></div>
+      <div class="feat-card"><div class="feat-icon fi-pu">REF</div><h3>레퍼런스로도 활용</h3><p>단축키 표, 치트시트, 체크리스트. 다 본 뒤에도 사전처럼 찾아볼 수 있습니다.</p></div>
     </div>
   </div>
 </section>
@@ -359,16 +426,13 @@ footer p{color:var(--muted);font-size:12px;margin-bottom:14px}
 <footer>
   <p>이 가이드는 공식 Blender / Roblox 문서가 아닙니다.</p>
   <div class="foot-links">
-    <a href="beginner.html">블렌더 입문</a>
-    <a href="intermediate.html">중급</a>
-    <a href="advanced.html">고급</a>
-    <a href="master.html">초고급</a>
-    <a href="studio-beginner.html">Studio 초급</a>
-    <a href="studio-intermediate.html">Studio 중급</a>
-    <a href="studio-advanced.html">Studio 고급</a>
+    <a href="beginner.html">블렌더</a>
+    <a href="lua-beginner.html">Luau</a>
+    <a href="studio-beginner.html">Studio</a>
     <a href="glossary.html">용어 사전</a>
   </div>
 </footer>
 
+<script src="assistant.js"></script>
 </body>
 </html>
