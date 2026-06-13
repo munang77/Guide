@@ -68,6 +68,8 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
     <a class="page-tab tab-map" href="studio-beginner.html">초급</a>
     <a class="page-tab" href="studio-intermediate.html">중급</a>
     <a class="page-tab" href="studio-advanced.html">고급</a>
+    <a class="page-tab" href="studio-master.html">초고급</a>
+    <a class="page-tab" href="studio-expert.html">전문가</a>
   </nav>
   <span style="font-size:12px;color:var(--muted);font-weight:600"><a href="index.html" style="color:var(--muted)">메인</a></span>
 </div>
@@ -317,6 +319,16 @@ Workspace
     <p>블<span class="term" tabindex="0" data-tip="3D 장면을 계산해서 화면에 그려내는 것">렌더</span> 등에서 만든 <span class="term" tabindex="0" data-tip="3D 모델을 프로그램끼리 주고받을 때 쓰는 파일 형식 (.fbx)">FBX</span>/OBJ 파일은 Home 탭 &gt; <code>Import 3D</code>로 가져옵니다. MeshPart로 변환되어 Workspace에 추가됩니다. 크기가 이상하면 <span class="term" tabindex="0" data-tip="외부에서 만든 파일을 프로그램 안으로 가져오는 것">임포트</span> 창에서 Scale을 조절하세요.</p>
 
     <div class="callout co-rbx"><span class="ico">RBX</span><p>이미지(데칼, <span class="term" tabindex="0" data-tip="3D 모델 표면에 입히는 그림(이미지). 옷에 프린트된 무늬 같은 것">텍스처</span>)를 쓰려면 create.roblox.com의 Creator Hub에서 업로드한 뒤 발급된 Asset ID를 <code>rbxassetid://숫자</code> 형식으로 입력합니다.</p></div>
+
+    <h3>플러그인 — Studio에 기능 추가하기</h3>
+    <p>플러그인은 Studio에 새 도구를 더해주는 확장 프로그램입니다. 에셋이 "가져다 쓰는 물건"이라면, 플러그인은 "작업을 도와주는 도구"입니다. 손으로 하면 한참 걸리는 일을 버튼 한 번으로 끝내주는 것들이 많아 맵 제작 속도를 크게 올려줍니다.</p>
+    <ol class="steps">
+      <li><b>찾기:</b> 상단 <code>Plugins</code> 탭 &gt; <code>Creator Store</code> (또는 create.roblox.com의 Creator Store &gt; Plugins).</li>
+      <li><b>설치:</b> 원하는 플러그인을 <code>Install</code> (무료/유료가 있습니다). 설치하면 Plugins 탭에 버튼이 생깁니다.</li>
+      <li><b>관리:</b> Plugins 탭 &gt; <code>Manage Plugins</code>에서 켜고 끄거나 업데이트.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>플러그인도 Toolbox 모델처럼 신뢰가 중요합니다. 설치 수가 많고 평판이 좋은 공식/유명 제작자의 것을 쓰세요. 플러그인은 Studio 안에서 코드를 실행할 수 있으므로, 출처가 불분명한 것은 피하는 게 안전합니다.</p></div>
+    <p>구체적으로 어떤 플러그인이 맵 제작에 유용한지는 중급(건축 보조)과 고급(최적화)에서 실제 작업과 함께 다룹니다.</p>
   </div>
 </section>
 
@@ -456,5 +468,6 @@ Workspace
   tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
 })();
 </script>
+<script src="assistant.js"></script>
 </body>
 </html>
