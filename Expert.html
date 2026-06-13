@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>블렌더 전문가 — 프로덕션 레벨</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23ff5470'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>B</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none;border-color:rgba(255,84,112,0.4)}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px);color:#ff5470}
+#progress{background:linear-gradient(90deg,#ff5470,#ff7d93)}
+h3::before{background:#ff5470}
+h2 .num{color:#ff5470;background:rgba(255,84,112,0.13);border-color:rgba(255,84,112,0.28)}
+.nav-link.active{background:rgba(255,84,112,0.13);color:#ff7d93;border-left-color:#ff5470}
+.nav-link.active .n{color:#ff5470}
+.logo-mark.pg{background:linear-gradient(150deg,#ff7d93,#ff5470)}
+.chip-pg{color:#ff5470;background:rgba(255,84,112,0.13);border:1px solid rgba(255,84,112,0.4)}
+.tab-pg{color:#ff5470;background:rgba(255,84,112,0.13);border-color:rgba(255,84,112,0.28)}
+.lv-pg{color:#ff7d93;border-color:rgba(255,84,112,0.4);background:rgba(255,84,112,0.13)}
+
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark pg">B</div>
+    <div><b>전문가 강좌</b><small>EXPERT</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
+  <div class="nav-group"><span>파이프라인</span>
+    <a class="nav-link" href="#pipeline"><span class="n">41</span>스튜디오 파이프라인 설계</a>
+    <a class="nav-link" href="#bigscene"><span class="n">42</span>대규모 씬 관리</a>
+    <a class="nav-link" href="#nodegroups"><span class="n">43</span>노드 그룹과 에셋 배포</a>
+    <a class="nav-link" href="#simcache"><span class="n">44</span>시뮬레이션 캐시 운용</a>
+  </div>
+  <div class="nav-group"><span>시스템</span>
+    <a class="nav-link" href="#addon-arch"><span class="n">45</span>애드온 아키텍처와 배포</a>
+    <a class="nav-link" href="#gn-systems"><span class="n">46</span>Geometry Nodes 시스템</a>
+    <a class="nav-link" href="#shader-debug"><span class="n">47</span>셰이더 최적화와 디버깅</a>
+    <a class="nav-link" href="#colormgmt"><span class="n">48</span>색 관리 (AgX/ACES)</a>
+  </div>
+  <div class="nav-group"><span>프로</span>
+    <a class="nav-link" href="#collab"><span class="n">49</span>협업과 납품 규격</a>
+    <a class="nav-link" href="#career"><span class="n">50</span>포트폴리오와 다음 단계</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="beginner.html">입문</a>
+    <a class="page-tab" href="intermediate.html">중급</a>
+    <a class="page-tab" href="advanced.html">고급</a>
+    <a class="page-tab" href="master.html">초고급</a>
+    <a class="page-tab tab-pg" href="expert.html">전문가</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(255,84,112,0.15),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-pg">BLENDER EXPERT</div>
+    <h1>블렌더 전문가</h1>
+    <p class="lead">프로덕션 파이프라인, 대규모 씬, 도구 제작, 색 관리, 협업과 납품. 취미를 직업 수준으로 끌어올리는 마지막 단계.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">파이프라인</span>
+      <span class="hero-tag">시스템 설계</span>
+      <span class="hero-tag">협업/납품</span>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="pipeline">
+  <div class="wrap">
+    <h2><span class="num">41</span>스튜디오 파이프라인 설계 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">혼자가 아니라 팀과 시간을 상대로 작업하는 단계. 파일 하나가 아니라 시스템을 설계합니다.</p>
+    <h3>프로젝트 구조 표준화</h3>
+    <pre class="code-block"><span class="cm"># 프로덕션 프로젝트 구조 예시</span>
+project/
+  assets/        <span class="cm"># 캐릭터, 소품별 폴더. 각각 model/ texture/ export/</span>
+  scenes/        <span class="cm"># 작업 씬. 날짜나 버전 접미사 금지 — 버전관리가 할 일</span>
+  lib/           <span class="cm"># 링크용 공용 라이브러리 (.blend)</span>
+  export/        <span class="cm"># FBX/GLB 산출물. 자동 생성, 손으로 안 건드림</span>
+  scripts/       <span class="cm"># 파이프라인 자동화 파이썬</span></pre>
+    <h3>네이밍 컨벤션</h3>
+    <ul class="plain">
+      <li><b>오브젝트:</b> <code>SM_Rock_Large_01</code> (SM=Static Mesh), <code>SK_Hero</code> (SK=Skeletal). 접두사로 종류를 즉시 구분.</li>
+      <li><b>재질:</b> <code>M_Rock</code>, <span class="term" tabindex="0" data-tip="3D 모델 표면에 입히는 그림(이미지)">텍스처</span>: <code>T_Rock_BC</code>(BaseColor) / <code>_N</code>(Normal) / <code>_R</code>(Roughness).</li>
+      <li><b>본(Bone):</b> 좌우 대칭은 반드시 <code>.L</code> / <code>.R</code> 접미사 — 미러 기능들의 전제 조건.</li>
+      <li>규칙은 문서로 박제하고 예외를 만들지 않는 것이 핵심. 자동화 스크립트는 규칙 위에서만 동작합니다.</li>
+    </ul>
+    <h3>버전 관리</h3>
+    <ul class="plain">
+      <li>.blend는 바이너리라 Git 기본만으론 비효율 — <b>Git LFS</b>로 대용량을 분리 추적.</li>
+      <li>커밋 단위는 "작업 의미" 단위 (모델 완성, 리<span class="term" tabindex="0" data-tip="메시의 면들이 짜인 구조. 깔끔할수록 수정과 변형이 쉬움">토폴로지</span> 완료). 하루 끝 통커밋 금지.</li>
+      <li>텍스처 원본(PSD/KRA)과 베이크 산출물(PNG)을 분리 — 산출물은 재생성 가능하므로 LFS 부담을 줄일 수 있음.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>파이프라인의 성공 기준은 "새 멤버가 문서만 읽고 반나절 안에 <span class="term" tabindex="0" data-tip="모델, 그림, 소리처럼 게임 제작에 쓰는 재료 파일">에셋</span> 하나를 규격대로 납품할 수 있는가" 입니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="bigscene">
+  <div class="wrap">
+    <h2><span class="num">42</span>대규모 씬 관리 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">오브젝트 수천 개, 수억 폴리곤의 씬을 멈추지 않고 다루는 기술.</p>
+    <h3>Collection 전략</h3>
+    <ul class="plain">
+      <li>씬을 Collection 트리로 구획: ENV(환경) / CHAR / PROPS / LIGHTS / FX. 뷰 레이어에서 통째로 켜고 끄며 작업 영역만 로드.</li>
+      <li>Collection Instance(<kbd>Shift</kbd>+<kbd>A</kbd> &gt; Collection Instance)로 반복 배치 — 데이터는 1벌, 메모리 절약.</li>
+    </ul>
+    <h3>Link와 Library Override</h3>
+    <ol class="steps">
+      <li>File &gt; Link로 외부 .blend의 Collection을 링크 — 원본 수정이 모든 씬에 전파됩니다.</li>
+      <li>링크된 에셋을 씬별로 변형해야 하면 <b>Library Override</b> (우클릭 &gt; Library Override &gt; Make) — 원본은 그대로, 이 씬에서만 위치/<span class="term" tabindex="0" data-tip="표면의 재질. 나무, 금속, 유리처럼 무엇으로 만들어진 느낌인지">머티리얼</span> 덮어쓰기.</li>
+      <li>캐릭터 리그를 링크+오버라이드로 쓰는 것이 애니메이션 프로덕션의 표준입니다.</li>
+    </ol>
+    <h3>무거운 씬 생존 설정</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>기법</th><th>방법</th><th>효과</th></tr></thead>
+      <tbody>
+        <tr><td>Simplify</td><td>Render Properties &gt; Simplify, 뷰포트 Subdivision 0~1</td><td>뷰포트 즉시 경량화</td></tr>
+        <tr><td>인스턴싱</td><td>Alt+D 복제(Linked) 또는 Geometry Nodes Instance</td><td><span class="term" tabindex="0" data-tip="점과 선과 면으로 이루어진 3D 모델의 형태 그 자체">메시</span> 데이터 공유</td></tr>
+        <tr><td>Bounds 표시</td><td>Object Properties &gt; Viewport Display &gt; Bounds</td><td>배경 덩어리를 상자로만 표시</td></tr>
+        <tr><td>Hide in Viewport</td><td>모니터 아이콘 (렌더에는 포함)</td><td>작업 중 안 보이게</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="sec" id="nodegroups">
+  <div class="wrap">
+    <h2><span class="num">43</span>커스텀 노드 그룹과 에셋 배포 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">반복되는 노드 조합을 도구로 포장해 팀 전체가 쓰게 만듭니다.</p>
+    <h3>노드 그룹 설계 원칙</h3>
+    <ol class="steps">
+      <li>노드 선택 &gt; <kbd>Ctrl</kbd>+<kbd>G</kbd>로 그룹화. 입출력 소켓에 <b>의미 있는 이름과 기본값, 최소/최대 범위</b>를 지정.</li>
+      <li>내부 구현은 숨기고 소켓만 노출 — 쓰는 사람이 내부를 몰라도 되게. 함수를 설계하듯.</li>
+      <li>그룹 안에 그룹: 저수준 유틸(마스크 생성기) 위에 고수준 그룹(바위 재질)을 조립.</li>
+      <li>Description 필드 작성 — 마우스 오버 툴팁이 곧 문서.</li>
+    </ol>
+    <h3>Asset Browser로 배포</h3>
+    <ol class="steps">
+      <li>완성된 노드 그룹/재질/오브젝트 우클릭 &gt; <code>Mark as Asset</code>.</li>
+      <li>Preferences &gt; File Paths &gt; Asset Libraries에 팀 공유 폴더(NAS, 클라우드 동기화 폴더) 등록.</li>
+      <li>카탈로그(Catalog)로 분류 트리 구성 — Materials/Nature, NodeGroups/Masks 처럼.</li>
+      <li>라이브러리 .blend는 "읽기 전용 + 담당자만 갱신" 규칙으로 — 아무나 덮어쓰면 전원이 깨집니다.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>노드 그룹을 수정하면 그걸 쓰는 모든 씬에 영향이 갑니다. 동작이 바뀌는 수정은 새 버전(v2 그룹)으로 추가하고 기존 것은 유지하는 것이 안전합니다 — 코드의 하위 호환성과 같은 개념.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="simcache">
+  <div class="wrap">
+    <h2><span class="num">44</span>시뮬레이션 캐시 운용 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">시뮬레이션은 계산이 아니라 자산입니다. 캐시를 굽고, 보관하고, 재사용합니다.</p>
+    <h3>캐시 전략</h3>
+    <ul class="plain">
+      <li>모든 시뮬(천, 유체, 입자)은 <b>Bake</b>해서 디스크 캐시로 고정 — 재생할 때마다 재계산하지 않게.</li>
+      <li>캐시 경로는 프로젝트 상대 경로(<code>//cache/</code>)로 — 다른 컴퓨터에서도 깨지지 않게.</li>
+      <li>유체는 해상도별 캐시를 따로: 프리뷰(64)로 타이밍을 확정한 뒤 파이널(256+)을 밤새 베이크.</li>
+      <li>대형 캐시는 버전관리에서 제외(.gitignore)하고 재생성 스크립트를 커밋.</li>
+    </ul>
+    <h3>Alembic으로 시뮬 굳히기</h3>
+    <ol class="steps">
+      <li>완성된 시뮬을 File &gt; Export &gt; <span class="term" tabindex="0" data-tip="완성된 시뮬레이션이나 애니메이션을 메시 시퀀스로 굳혀 주고받는 파일 형식(.abc)">Alembic</span>(.abc)으로 베이크된 메시 시퀀스로 내보내기.</li>
+      <li>새 씬에서 .abc를 임포트하면 시뮬 설정 없이 결과만 재생 — 라이팅/렌더 씬을 가볍게 유지.</li>
+      <li>시뮬 담당과 라이팅 담당이 분업하는 표준 방식입니다 (챕터 36 USD/Alembic 참고).</li>
+    </ol>
+    <h3>결정론과 재현성</h3>
+    <p>같은 씬을 다시 열어도 같은 결과가 나오게 — Seed 값 기록, 프레임 시작점 고정, 의존 오브젝트의 애니메이션을 먼저 베이크. "어제는 됐는데 오늘 다르게 나온다"는 대부분 캐시가 아닌 라이브 시뮬을 렌더에 태웠기 때문입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="addon-arch">
+  <div class="wrap">
+    <h2><span class="num">45</span>애드온 아키텍처와 배포 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">단일 파일 스크립트(챕터 40)를 넘어 — 멀티 모듈, 설정 저장, 업데이트까지 갖춘 진짜 애드온.</p>
+    <h3>멀티파일 구조</h3>
+    <pre class="code-block"><span class="cm"># 패키지형 애드온 구조</span>
+my_addon/
+  __init__.py    <span class="cm"># bl_info, register/unregister만. 로직 금지</span>
+  operators.py   <span class="cm"># Operator 클래스들</span>
+  panels.py      <span class="cm"># UI Panel</span>
+  props.py       <span class="cm"># PropertyGroup (설정 데이터)</span>
+  core/          <span class="cm"># 블렌더 비의존 순수 로직 — 단위 테스트 가능</span>
+  utils.py</pre>
+    <ul class="plain">
+      <li><b>core 분리가 핵심:</b> bpy를 import하지 않는 순수 파이썬 로직을 분리하면 블렌더 없이 테스트할 수 있습니다.</li>
+      <li>클래스 등록은 리스트로 모아 일괄 register — 등록 순서 버그를 줄입니다.</li>
+      <li>설정은 AddonPreferences에 저장 — 블렌더를 꺼도 유지되는 사용자 설정.</li>
+    </ul>
+    <h3>배포와 호환성</h3>
+    <ul class="plain">
+      <li>블렌더 4.2+는 <b>Extensions</b> 플랫폼(extensions.blender.org) — manifest(blender_manifest.toml) 작성, 심사 후 공개 배포.</li>
+      <li>버전 분기: <code>if bpy.app.version &gt;= (4, 1, 0):</code> 로 API 변경 대응. 지원 최소 버전을 bl_info에 명시.</li>
+      <li>에러 리포트 받을 채널(GitHub Issues)과 변경 로그를 갖추는 순간부터 "도구"가 "제품"이 됩니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="gn-systems">
+  <div class="wrap">
+    <h2><span class="num">46</span>Geometry Nodes 시스템 설계 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">노드 몇 개가 아니라, 맵 하나를 통째로 생성하는 프로시저럴 시스템을 설계합니다.</p>
+    <h3>시스템 분해</h3>
+    <p>예: "숲 생성기"를 한 트리로 만들지 말고 책임별로 분해합니다 —</p>
+    <ol class="steps">
+      <li><b>분포 레이어:</b> 어디에 심을지 (경사도/고도/노이즈 마스크 조합 &rarr; 포인트).</li>
+      <li><b>선택 레이어:</b> 무엇을 심을지 (포인트마다 가중 랜덤으로 나무 종류 선택).</li>
+      <li><b>변형 레이어:</b> 어떻게 심을지 (크기/회전/기울기 랜덤, 지형 노멀 정렬).</li>
+      <li>각 레이어를 노드 그룹으로 — 분포만 갈아끼우면 바위 생성기로 재사용됩니다.</li>
+    </ol>
+    <h3>성능 규율</h3>
+    <ul class="plain">
+      <li><b>Realize Instances는 최후에:</b> <span class="term" tabindex="0" data-tip="게임 안에 존재하는 모든 것 하나하나 (파트, 조명, 소리)">인스턴스</span> 상태로 끝까지 끌고 가면 수십만 그루도 가볍습니다. Realize하는 순간 메모리가 터집니다.</li>
+      <li>스파이크 찾기: 노드 에디터 헤더 &gt; Timings 표시 — 어느 노드가 ms를 먹는지 보입니다.</li>
+      <li>Named Attribute로 레이어 사이 데이터 전달 — 스파게티 연결 대신 명세된 인터페이스.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>입력 슬라이더는 "예술가 언어"로: Density 0.73 대신 "나무 빽빽함 0~10". 도구의 품질은 내부가 아니라 노출된 입력의 품질입니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="shader-debug">
+  <div class="wrap">
+    <h2><span class="num">47</span>셰이더 최적화와 디버깅 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">느린 재질, 노이즈 끼는 재질, 게임에서 무거운 재질을 진단하고 수술합니다.</p>
+    <h3>비용 진단</h3>
+    <ul class="plain">
+      <li>렌더 시간이 튀면 재질을 하나씩 Holdout으로 바꿔 범인 격리 — 대부분 SSS, 볼륨, 다층 투명이 범인.</li>
+      <li>텍스처 해상도 감사: 화면에서 차지하는 픽셀보다 큰 텍스처는 낭비. 소품은 1K면 충분한 경우가 대부분.</li>
+      <li>노드 수가 아니라 <b>텍스처 샘플 수와 레이어 수</b>가 비용입니다. Mix를 줄이고 채널 패킹(R=러프니스, G=메탈릭, B=AO 한 장에)으로.</li>
+    </ul>
+    <h3>디버그 테크닉</h3>
+    <ol class="steps">
+      <li>의심 구간 출력을 Emission에 직결해 값을 색으로 직접 보기 — 마스크가 의도대로인지 즉시 확인.</li>
+      <li>Math &gt; Greater Than으로 특정 값 범위만 하이라이트 — "어디서 1을 넘는가".</li>
+      <li>노멀 문제는 Geometry &gt; Normal을 Emission으로 — 무지개색이 고르지 않으면 노멀 오염.</li>
+    </ol>
+    <h3>게임 이식 관점</h3>
+    <p>블렌더 프로시저럴 노드는 게임 엔진으로 못 갑니다 — 최종적으로 <b>텍스처로 <span class="term" tabindex="0" data-tip="복잡한 디테일이나 조명을 이미지 한 장으로 구워내 저장하는 것">베이킹</span></b>해야 합니다. 처음부터 "이 재질은 베이크 가능한 구조인가"(오브젝트 좌표 의존, 4D 노이즈 등 베이크 불가 요소 회피)를 따지는 것이 전문가의 차이입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="colormgmt">
+  <div class="wrap">
+    <h2><span class="num">48</span>색 관리 — Filmic, AgX, ACES <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">"내 화면과 남의 화면이 다르다"를 끝내는 단계. 색이 어떻게 기록되고 표시되는지 통제합니다.</p>
+    <h3>핵심 개념</h3>
+    <ul class="plain">
+      <li><b>씬 리니어:</b> 블렌더 내부 계산은 선형 공간 — 빛의 물리량 그대로.</li>
+      <li><b>뷰 트랜스폼:</b> 그 물리량을 화면용으로 바꾸는 변환. Standard(왜곡 없음, 클리핑 잘 됨) / Filmic / <b>AgX</b>(기본값, 밝은 영역이 자연스럽게 굴러떨어짐).</li>
+      <li>텍스처 컬러스페이스: 색 텍스처는 sRGB, <b>데이터 텍스처(노멀/러프니스/마스크)는 반드시 Non-Color</b> — 이거 하나로 노멀 맵 문제 절반이 설명됩니다.</li>
+    </ul>
+    <h3>실무 규칙</h3>
+    <ol class="steps">
+      <li>중간 산출물(컴포지팅으로 넘길 렌더)은 <b>OpenEXR 32bit</b>로 — 뷰 트랜스폼이 굽지 않은 리니어 데이터 보존.</li>
+      <li>최종 납품 직전에만 출력 공간으로 변환 (웹용 sRGB PNG 등).</li>
+      <li>외부 스튜디오 협업이면 ACES 같은 공통 규격 합의 — OCIO 설정 파일을 주고받습니다.</li>
+      <li>게임 에셋 텍스처는 뷰 트랜스폼 영향 없이 베이크되는지 확인 — 베이크는 Raw 데이터입니다.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>AgX로 보면서 만든 재질을 Standard로 보내거나 그 반대면 색이 완전히 달라집니다. 프로젝트 시작 시 뷰 트랜스폼을 팀 전체가 고정하세요.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="collab">
+  <div class="wrap">
+    <h2><span class="num">49</span>협업과 납품 규격 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">외주, 팀 작업, 클라이언트 납품 — 작업물이 아니라 신뢰를 납품하는 방법.</p>
+    <h3>납품 규격서(스펙) 만들기</h3>
+    <p>의뢰를 받든 주든, 시작 전에 한 장으로 합의합니다:</p>
+    <ul class="plain">
+      <li><b>기하:</b> <span class="term" tabindex="0" data-tip="3D 모델을 이루는 면 조각. 많을수록 정교하지만 무거워짐">폴리곤</span> 예산(예: 소품 &le;3k 트라이), 단위/스케일, 피벗 위치 규칙, 적용해야 할 <span class="term" tabindex="0" data-tip="원본을 직접 건드리지 않고 효과를 입히는 블렌더 기능">모디파이어</span>.</li>
+      <li><b>텍스처:</b> 해상도, 채널 패킹 규칙, 네이밍, 컬러스페이스.</li>
+      <li><b>파일:</b> 포맷(FBX/GLB), 좌표계(Y-up/Z-up), 포함물(LOD? 콜리전 메시?).</li>
+      <li><b>검수 기준:</b> 어떤 뷰어/엔진에서 확인할지 — "내 블렌더에선 됐는데"를 차단.</li>
+    </ul>
+    <h3>리뷰 사이클</h3>
+    <ol class="steps">
+      <li>블로킹(실루엣만) &rarr; 1차 컨펌 &rarr; 디테일 &rarr; 2차 컨펌 &rarr; 텍스처/마감 &rarr; 납품. 단계마다 컨펌을 받아 되돌림 비용을 최소화.</li>
+      <li>피드백은 스크린샷에 그려서 주고받기 — 말은 휘발됩니다.</li>
+      <li>수정 횟수와 범위를 계약에 명시 (예: 단계별 2회) — 무한 수정 지옥 방지.</li>
+    </ol>
+    <h3>인수인계 가능한 파일</h3>
+    <p>내가 사라져도 파일이 살아있게: 외부 텍스처 Pack 또는 상대경로 정리(File &gt; External Data), 쓰지 않는 데이터 제거(Orphan Data Purge), 씬에 README 텍스트 블록(어디를 만지면 무엇이 바뀌는지) 포함.</p>
+  </div>
+</section>
+
+<section class="sec" id="career">
+  <div class="wrap">
+    <h2><span class="num">50</span>포트폴리오와 다음 단계 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">기술의 끝은 결과물로 증명하는 것. 50챕터의 마지막은 보여주는 법입니다.</p>
+    <h3>포트폴리오 원칙</h3>
+    <ul class="plain">
+      <li><b>최고 3점 &gt; 평범한 30점.</b> 보는 사람은 가장 약한 작품으로 실력을 추정합니다.</li>
+      <li>과정을 함께: 와이어프레임, 텍스처 브레이크다운, 노드 그래프 한 장 — "어쩌다 나온 결과"가 아님을 증명.</li>
+      <li>실시간 에셋이면 트라이 수/텍스처 규격 명기 — 게임 분야는 예산 준수 능력이 곧 실력.</li>
+      <li>ArtStation + 짧은 턴<span class="term" tabindex="0" data-tip="Luau의 만능 자료구조. 목록도 사전도 전부 테이블">테이블</span> 영상이 표준. 로블록스 쪽이면 실제 플레이 가능한 쇼케이스 맵이 최강의 포트폴리오.</li>
+    </ul>
+    <h3>전문가 루틴</h3>
+    <ol class="steps">
+      <li>릴리즈 노트 읽기 — 블렌더는 버전마다 워크플로가 바뀝니다. 새 기능을 한 달 안에 한 번은 실전 투입.</li>
+      <li>분해 연습 — 잘 만든 작품을 보면 "몇 개의 패스/레이어로 만들었나"를 역산하는 습관.</li>
+      <li>도구 제작 — 같은 일을 세 번 하면 애드온/노드그룹으로. 만든 도구가 곧 전문성의 증거.</li>
+      <li>공유 — 튜토리얼이나 에셋을 공개하면 피드백이 성장을 가속합니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>여기까지 왔다면 더 이상 강좌가 필요한 단계가 아닙니다. 공식 매뉴얼과 릴리즈 노트, 그리고 마감이 있는 실전 프로젝트가 가장 좋은 스승입니다.</p></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level" href="index.html">
+    <div><span class="nl-label">DONE</span><span class="nl-title">블렌더 전 과정 완주 — 메인으로 돌아가기</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Blender 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="master.html">&larr; 초고급</a>
+      <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+<script src="assistant.js"></script>
+</body>
+</html>
