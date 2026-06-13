@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luau 중급 — 이벤트와 게임 기능</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23ffc44d'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>L</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none;border-color:rgba(255,196,77,0.4)}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px);color:#ffc44d}
+#progress{background:linear-gradient(90deg,#ffc44d,#ffd57e)}
+h3::before{background:#ffc44d}
+h2 .num{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.nav-link.active{background:rgba(255,196,77,0.13);color:#ffd57e;border-left-color:#ffc44d}
+.nav-link.active .n{color:#ffc44d}
+.logo-mark.pg{background:linear-gradient(150deg,#ffd57e,#ffc44d)}
+.chip-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border:1px solid rgba(255,196,77,0.4)}
+.tab-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.lv-pg{color:#ffd57e;border-color:rgba(255,196,77,0.4);background:rgba(255,196,77,0.13)}
+.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:#5ad08a}.lua .cm{color:var(--muted)}.lua .num{color:#ffa45c}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark pg">L</div>
+    <div><b>Luau 중급</b><small>GAME LOGIC</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
+  <div class="nav-group"><span>자료구조</span>
+    <a class="nav-link" href="#tables"><span class="n">11</span>테이블</a>
+    <a class="nav-link" href="#instances"><span class="n">12</span>인스턴스 다루기</a>
+  </div>
+  <div class="nav-group"><span>게임의 심장</span>
+    <a class="nav-link" href="#events"><span class="n">13</span>이벤트</a>
+    <a class="nav-link" href="#player"><span class="n">14</span>플레이어와 캐릭터</a>
+    <a class="nav-link" href="#cs"><span class="n">15</span>클라이언트와 서버</a>
+    <a class="nav-link" href="#remote"><span class="n">16</span>RemoteEvent 통신</a>
+  </div>
+  <div class="nav-group"><span>화면과 연출</span>
+    <a class="nav-link" href="#gui"><span class="n">17</span>GUI 만들기</a>
+    <a class="nav-link" href="#tween"><span class="n">18</span>TweenService</a>
+    <a class="nav-link" href="#services"><span class="n">19</span>자주 쓰는 서비스</a>
+  </div>
+  <div class="nav-group"><span>실전</span>
+    <a class="nav-link" href="#project2"><span class="n">20</span>종합 — 코인 줍기 게임</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="lua-beginner.html">초급</a>
+    <a class="page-tab tab-pg" href="lua-intermediate.html">중급</a>
+    <a class="page-tab" href="lua-advanced.html">고급</a>
+    <a class="page-tab" href="lua-master.html">초고급</a>
+    <a class="page-tab" href="lua-expert.html">전문가</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(255,196,77,0.15),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-pg">LUAU INTERMEDIATE</div>
+    <h1>Luau 중급 — 이벤트와 게임 기능</h1>
+    <p class="lead">테이블, 이벤트, 클라이언트/서버, GUI, Tween. 문법을 넘어 진짜 게임 기능을 만드는 단계.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">이벤트</span>
+      <span class="hero-tag">서버/클라이언트</span>
+      <span class="hero-tag">GUI</span>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="tables">
+  <div class="wrap">
+    <h2><span class="num">11</span>테이블 — 만능 보관함 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">Luau의 유일하고 가장 중요한 자료구조. 목록도, 사전도, 객체도 전부 테이블입니다.</p>
+    <h3>배열 — 순서 있는 목록</h3>
+    <pre class="code-block lua"><span class="kw">local</span> fruits = {<span class="str">"사과"</span>, <span class="str">"바나나"</span>, <span class="str">"포도"</span>}
+<span class="fn">print</span>(fruits[<span class="num">1</span>])        <span class="cm">-- 사과 (1번부터 시작!)</span>
+<span class="fn">print</span>(#fruits)          <span class="cm">-- 3 (#은 개수)</span>
+table.insert(fruits, <span class="str">"수박"</span>)   <span class="cm">-- 끝에 추가</span>
+table.remove(fruits, <span class="num">2</span>)        <span class="cm">-- 2번째 제거</span></pre>
+    <h3>딕셔너리 — 이름표 달린 보관함</h3>
+    <pre class="code-block lua"><span class="kw">local</span> player = {
+    name = <span class="str">"문앙"</span>,
+    level = <span class="num">5</span>,
+    isVip = <span class="kw">true</span>,
+}
+<span class="fn">print</span>(player.name)      <span class="cm">-- 문앙</span>
+player.level = player.level + <span class="num">1</span></pre>
+    <h3>순회 — 전부 꺼내보기</h3>
+    <pre class="code-block lua"><span class="kw">for</span> i, fruit <span class="kw">in ipairs</span>(fruits) <span class="kw">do</span>   <span class="cm">-- 배열은 ipairs</span>
+    <span class="fn">print</span>(i, fruit)
+<span class="kw">end</span>
+<span class="kw">for</span> key, value <span class="kw">in pairs</span>(player) <span class="kw">do</span>   <span class="cm">-- 딕셔너리는 pairs</span>
+    <span class="fn">print</span>(key, value)
+<span class="kw">end</span></pre>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Luau의 인덱스는 1부터입니다. 다른 언어의 0부터에 익숙하다면 가장 자주 틀리는 부분.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="instances">
+  <div class="wrap">
+    <h2><span class="num">12</span>인스턴스 다루기 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">게임 속 모든 것을 코드로 찾고, 만들고, 지우는 법.</p>
+    <h3>찾기</h3>
+    <pre class="code-block lua"><span class="kw">local</span> part = workspace.MyPart              <span class="cm">-- 직접 접근 (없으면 에러)</span>
+<span class="kw">local</span> p2 = workspace:FindFirstChild(<span class="str">"MyPart"</span>)  <span class="cm">-- 없으면 nil (안전)</span>
+<span class="kw">local</span> p3 = workspace:WaitForChild(<span class="str">"MyPart"</span>)    <span class="cm">-- 생길 때까지 기다림</span>
+<span class="kw">local</span> kids = workspace.Map:GetChildren()       <span class="cm">-- 자식 전부 (테이블)</span>
+<span class="kw">local</span> all = workspace.Map:GetDescendants()     <span class="cm">-- 자손 전부</span></pre>
+    <h3>만들기와 지우기</h3>
+    <pre class="code-block lua"><span class="kw">local</span> part = Instance.new(<span class="str">"Part"</span>)   <span class="cm">-- 새 파트 생성</span>
+part.Size = Vector3.new(<span class="num">4</span>, <span class="num">1</span>, <span class="num">4</span>)
+part.Anchored = <span class="kw">true</span>
+part.Parent = workspace              <span class="cm">-- Parent를 정해야 세상에 나타남 (마지막에!)</span>
+
+part:Destroy()                       <span class="cm">-- 삭제</span>
+
+<span class="kw">local</span> copy = workspace.Tree:Clone()  <span class="cm">-- 복제</span>
+copy.Parent = workspace</pre>
+    <ul class="plain">
+      <li><b>Parent는 마지막에:</b> 속성을 다 정한 뒤 Parent를 지정하는 것이 성능상 올바른 순서입니다.</li>
+      <li><b>:IsA("BasePart")</b> — 종류 검사. GetDescendants 순회와 조합해 "모든 파트만 골라서" 작업.</li>
+    </ul>
+    <pre class="code-block lua"><span class="cm">-- 맵의 모든 파트를 반투명하게</span>
+<span class="kw">for</span> _, obj <span class="kw">in ipairs</span>(workspace.Map:GetDescendants()) <span class="kw">do</span>
+    <span class="kw">if</span> obj:IsA(<span class="str">"BasePart"</span>) <span class="kw">then</span>
+        obj.Transparency = <span class="num">0.5</span>
+    <span class="kw">end</span>
+<span class="kw">end</span></pre>
+  </div>
+</section>
+
+<section class="sec" id="events">
+  <div class="wrap">
+    <h2><span class="num">13</span>이벤트 — 일이 생기면 알려줘 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">게임은 이벤트로 굴러갑니다. "닿으면", "들어오면", "클릭하면" — 전부 이벤트.</p>
+    <pre class="code-block lua"><span class="cm">-- 패턴: 무언가.이벤트이름:Connect(실행할 함수)</span>
+workspace.Lava.Touched:Connect(<span class="kw">function</span>(hit)
+    <span class="kw">local</span> humanoid = hit.Parent:FindFirstChildOfClass(<span class="str">"Humanoid"</span>)
+    <span class="kw">if</span> humanoid <span class="kw">then</span>
+        humanoid.Health = <span class="num">0</span>      <span class="cm">-- 용암 밟으면 사망</span>
+    <span class="kw">end</span>
+<span class="kw">end</span>)</pre>
+    <h3>자주 쓰는 이벤트</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th><span class="term" tabindex="0" data-tip="무언가 닿거나 들어왔을 때 함수를 실행하도록 예약하는 것">이벤트</span></th><th>언제 발생</th><th>대표 용도</th></tr></thead>
+      <tbody>
+        <tr><td>part.Touched</td><td>파트에 무언가 닿을 때</td><td>용암, 체크포인트, 아이템 획득</td></tr>
+        <tr><td>Players.PlayerAdded</td><td>플레이어 입장</td><td>데이터 로드, 환영 메시지</td></tr>
+        <tr><td>Players.PlayerRemoving</td><td>플레이어 퇴장</td><td>데이터 저장</td></tr>
+        <tr><td>humanoid.Died</td><td>캐릭터 사망</td><td>리<span class="term" tabindex="0" data-tip="캐릭터나 오브젝트가 게임 안에 나타나는 것, 또는 그 위치">스폰</span> 처리, 킬 카운트</td></tr>
+        <tr><td>ClickDetector.MouseClick</td><td>파트 클릭</td><td>버튼, 상호작용</td></tr>
+        <tr><td>ProximityPrompt.Triggered</td><td>E키 상호작용</td><td>문, 상점, 줍기</td></tr>
+      </tbody>
+    </table></div>
+    <h3>연결 해제와 디바운스</h3>
+    <pre class="code-block lua"><span class="kw">local</span> conn = part.Touched:Connect(handler)
+conn:Disconnect()                <span class="cm">-- 더 이상 안 들음</span>
+
+<span class="cm">-- 디바운스: Touched는 1초에 수십 번 발생 — 한 번만 처리하게 잠금</span>
+<span class="kw">local</span> busy = <span class="kw">false</span>
+part.Touched:Connect(<span class="kw">function</span>(hit)
+    <span class="kw">if</span> busy <span class="kw">then return end</span>
+    busy = <span class="kw">true</span>
+    <span class="cm">-- 처리...</span>
+    task.wait(<span class="num">1</span>)
+    busy = <span class="kw">false</span>
+<span class="kw">end</span>)</pre>
+  </div>
+</section>
+
+<section class="sec" id="player">
+  <div class="wrap">
+    <h2><span class="num">14</span>플레이어와 캐릭터 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">Player(계정 정보)와 Character(월드 속 몸)는 다른 것입니다. 이 구분이 모든 캐릭터 코드의 출발점.</p>
+    <pre class="code-block lua"><span class="kw">local</span> Players = game:GetService(<span class="str">"Players"</span>)
+
+Players.PlayerAdded:Connect(<span class="kw">function</span>(player)
+    <span class="fn">print</span>(player.Name .. <span class="str">" 입장!"</span>)
+
+    player.CharacterAdded:Connect(<span class="kw">function</span>(character)
+        <span class="kw">local</span> humanoid = character:WaitForChild(<span class="str">"Humanoid"</span>)
+        humanoid.WalkSpeed = <span class="num">24</span>      <span class="cm">-- 이동속도 (기본 16)</span>
+        humanoid.JumpPower = <span class="num">70</span>      <span class="cm">-- 점프력 (기본 50)</span>
+        humanoid.MaxHealth = <span class="num">150</span>
+        humanoid.Health = <span class="num">150</span>
+    <span class="kw">end</span>)
+<span class="kw">end</span>)</pre>
+    <h3>구조 이해</h3>
+    <ul class="plain">
+      <li><b>Player</b> — game.Players 안. 이름, 팀, 데이터. 게임 내내 유지.</li>
+      <li><b>Character</b> — workspace 안의 모델. 죽으면 사라지고 리스폰 때 새로 생김 — 그래서 CharacterAdded로 매번 다시 설정.</li>
+      <li><b><span class="term" tabindex="0" data-tip="캐릭터 안의 생명 <span class="term" tabindex="0" data-tip="게임 안에 존재하는 모든 것 하나하나 (파트, 조명, 소리)">인스턴스</span>. 체력·이동속도·점프·사망 담당">Humanoid</span></b> — 캐릭터 안의 "생명" 인스턴스. 체력, 속도, 점프, 사망 이벤트 담당.</li>
+      <li><b>HumanoidRootPart</b> — 캐릭터의 물리 중심. 순간이동은 이것의 <span class="term" tabindex="0" data-tip="위치 + 바라보는 방향을 함께 담는 3D 좌표. 3D 조작의 만능 도구">CFrame</span>을 바꿉니다.</li>
+    </ul>
+    <pre class="code-block lua"><span class="cm">-- 순간이동</span>
+character:PivotTo(CFrame.new(<span class="num">0</span>, <span class="num">50</span>, <span class="num">0</span>))</pre>
+  </div>
+</section>
+
+<section class="sec" id="cs">
+  <div class="wrap">
+    <h2><span class="num">15</span>클라이언트와 서버 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">Roblox 게임은 한 대가 아니라 여러 대의 컴퓨터에서 동시에 돌아갑니다. 이걸 이해해야 중급입니다.</p>
+    <h3>두 개의 세계</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th></th><th>서버</th><th>클라이언트 (각 플레이어 기기)</th></tr></thead>
+      <tbody>
+        <tr><td>스크립트 종류</td><td>Script</td><td>LocalScript</td></tr>
+        <tr><td>두는 곳</td><td>ServerScriptService</td><td>StarterPlayerScripts, StarterGui</td></tr>
+        <tr><td>담당</td><td>게임 규칙, 점수, 데이터 — 진실</td><td>화면, 입력, 카메라, 효과 — 보이는 것</td></tr>
+        <tr><td>신뢰</td><td>신뢰 가능</td><td>해커가 조작 가능 — 신뢰 금지</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="plain">
+      <li>서버에서 바꾼 것은 모두에게 복제(replicate)되어 보입니다. 클라이언트에서 바꾼 것은 <b>자기 화면에만</b> 보입니다.</li>
+      <li>점수, 돈, 체력 같은 "진짜 값"은 반드시 서버에서만 변경 — 클라이언트 값은 해킹될 수 있습니다.</li>
+      <li>둘 사이 대화는 <span class="term" tabindex="0" data-tip="클라이언트와 서버가 대화하는 공식 통로">RemoteEvent</span>로 — 다음 챕터.</li>
+    </ul>
+    <div class="callout co-warn"><span class="ico">!!</span><p>LocalScript를 ServerScriptService에 넣으면 실행되지 않고, Script를 StarterGui에 넣으면 의도와 다르게 동작합니다. "어디에 두는가"가 "어디서 실행되는가"입니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="remote">
+  <div class="wrap">
+    <h2><span class="num">16</span>RemoteEvent — 서버와 대화 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">클라이언트가 서버에게 "이거 해줘"라고 부탁하는 공식 통로.</p>
+    <ol class="steps">
+      <li>ReplicatedStorage에 <code>RemoteEvent</code> 추가, 이름 <code>BuyItem</code>.</li>
+      <li>클라이언트(LocalScript)에서 발사:</li>
+    </ol>
+    <pre class="code-block lua"><span class="cm">-- LocalScript (버튼 클릭 시)</span>
+<span class="kw">local</span> RS = game:GetService(<span class="str">"ReplicatedStorage"</span>)
+RS.BuyItem:FireServer(<span class="str">"Sword"</span>)   <span class="cm">-- 서버에게 "Sword 살게요"</span></pre>
+    <pre class="code-block lua"><span class="cm">-- Script (서버에서 수신)</span>
+<span class="kw">local</span> RS = game:GetService(<span class="str">"ReplicatedStorage"</span>)
+RS.BuyItem.OnServerEvent:Connect(<span class="kw">function</span>(player, itemName)
+    <span class="cm">-- 서버가 검증: 돈이 충분한가? 그런 아이템이 있는가?</span>
+    <span class="kw">if</span> itemName == <span class="str">"Sword"</span> <span class="kw">and</span> playerCoins[player] &gt;= <span class="num">100</span> <span class="kw">then</span>
+        playerCoins[player] -= <span class="num">100</span>
+        giveItem(player, itemName)
+    <span class="kw">end</span>
+<span class="kw">end</span>)</pre>
+    <ul class="plain">
+      <li>첫 매개<span class="term" tabindex="0" data-tip="값을 담아 이름으로 꺼내 쓰는 상자. local x = 10처럼 만듦">변수</span> <code>player</code>는 자동으로 들어옵니다 — 누가 보냈는지.</li>
+      <li><b>서버는 클라이언트가 보낸 값을 절대 믿지 않습니다.</b> "돈 있어요"라고 보내와도 서버가 직접 확인 — 이것이 보안의 기본.</li>
+      <li>서버→클라이언트는 <code>FireClient(player, ...)</code> / <code>FireAllClients(...)</code>, 수신은 <code>OnClientEvent</code>.</li>
+      <li>답장이 필요하면 RemoteFunction(<code>InvokeServer</code>) — 단, 서버가 클라이언트를 Invoke하는 것은 위험하니 금지.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="gui">
+  <div class="wrap">
+    <h2><span class="num">17</span>GUI 만들기 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">화면에 붙는 점수판, 버튼, 상점창. GUI는 클라이언트(LocalScript)의 영역입니다.</p>
+    <h3>구조</h3>
+    <ol class="steps">
+      <li>StarterGui에 <code>ScreenGui</code> 추가 — GUI의 캔버스.</li>
+      <li>그 안에 <code>Frame</code>(패널), <code>TextLabel</code>(글자), <code>TextButton</code>(버튼), <code>ImageLabel</code>(그림)을 배치.</li>
+      <li>위치/크기는 <b>UDim2</b>: <code>UDim2.new(0.5, 0, 0.1, 0)</code> = (가로 50% + 0px, 세로 10% + 0px). 비율을 쓰면 모든 화면 크기에 대응.</li>
+      <li>AnchorPoint (0.5, 0.5)로 중심 기준 배치 — 중앙 정렬의 핵심.</li>
+    </ol>
+    <h3>버튼 동작</h3>
+    <pre class="code-block lua"><span class="cm">-- LocalScript (ScreenGui 안)</span>
+<span class="kw">local</span> button = script.Parent.ShopButton
+<span class="kw">local</span> frame = script.Parent.ShopFrame
+
+button.MouseButton1Click:Connect(<span class="kw">function</span>()
+    frame.Visible = <span class="kw">not</span> frame.Visible   <span class="cm">-- 켜고 끄기 토글</span>
+<span class="kw">end</span>)</pre>
+    <h3>점수 표시 실시간 갱신</h3>
+    <pre class="code-block lua"><span class="cm">-- leaderstats 값을 화면 라벨에 연동</span>
+<span class="kw">local</span> player = game.Players.LocalPlayer
+<span class="kw">local</span> coins = player:WaitForChild(<span class="str">"leaderstats"</span>):WaitForChild(<span class="str">"Coins"</span>)
+<span class="kw">local</span> label = script.Parent.CoinLabel
+
+label.Text = <span class="str">"코인: "</span> .. coins.Value
+coins.Changed:Connect(<span class="kw">function</span>(v)
+    label.Text = <span class="str">"코인: "</span> .. v
+<span class="kw">end</span>)</pre>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>UICorner(둥근 모서리), UIStroke(테두리), UIListLayout(자동 정렬)을 Frame에 추가하면 코드 없이 디자인 품질이 올라갑니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="tween">
+  <div class="wrap">
+    <h2><span class="num">18</span>TweenService — 부드러운 움직임 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">뚝뚝 끊기지 않고 스르륵 — 문, GUI, 이펙트의 모든 부드러운 변화.</p>
+    <pre class="code-block lua"><span class="kw">local</span> TweenService = game:GetService(<span class="str">"TweenService"</span>)
+<span class="kw">local</span> door = workspace.Door
+
+<span class="kw">local</span> info = TweenInfo.new(
+    <span class="num">1.5</span>,                              <span class="cm">-- 시간(초)</span>
+    Enum.EasingStyle.Quad,            <span class="cm">-- 가감속 곡선</span>
+    Enum.EasingDirection.Out          <span class="cm">-- 끝에서 감속</span>
+)
+<span class="kw">local</span> goal = {
+    Position = door.Position + Vector3.new(<span class="num">0</span>, <span class="num">8</span>, <span class="num">0</span>),  <span class="cm">-- 목표값</span>
+    Transparency = <span class="num">0.5</span>,
+}
+<span class="kw">local</span> tween = TweenService:Create(door, info, goal)
+tween:Play()
+tween.Completed:Wait()    <span class="cm">-- 끝날 때까지 대기 (선택)</span></pre>
+    <h3>EasingStyle 고르기</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>스타일</th><th>느낌</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td>Linear</td><td>일정 속도</td><td>회전, 컨베이어</td></tr>
+        <tr><td>Quad / Quart</td><td>자연스러운 감속</td><td>문, 카메라, 대부분</td></tr>
+        <tr><td>Back</td><td>살짝 넘었다 돌아옴</td><td>GUI 팝업</td></tr>
+        <tr><td>Bounce</td><td>통통 튐</td><td>떨어지는 보상</td></tr>
+        <tr><td>Elastic</td><td>용수철</td><td>강조 연출</td></tr>
+      </tbody>
+    </table></div>
+    <p>GUI에도 똑같이 적용됩니다 — Frame의 Position/Size를 Tween하면 슬라이드 인 메뉴가 됩니다. 블렌더에서 만든 검기 메시를 움직이는 것도 바로 이 도구입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="services">
+  <div class="wrap">
+    <h2><span class="num">19</span>자주 쓰는 서비스 모음 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">Roblox가 미리 만들어 둔 기능 창고들. game:GetService()로 꺼내 씁니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>서비스</th><th>담당</th><th>대표 사용</th></tr></thead>
+      <tbody>
+        <tr><td>Players</td><td>플레이어 입퇴장</td><td>PlayerAdded, GetPlayers()</td></tr>
+        <tr><td>ReplicatedStorage</td><td>서버·클라 공유 보관함</td><td>RemoteEvent, 공용 모듈</td></tr>
+        <tr><td>ServerStorage</td><td>서버 전용 보관함</td><td>몬스터 템플릿, 비밀 데이터</td></tr>
+        <tr><td>TweenService</td><td>부드러운 변화</td><td>챕터 18</td></tr>
+        <tr><td>RunService</td><td>매 프레임 실행</td><td>Heartbeat (서버), RenderStepped (클라)</td></tr>
+        <tr><td>UserInputService</td><td>키보드/마우스/터치</td><td>키 입력 감지 (LocalScript)</td></tr>
+        <tr><td>Debris</td><td>시한부 삭제</td><td>AddItem(part, 3) — 3초 뒤 자동 삭제</td></tr>
+        <tr><td>SoundService</td><td>전역 사운드</td><td>BGM 재생</td></tr>
+        <tr><td>Lighting</td><td>조명/시간</td><td>ClockTime을 코드로 — 낮밤 순환</td></tr>
+      </tbody>
+    </table></div>
+    <pre class="code-block lua"><span class="cm">-- 낮밤 순환 예시 (RunService + Lighting)</span>
+<span class="kw">local</span> RunService = game:GetService(<span class="str">"RunService"</span>)
+<span class="kw">local</span> Lighting = game:GetService(<span class="str">"Lighting"</span>)
+RunService.Heartbeat:Connect(<span class="kw">function</span>(dt)
+    Lighting.ClockTime = (Lighting.ClockTime + dt * <span class="num">0.05</span>) % <span class="num">24</span>
+<span class="kw">end</span>)</pre>
+    <h3>키 입력 (LocalScript)</h3>
+    <pre class="code-block lua"><span class="kw">local</span> UIS = game:GetService(<span class="str">"UserInputService"</span>)
+UIS.InputBegan:Connect(<span class="kw">function</span>(input, processed)
+    <span class="kw">if</span> processed <span class="kw">then return end</span>   <span class="cm">-- 채팅 입력 중이면 무시</span>
+    <span class="kw">if</span> input.KeyCode == Enum.KeyCode.E <span class="kw">then</span>
+        <span class="fn">print</span>(<span class="str">"E 눌림!"</span>)
+    <span class="kw">end</span>
+<span class="kw">end</span>)</pre>
+  </div>
+</section>
+
+<section class="sec" id="project2">
+  <div class="wrap">
+    <h2><span class="num">20</span>종합 프로젝트 — 코인 줍기 게임 <span class="lv lv-pg">중급</span></h2>
+    <p class="sec-sub">중급 전부를 조합: 서버가 코인을 관리하고, 닿으면 획득, GUI에 표시.</p>
+    <pre class="code-block lua"><span class="cm">-- Script (ServerScriptService): leaderstats + 코인 시스템</span>
+<span class="kw">local</span> Players = game:GetService(<span class="str">"Players"</span>)
+
+Players.PlayerAdded:Connect(<span class="kw">function</span>(player)
+    <span class="kw">local</span> stats = Instance.new(<span class="str">"Folder"</span>)
+    stats.Name = <span class="str">"leaderstats"</span>      <span class="cm">-- 이 이름이면 자동으로 순위표에 표시</span>
+    <span class="kw">local</span> coins = Instance.new(<span class="str">"IntValue"</span>)
+    coins.Name = <span class="str">"Coins"</span>
+    coins.Parent = stats
+    stats.Parent = player
+<span class="kw">end</span>)
+
+<span class="cm">-- 코인 파트 동작</span>
+<span class="kw">for</span> _, coin <span class="kw">in ipairs</span>(workspace.Coins:GetChildren()) <span class="kw">do</span>
+    <span class="kw">local</span> taken = <span class="kw">false</span>
+    coin.Touched:Connect(<span class="kw">function</span>(hit)
+        <span class="kw">if</span> taken <span class="kw">then return end</span>
+        <span class="kw">local</span> player = Players:GetPlayerFromCharacter(hit.Parent)
+        <span class="kw">if</span> player <span class="kw">then</span>
+            taken = <span class="kw">true</span>
+            player.leaderstats.Coins.Value += <span class="num">1</span>
+            coin:Destroy()
+        <span class="kw">end</span>
+    <span class="kw">end</span>)
+<span class="kw">end</span></pre>
+    <ol class="steps">
+      <li>Workspace에 <code>Coins</code> 폴더 &gt; 노란 Neon 파트 여러 개 (Anchored, CanCollide false).</li>
+      <li>위 스크립트를 ServerScriptService에.</li>
+      <li>화면 GUI는 챕터 17의 코인 라벨 코드를 그대로 — leaderstats.Coins에 연동되어 자동 갱신.</li>
+      <li>도전 과제: 코인이 빙글빙글 돌게 (Heartbeat + CFrame.Angles), 먹을 때 소리 추가.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>여기까지 오면 작은 게임을 만들 수 있습니다. 고급에서는 이 코드를 "제대로 된 구조"로 다시 짜는 법 — 모듈, 데이터 저장, CFrame 수학을 배웁니다.</p></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level" href="lua-advanced.html">
+    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Luau 고급 — 구조와 데이터</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="lua-beginner.html">&larr; 초급</a>
+      <a href="index.html">메인</a>
+      <a href="lua-advanced.html">고급으로 &rarr;</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+<script src="assistant.js"></script>
+</body>
+</html>
