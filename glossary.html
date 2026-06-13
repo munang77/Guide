@@ -22,6 +22,7 @@
 .glos-cat.c-common{color:#5ad08a}
 .glos-cat.c-blender{color:#ffa45c}
 .glos-cat.c-studio{color:#5aa7ff}
+.glos-cat.c-lua{color:#ffc44d}
 dl.glos{margin:0}
 .glos-item{background:var(--panel);border:1px solid var(--border-soft);border-radius:12px;padding:15px 19px;margin-bottom:9px;transition:border-color .15s}
 .glos-item:hover{border-color:#3a3a46}
@@ -79,6 +80,28 @@ dl.glos{margin:0}
     <div class="glos-item"><dt>OSL</dt><dd>Open Shading Language. 셰이더를 코드로 직접 짜는 언어. 초고급 영역입니다.</dd></div>
   </dl>
 
+  <div class="glos-cat c-lua">Luau · 스크립트</div>
+  <dl class="glos">
+    <div class="glos-item"><dt>Luau</dt><dd>Roblox에서 쓰는 프로그래밍 언어. Lua를 개량한 것으로 문법이 짧고 배우기 쉽습니다.</dd></div>
+    <div class="glos-item"><dt>변수 <span class="en">Variable</span></dt><dd>값을 담아 이름으로 꺼내 쓰는 상자. <code>local coins = 10</code>처럼 만듭니다.</dd></div>
+    <div class="glos-item"><dt>함수 <span class="en">Function</span></dt><dd>자주 하는 작업을 묶어 이름 붙인 것. 이름만 부르면 그 작업이 실행됩니다.</dd></div>
+    <div class="glos-item"><dt>테이블 <span class="en">Table</span></dt><dd>Luau의 만능 자료구조. 목록(배열)도, 이름표 달린 보관함(딕셔너리)도 전부 테이블입니다.</dd></div>
+    <div class="glos-item"><dt>이벤트 <span class="en">Event</span></dt><dd>"무언가 닿으면", "플레이어가 들어오면"처럼 일이 생겼을 때 함수를 실행하도록 예약하는 것. <code>Touched:Connect(...)</code>.</dd></div>
+    <div class="glos-item"><dt>인스턴스 <span class="en">Instance</span></dt><dd>게임 안에 존재하는 모든 것 하나하나 (파트, 조명, 소리). 코드로 찾고 만들고 지웁니다.</dd></div>
+    <div class="glos-item"><dt>서버 / 클라이언트 <span class="en">Server / Client</span></dt><dd>서버는 게임 규칙·점수를 관리하는 진실의 컴퓨터, 클라이언트는 각 플레이어의 화면. 점수 같은 진짜 값은 서버에서만 바꿔야 안전합니다.</dd></div>
+    <div class="glos-item"><dt>Script / LocalScript</dt><dd>Script는 서버에서, LocalScript는 각 플레이어 기기에서 실행됩니다. 어디에 두는가가 어디서 실행되는가를 정합니다.</dd></div>
+    <div class="glos-item"><dt>RemoteEvent</dt><dd>클라이언트와 서버가 대화하는 공식 통로. 클라가 서버에게 "이거 해줘"라고 부탁할 때 씁니다.</dd></div>
+    <div class="glos-item"><dt>ModuleScript</dt><dd>여러 스크립트가 공유해 쓰는 코드 부품. <code>require</code>로 불러옵니다. 코드를 기능별로 정리하는 도구.</dd></div>
+    <div class="glos-item"><dt>메타테이블 <span class="en">Metatable</span></dt><dd>테이블에 없는 키를 찾으면 어디서 대신 찾을지 정하는 장치. OOP(설계도로 객체 찍어내기)의 토대.</dd></div>
+    <div class="glos-item"><dt>DataStore</dt><dd>게임을 껐다 켜도 데이터(코인, 레벨)가 남아있게 영구 저장하는 서버 기능.</dd></div>
+    <div class="glos-item"><dt>CFrame</dt><dd>위치 + 바라보는 방향을 함께 담는 3D 좌표. 순간이동, 회전, 따라보기 등 3D 조작의 만능 도구.</dd></div>
+    <div class="glos-item"><dt>Vector3</dt><dd>3D 공간의 한 점이나 방향 (x, y, z). 위치와 크기에 쓰입니다.</dd></div>
+    <div class="glos-item"><dt>Humanoid</dt><dd>캐릭터 안의 "생명" 인스턴스. 체력, 이동속도, 점프, 사망을 담당합니다.</dd></div>
+    <div class="glos-item"><dt>pcall</dt><dd>실패할 수 있는 코드(저장, 외부 호출)를 감싸 에러가 나도 전체가 죽지 않게 보호하는 함수.</dd></div>
+    <div class="glos-item"><dt>익스플로잇 <span class="en">Exploit</span></dt><dd>해커가 클라이언트를 조작해 부정행위를 하는 것. 서버 검증으로 막습니다.</dd></div>
+    <div class="glos-item"><dt>nil</dt><dd>"아무것도 없음"을 뜻하는 값. 빈 상자. "attempt to index nil" 에러는 없는 것을 건드렸다는 뜻.</dd></div>
+  </dl>
+
   <div class="glos-cat c-studio">Roblox Studio</div>
   <dl class="glos">
     <div class="glos-item"><dt>퍼블리시 <span class="en">Publish</span></dt><dd>내가 만든 맵/게임을 Roblox 서버에 올려서 다른 사람들도 들어와 플레이할 수 있게 공개하는 것. File &gt; Publish to Roblox.</dd></div>
@@ -128,5 +151,6 @@ dl.glos{margin:0}
   window.addEventListener('scroll',function(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'},{passive:true});
 })();
 </script>
+<script src="assistant.js"></script>
 </body>
 </html>
