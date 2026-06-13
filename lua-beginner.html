@@ -1,1 +1,387 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luau 초급 — 코딩 첫걸음</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23ffc44d'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>L</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none;border-color:rgba(255,196,77,0.4)}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px);color:#ffc44d}
+#progress{background:linear-gradient(90deg,#ffc44d,#ffd57e)}
+h3::before{background:#ffc44d}
+h2 .num{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.nav-link.active{background:rgba(255,196,77,0.13);color:#ffd57e;border-left-color:#ffc44d}
+.nav-link.active .n{color:#ffc44d}
+.logo-mark.pg{background:linear-gradient(150deg,#ffd57e,#ffc44d)}
+.chip-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border:1px solid rgba(255,196,77,0.4)}
+.tab-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.lv-pg{color:#ffd57e;border-color:rgba(255,196,77,0.4);background:rgba(255,196,77,0.13)}
+.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:#5ad08a}.lua .cm{color:var(--muted)}.lua .num{color:#ffa45c}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
 
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark pg">L</div>
+    <div><b>Luau 초급</b><small>SCRIPT BASICS</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
+  <div class="nav-group"><span>시작</span>
+    <a class="nav-link" href="#what"><span class="n">01</span>스크립트란 무엇인가</a>
+    <a class="nav-link" href="#vars"><span class="n">02</span>변수</a>
+    <a class="nav-link" href="#ops"><span class="n">03</span>연산자</a>
+  </div>
+  <div class="nav-group"><span>흐름 제어</span>
+    <a class="nav-link" href="#if"><span class="n">04</span>조건문</a>
+    <a class="nav-link" href="#loops"><span class="n">05</span>반복문</a>
+    <a class="nav-link" href="#func"><span class="n">06</span>함수</a>
+  </div>
+  <div class="nav-group"><span>실전</span>
+    <a class="nav-link" href="#firstpart"><span class="n">07</span>실습 — 파트 조작</a>
+    <a class="nav-link" href="#errors"><span class="n">08</span>에러 읽는 법</a>
+    <a class="nav-link" href="#practice"><span class="n">09</span>종합 실습 — 자동문</a>
+    <a class="nav-link" href="#cheat1"><span class="n">10</span>초급 치트시트</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab tab-pg" href="lua-beginner.html">초급</a>
+    <a class="page-tab" href="lua-intermediate.html">중급</a>
+    <a class="page-tab" href="lua-advanced.html">고급</a>
+    <a class="page-tab" href="lua-master.html">초고급</a>
+    <a class="page-tab" href="lua-expert.html">전문가</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(255,196,77,0.15),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-pg">LUAU BEGINNER</div>
+    <h1>Luau 초급 — 코딩 첫걸음</h1>
+    <p class="lead">코딩이 처음이어도 됩니다. 변수부터 자동문까지, Roblox 스크립트의 알파벳을 배우는 단계.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">변수와 조건문</span>
+      <span class="hero-tag">함수</span>
+      <span class="hero-tag">첫 실습</span>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="what">
+  <div class="wrap">
+    <h2><span class="num">01</span>스크립트란 무엇인가 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">맵은 무대, 스크립트는 연출입니다. 문이 열리고 코인이 돌고 점수가 오르는 모든 "움직임"이 스크립트.</p>
+    <h3>Luau란</h3>
+    <p>Roblox에서 쓰는 프로그래밍 언어입니다. Lua라는 배우기 쉬운 언어를 Roblox가 개량한 것으로, 문법이 짧고 영어 문장처럼 읽힙니다. 코딩이 처음이어도 시작하기 좋은 언어입니다.</p>
+    <h3>스크립트 만들고 실행하기</h3>
+    <ol class="steps">
+      <li>Explorer에서 <code>ServerScriptService</code> 옆 <code>+</code> &gt; <code>Script</code> 추가.</li>
+      <li>더블클릭하면 코드 편집기가 열립니다. 기본으로 적힌 코드가 보입니다.</li>
+      <li><kbd>F5</kbd>(Play)를 누르면 스크립트가 실행됩니다.</li>
+      <li>View &gt; <code>Output</code> 창을 열어두세요 — 스크립트가 말하는 내용과 에러가 여기 표시됩니다.</li>
+    </ol>
+    <h3>첫 코드</h3>
+    <pre class="code-block lua"><span class="fn">print</span>(<span class="str">"안녕, Roblox!"</span>)  <span class="cm">-- Output 창에 글자를 출력</span></pre>
+    <p><code>print</code>는 괄호 안 내용을 Output 창에 적어주는 명령입니다. 앞으로 "코드가 어디까지 갔나" 확인하는 손전등처럼 계속 쓰게 됩니다.</p>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>-- 두 개 뒤의 글은 주석입니다. 컴퓨터는 무시하고 사람만 읽는 메모. 코드에 한국어로 메모를 달면서 배우세요.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="vars">
+  <div class="wrap">
+    <h2><span class="num">02</span>변수 — 이름 붙인 상자 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">값을 담아두고 이름으로 꺼내 쓰는 상자. 모든 프로그래밍의 첫 단추.</p>
+    <pre class="code-block lua"><span class="kw">local</span> coins = <span class="num">10</span>            <span class="cm">-- coins라는 상자에 10을 담음</span>
+<span class="kw">local</span> playerName = <span class="str">"문앙"</span>   <span class="cm">-- 글자(문자열)도 담을 수 있음</span>
+<span class="kw">local</span> isAlive = <span class="kw">true</span>        <span class="cm">-- 참/거짓도 담을 수 있음</span>
+
+coins = coins + <span class="num">5</span>           <span class="cm">-- 상자 내용을 바꿈 (이제 15)</span>
+<span class="fn">print</span>(coins)                <span class="cm">-- 15</span></pre>
+    <h3>규칙</h3>
+    <ul class="plain">
+      <li><code>local</code>을 붙여 만듭니다. 안 붙여도 되지만 붙이는 것이 표준이고 더 빠릅니다.</li>
+      <li>이름은 영문으로, 뜻이 보이게: <code>coins</code>, <code>maxHealth</code>, <code>isDoorOpen</code>. 단어 경계는 대문자로 (camelCase).</li>
+      <li>숫자로 시작 불가, 띄어쓰기 불가.</li>
+    </ul>
+    <h3>자료형 4총사</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>자료형</th><th>예시</th><th>용도</th></tr></thead>
+      <tbody>
+        <tr><td>number</td><td><code>10</code>, <code>3.5</code>, <code>-2</code></td><td>점수, 체력, 좌표</td></tr>
+        <tr><td>string</td><td><code>"안녕"</code></td><td>이름, 메시지. 따옴표로 감쌈</td></tr>
+        <tr><td>boolean</td><td><code>true</code> / <code>false</code></td><td>켜짐/꺼짐, 살았나/죽었나</td></tr>
+        <tr><td>nil</td><td><code>nil</code></td><td>"아무것도 없음". 빈 상자</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<section class="sec" id="ops">
+  <div class="wrap">
+    <h2><span class="num">03</span>연산자 — 계산과 비교 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">더하고 빼고, 크고 작음을 비교하는 기호들.</p>
+    <h3>계산</h3>
+    <pre class="code-block lua"><span class="fn">print</span>(<span class="num">7</span> + <span class="num">3</span>)   <span class="cm">-- 10</span>
+<span class="fn">print</span>(<span class="num">7</span> - <span class="num">3</span>)   <span class="cm">-- 4</span>
+<span class="fn">print</span>(<span class="num">7</span> * <span class="num">3</span>)   <span class="cm">-- 21 (곱하기)</span>
+<span class="fn">print</span>(<span class="num">7</span> / <span class="num">2</span>)   <span class="cm">-- 3.5 (나누기)</span>
+<span class="fn">print</span>(<span class="num">7</span> % <span class="num">3</span>)   <span class="cm">-- 1 (나눈 나머지)</span>
+<span class="fn">print</span>(<span class="num">2</span> ^ <span class="num">3</span>)   <span class="cm">-- 8 (거듭제곱)</span>
+<span class="fn">print</span>(<span class="str">"레벨 "</span> .. <span class="num">5</span>)  <span class="cm">-- "레벨 5" (..은 글자 이어붙이기)</span></pre>
+    <h3>비교 — 결과는 true/false</h3>
+    <pre class="code-block lua"><span class="fn">print</span>(<span class="num">5</span> &gt; <span class="num">3</span>)    <span class="cm">-- true</span>
+<span class="fn">print</span>(<span class="num">5</span> &lt;= <span class="num">5</span>)   <span class="cm">-- true (작거나 같다)</span>
+<span class="fn">print</span>(<span class="num">5</span> == <span class="num">3</span>)   <span class="cm">-- false (같은가? — 등호 두 개!)</span>
+<span class="fn">print</span>(<span class="num">5</span> ~= <span class="num">3</span>)   <span class="cm">-- true (다른가?)</span></pre>
+    <div class="callout co-warn"><span class="ico">!!</span><p>= 하나는 "담아라", == 두 개는 "같은가?". 초보 에러 1위가 이 둘을 헷갈리는 것입니다.</p></div>
+    <h3>논리 연산</h3>
+    <pre class="code-block lua"><span class="cm">-- and: 둘 다 참이어야 참 / or: 하나만 참이어도 참 / not: 뒤집기</span>
+<span class="fn">print</span>(<span class="kw">true</span> <span class="kw">and</span> <span class="kw">false</span>)  <span class="cm">-- false</span>
+<span class="fn">print</span>(<span class="kw">true</span> <span class="kw">or</span> <span class="kw">false</span>)   <span class="cm">-- true</span>
+<span class="fn">print</span>(<span class="kw">not</span> <span class="kw">true</span>)        <span class="cm">-- false</span></pre>
+  </div>
+</section>
+
+<section class="sec" id="if">
+  <div class="wrap">
+    <h2><span class="num">04</span>조건문 — 만약에 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">"체력이 0이면 죽는다" — 상황에 따라 다르게 행동하게 만드는 문법.</p>
+    <pre class="code-block lua"><span class="kw">local</span> health = <span class="num">30</span>
+
+<span class="kw">if</span> health &lt;= <span class="num">0</span> <span class="kw">then</span>
+    <span class="fn">print</span>(<span class="str">"죽었습니다"</span>)
+<span class="kw">elseif</span> health &lt; <span class="num">50</span> <span class="kw">then</span>
+    <span class="fn">print</span>(<span class="str">"위험! 체력이 낮습니다"</span>)   <span class="cm">-- 이게 출력됨</span>
+<span class="kw">else</span>
+    <span class="fn">print</span>(<span class="str">"건강합니다"</span>)
+<span class="kw">end</span></pre>
+    <ul class="plain">
+      <li><code>if 조건 then ... end</code>가 뼈대. 조건이 true면 안쪽이 실행됩니다.</li>
+      <li><code>elseif</code>로 추가 조건, <code>else</code>로 "그 외 전부". 위에서부터 검사해서 처음 맞는 곳 하나만 실행.</li>
+      <li>안쪽 코드는 들여쓰기(Tab) — 문법상 필수는 아니지만 읽기 위해 반드시.</li>
+    </ul>
+    <h3>조건 조합</h3>
+    <pre class="code-block lua"><span class="kw">if</span> hasKey <span class="kw">and not</span> isDoorOpen <span class="kw">then</span>
+    <span class="fn">print</span>(<span class="str">"문을 엽니다"</span>)
+<span class="kw">end</span></pre>
+  </div>
+</section>
+
+<section class="sec" id="loops">
+  <div class="wrap">
+    <h2><span class="num">05</span>반복문 — 여러 번 시키기 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">같은 일을 100번 시키는 법. 코드를 100번 복붙하는 게 아닙니다.</p>
+    <h3>for — 횟수를 알 때</h3>
+    <pre class="code-block lua"><span class="kw">for</span> i = <span class="num">1</span>, <span class="num">5</span> <span class="kw">do</span>
+    <span class="fn">print</span>(<span class="str">"카운트: "</span> .. i)   <span class="cm">-- 1 2 3 4 5</span>
+<span class="kw">end</span>
+
+<span class="kw">for</span> i = <span class="num">10</span>, <span class="num">2</span>, <span class="num">-2</span> <span class="kw">do</span>      <span class="cm">-- 10부터 2까지 2씩 감소</span>
+    <span class="fn">print</span>(i)                 <span class="cm">-- 10 8 6 4 2</span>
+<span class="kw">end</span></pre>
+    <h3>while — 조건이 참인 동안</h3>
+    <pre class="code-block lua"><span class="kw">local</span> hp = <span class="num">10</span>
+<span class="kw">while</span> hp &gt; <span class="num">0</span> <span class="kw">do</span>
+    hp = hp - <span class="num">3</span>
+    <span class="fn">print</span>(<span class="str">"남은 체력: "</span> .. hp)
+<span class="kw">end</span>   <span class="cm">-- 7, 4, 1, -2 출력 후 종료</span></pre>
+    <div class="callout co-warn"><span class="ico">!!</span><p>조건이 영원히 참이면 무한루프 — Studio가 멈춥니다. 반복 안에서 조건이 언젠가 거짓이 되는지 확인하고, 계속 도는 루프엔 task.wait()을 넣어 숨 쉴 틈을 주세요.</p></div>
+    <pre class="code-block lua"><span class="kw">while true do</span>           <span class="cm">-- 게임 내내 도는 루프의 올바른 형태</span>
+    <span class="fn">print</span>(<span class="str">"1초마다 실행"</span>)
+    task.wait(<span class="num">1</span>)
+<span class="kw">end</span></pre>
+  </div>
+</section>
+
+<section class="sec" id="func">
+  <div class="wrap">
+    <h2><span class="num">06</span>함수 — 이름 붙인 작업 묶음 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">자주 하는 일을 묶어 이름을 붙이고, 이름만 불러 실행합니다.</p>
+    <pre class="code-block lua"><span class="cm">-- 정의: 이렇게 생긴 작업이다</span>
+<span class="kw">local function</span> <span class="fn">greet</span>(name)
+    <span class="fn">print</span>(<span class="str">"안녕, "</span> .. name .. <span class="str">"!"</span>)
+<span class="kw">end</span>
+
+<span class="cm">-- 호출: 실행해라</span>
+<span class="fn">greet</span>(<span class="str">"문앙"</span>)    <span class="cm">-- 안녕, 문앙!</span>
+<span class="fn">greet</span>(<span class="str">"친구"</span>)    <span class="cm">-- 안녕, 친구!</span></pre>
+    <h3>값을 돌려주는 함수 — return</h3>
+    <pre class="code-block lua"><span class="kw">local function</span> <span class="fn">add</span>(a, b)
+    <span class="kw">return</span> a + b          <span class="cm">-- 결과를 돌려줌</span>
+<span class="kw">end</span>
+
+<span class="kw">local</span> result = <span class="fn">add</span>(<span class="num">3</span>, <span class="num">4</span>)  <span class="cm">-- result에 7이 담김</span></pre>
+    <ul class="plain">
+      <li>괄호 안 <code>name</code>, <code>a</code>, <code>b</code>는 매개<span class="term" tabindex="0" data-tip="값을 담아 이름으로 꺼내 쓰는 상자. local x = 10처럼 만듦">변수</span> — 함수에 전달하는 재료.</li>
+      <li><code>return</code>을 만나면 함수는 즉시 끝나고 값을 돌려줍니다.</li>
+      <li>같은 코드를 두 번 복붙하고 있다면 그것이 함수를 만들 신호입니다.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="firstpart">
+  <div class="wrap">
+    <h2><span class="num">07</span>실습 — 파트 조작하기 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">배운 것으로 진짜 게임 세계를 건드려 봅니다. 파트 색을 바꾸고 움직이게.</p>
+    <h3>파트 찾아서 바꾸기</h3>
+    <ol class="steps">
+      <li>Workspace에 Part를 하나 추가하고 이름을 <code>MyPart</code>로 바꿉니다.</li>
+      <li>ServerScriptService에 Script를 추가하고 아래 입력:</li>
+    </ol>
+    <pre class="code-block lua"><span class="kw">local</span> part = workspace.MyPart         <span class="cm">-- 파트를 변수에 담기</span>
+
+part.BrickColor = BrickColor.new(<span class="str">"Bright red"</span>)  <span class="cm">-- 색 변경</span>
+part.Material = Enum.Material.Neon              <span class="cm">-- 재질 변경</span>
+part.Transparency = <span class="num">0.3</span>                         <span class="cm">-- 투명도</span>
+part.Size = Vector3.new(<span class="num">8</span>, <span class="num">2</span>, <span class="num">8</span>)               <span class="cm">-- 크기 (x,y,z)</span>
+part.Position = Vector3.new(<span class="num">0</span>, <span class="num">10</span>, <span class="num">0</span>)          <span class="cm">-- 위치</span></pre>
+    <h3>반복문과 조합 — 무지개 파트</h3>
+    <pre class="code-block lua"><span class="kw">local</span> part = workspace.MyPart
+<span class="kw">while true do</span>
+    part.Color = Color3.fromHSV(math.random(), <span class="num">1</span>, <span class="num">1</span>)  <span class="cm">-- 랜덤 색</span>
+    task.wait(<span class="num">0.5</span>)
+<span class="kw">end</span></pre>
+    <p>F5로 실행해 보세요. 0.5초마다 색이 바뀝니다. 점(.)으로 "Workspace 안의 MyPart의 Color"처럼 소속을 따라 내려가는 것 — 이것이 Roblox 스크립팅의 기본 동작입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="errors">
+  <div class="wrap">
+    <h2><span class="num">08</span>에러 읽는 법 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">에러는 혼내는 게 아니라 "여기가 문제야"라고 알려주는 안내문입니다. 읽을 줄 알면 무섭지 않습니다.</p>
+    <h3>에러 메시지 해부</h3>
+    <pre class="code-block"><span class="cm">Workspace.Script:3: attempt to index nil with 'Color'</span></pre>
+    <ul class="plain">
+      <li><b>Workspace.Script</b> — 어느 스크립트에서</li>
+      <li><b>:3:</b> — 몇 번째 줄에서 (더블클릭하면 그 줄로 이동)</li>
+      <li><b>attempt to index nil</b> — 무슨 문제 ("없는 것(nil)의 속성에 접근하려 함")</li>
+    </ul>
+    <h3>초급 에러 사전</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>에러</th><th>뜻</th><th>흔한 원인</th></tr></thead>
+      <tbody>
+        <tr><td>attempt to index nil</td><td>없는 것을 건드림</td><td>이름 오타, 파트가 Workspace에 없음</td></tr>
+        <tr><td>is not a valid member of</td><td>그런 자식/속성 없음</td><td>철자, 대소문자 (position ≠ Position)</td></tr>
+        <tr><td>expected, got nil</td><td>값이 와야 하는데 비어 있음</td><td>변수에 담기 전 사용</td></tr>
+        <tr><td>'end' expected</td><td>end 짝이 안 맞음</td><td>if/for/function의 end 누락</td></tr>
+        <tr><td>attempt to compare number with string</td><td>숫자와 글자를 비교함</td><td>"10"과 10은 다름 — tonumber() 필요</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>막히면 print를 곳곳에 심으세요. "여기까지 옴1", "여기까지 옴2" — 어디까지 출력되고 멈췄는지가 곧 범인의 위치입니다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="practice">
+  <div class="wrap">
+    <h2><span class="num">09</span>종합 실습 — 자동문 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">변수, 조건, <span class="term" tabindex="0" data-tip="자주 하는 작업을 묶어 이름 붙인 것. 이름만 부르면 실행됨">함수</span>, 파트 조작을 전부 사용하는 첫 작품. 가까이 가면 열리는 문.</p>
+    <ol class="steps">
+      <li>Workspace에 Part 추가, 이름 <code>Door</code>, Anchored 켜기, 문 모양으로 크기 조절.</li>
+      <li>ServerScriptService에 Script 추가:</li>
+    </ol>
+    <pre class="code-block lua"><span class="kw">local</span> door = workspace.Door
+<span class="kw">local</span> isOpen = <span class="kw">false</span>
+
+<span class="kw">local function</span> <span class="fn">openDoor</span>()
+    <span class="kw">if</span> isOpen <span class="kw">then return end</span>   <span class="cm">-- 이미 열렸으면 무시</span>
+    isOpen = <span class="kw">true</span>
+    door.Transparency = <span class="num">0.8</span>
+    door.CanCollide = <span class="kw">false</span>      <span class="cm">-- 통과 가능</span>
+    task.wait(<span class="num">2</span>)                  <span class="cm">-- 2초 후</span>
+    door.Transparency = <span class="num">0</span>
+    door.CanCollide = <span class="kw">true</span>       <span class="cm">-- 다시 닫힘</span>
+    isOpen = <span class="kw">false</span>
+<span class="kw">end</span>
+
+door.Touched:Connect(<span class="kw">function</span>(hit)   <span class="cm">-- 닿으면 실행 (이벤트 맛보기)</span>
+    <span class="fn">openDoor</span>()
+<span class="kw">end</span>)</pre>
+    <p>마지막 두 줄이 <b><span class="term" tabindex="0" data-tip="무언가 닿거나 들어왔을 때 함수를 실행하도록 예약하는 것">이벤트</span></b> — "무언가 닿으면 이 함수를 실행해줘"라는 예약입니다. 이벤트는 중급에서 본격적으로 다룹니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="cheat1">
+  <div class="wrap">
+    <h2><span class="num">10</span>초급 치트시트 <span class="lv lv-pg">초급</span></h2>
+    <p class="sec-sub">초급 문법 한 장 요약. 막힐 때 돌아와서 보세요.</p>
+    <pre class="code-block lua"><span class="cm">-- 변수</span>
+<span class="kw">local</span> x = <span class="num">10</span>
+<span class="cm">-- 조건</span>
+<span class="kw">if</span> x &gt; <span class="num">5</span> <span class="kw">then</span> ... <span class="kw">elseif</span> x &gt; <span class="num">0</span> <span class="kw">then</span> ... <span class="kw">else</span> ... <span class="kw">end</span>
+<span class="cm">-- 반복</span>
+<span class="kw">for</span> i = <span class="num">1</span>, <span class="num">10</span> <span class="kw">do</span> ... <span class="kw">end</span>
+<span class="kw">while</span> 조건 <span class="kw">do</span> ... task.wait(<span class="num">1</span>) <span class="kw">end</span>
+<span class="cm">-- 함수</span>
+<span class="kw">local function</span> <span class="fn">f</span>(a, b) <span class="kw">return</span> a + b <span class="kw">end</span>
+<span class="cm">-- 파트 접근</span>
+<span class="kw">local</span> p = workspace.MyPart
+p.Color = Color3.fromRGB(<span class="num">255</span>, <span class="num">0</span>, <span class="num">0</span>)
+p.Position = Vector3.new(<span class="num">0</span>, <span class="num">10</span>, <span class="num">0</span>)
+<span class="cm">-- 기다리기</span>
+task.wait(<span class="num">1.5</span>)
+<span class="cm">-- 이벤트 (맛보기)</span>
+part.Touched:Connect(<span class="kw">function</span>(hit) ... <span class="kw">end</span>)</pre>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>여기까지가 "문법". 다음 단계(중급)부터 <span class="term" tabindex="0" data-tip="Luau의 만능 자료구조. 목록도 사전도 전부 테이블">테이블</span>, 이벤트, 클라이언트/서버 — 진짜 게임 기능을 만드는 도구들이 나옵니다.</p></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level" href="lua-intermediate.html">
+    <div><span class="nl-label">NEXT LEVEL</span><span class="nl-title">Luau 중급 — 이벤트와 게임 기능</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
+      <a href="lua-intermediate.html">중급으로 &rarr;</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+<script src="assistant.js"></script>
+</body>
+</html>
