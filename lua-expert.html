@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luau 전문가 — 라이브 게임 운영</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='18' fill='%23ffc44d'/><text x='50' y='70' font-size='56' text-anchor='middle' font-family='sans-serif' font-weight='900' fill='%23131316'>L</text></svg>">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pretendard/1.3.9/static/pretendard-dynamic-subset.min.css">
+<link rel="stylesheet" href="style.css">
+<style>
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.page-hero .hero-chip{animation:fadeUp .45s ease both}
+.page-hero h1{animation:fadeUp .5s .05s ease both}
+.page-hero .lead{animation:fadeUp .55s .1s ease both}
+.page-hero .hero-tags{animation:fadeUp .6s .15s ease both}
+@media(prefers-reduced-motion:reduce){.page-hero .hero-chip,.page-hero h1,.page-hero .lead,.page-hero .hero-tags{animation:none}}
+.next-level{display:flex;align-items:center;justify-content:space-between;gap:16px;background:var(--panel);border:1px solid var(--border-soft);border-radius:14px;padding:20px 24px;margin:52px 0 0;transition:border-color .18s,transform .18s}
+.next-level:hover{transform:translateY(-2px);text-decoration:none;border-color:rgba(255,196,77,0.4)}
+.next-level .nl-label{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.14em;color:var(--muted);display:block;margin-bottom:4px}
+.next-level .nl-title{font-size:17px;font-weight:750;color:var(--text);letter-spacing:-.02em}
+.next-level .nl-arrow{font-size:22px;color:var(--muted);transition:transform .18s,color .18s;flex:none}
+.next-level:hover .nl-arrow{transform:translateX(5px);color:#ffc44d}
+#progress{background:linear-gradient(90deg,#ffc44d,#ffd57e)}
+h3::before{background:#ffc44d}
+h2 .num{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.nav-link.active{background:rgba(255,196,77,0.13);color:#ffd57e;border-left-color:#ffc44d}
+.nav-link.active .n{color:#ffc44d}
+.logo-mark.pg{background:linear-gradient(150deg,#ffd57e,#ffc44d)}
+.chip-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border:1px solid rgba(255,196,77,0.4)}
+.tab-pg{color:#ffc44d;background:rgba(255,196,77,0.13);border-color:rgba(255,196,77,0.28)}
+.lv-pg{color:#ffd57e;border-color:rgba(255,196,77,0.4);background:rgba(255,196,77,0.13)}
+.lua .kw{color:var(--purple)}.lua .fn{color:#7ec0ff}.lua .str{color:#5ad08a}.lua .cm{color:var(--muted)}.lua .num{color:#ffa45c}
+</style>
+</head>
+<body>
+<div id="progress"></div>
+<button id="menu-btn" aria-label="메뉴 열기">&#9776;</button>
+<div id="overlay"></div>
+
+<nav id="sidebar">
+  <div class="logo">
+    <div class="logo-mark pg">L</div>
+    <div><b>Luau 전문가</b><small>PRODUCTION</small></div>
+  </div>
+  <a class="logo-home" href="index.html">&larr; 메인으로</a>
+  <a class="logo-home" href="glossary.html" style="margin-top:-8px">용어 사전</a>
+  <div class="nav-group"><span>고급 설계</span>
+    <a class="nav-link" href="#ecs"><span class="n">41</span>데이터 지향 설계와 ECS</a>
+    <a class="nav-link" href="#repl"><span class="n">42</span>커스텀 리플리케이션</a>
+    <a class="nav-link" href="#authority"><span class="n">43</span>서버 권위와 히트 검증</a>
+  </div>
+  <div class="nav-group"><span>데이터와 인프라</span>
+    <a class="nav-link" href="#bigdata"><span class="n">44</span>대규모 데이터 설계</a>
+    <a class="nav-link" href="#opencloud"><span class="n">45</span>Open Cloud와 외부 연동</a>
+  </div>
+  <div class="nav-group"><span>운영</span>
+    <a class="nav-link" href="#telemetry"><span class="n">46</span>텔레메트리와 A/B 테스트</a>
+    <a class="nav-link" href="#liveops"><span class="n">47</span>라이브 게임 운영</a>
+  </div>
+  <div class="nav-group"><span>마스터리</span>
+    <a class="nav-link" href="#vm"><span class="n">48</span>Luau 내부 동작 이해</a>
+    <a class="nav-link" href="#codereview"><span class="n">49</span>코드 리뷰와 팀 표준</a>
+    <a class="nav-link" href="#luacareer"><span class="n">50</span>전문가의 다음</a>
+  </div>
+</nav>
+
+<div class="page-topbar">
+  <nav class="page-tabs">
+    <a class="page-tab" href="lua-beginner.html">초급</a>
+    <a class="page-tab" href="lua-intermediate.html">중급</a>
+    <a class="page-tab" href="lua-advanced.html">고급</a>
+    <a class="page-tab" href="lua-master.html">초고급</a>
+    <a class="page-tab tab-pg" href="lua-expert.html">전문가</a>
+  </nav>
+</div>
+
+<main>
+<div class="page-hero" style="background:radial-gradient(560px 340px at 68% -8%,rgba(255,196,77,0.15),transparent 65%)">
+  <div class="wrap">
+    <div class="hero-chip chip-pg">LUAU EXPERT</div>
+    <h1>Luau 전문가 — 라이브 게임 운영</h1>
+    <p class="lead">ECS, 커스텀 리플리케이션, 서버 권위 판정, 대규모 데이터, 라이브 운영. 상용 게임을 만들고 굴리는 진짜 전문가의 영역.</p>
+    <div class="hero-tags">
+      <span class="hero-tag"><b>10</b>챕터</span>
+      <span class="hero-tag">리플리케이션</span>
+      <span class="hero-tag">대규모 데이터</span>
+      <span class="hero-tag">라이브 운영</span>
+    </div>
+  </div>
+</div>
+
+<section class="sec" id="ecs">
+  <div class="wrap">
+    <h2><span class="num">41</span>데이터 지향 설계와 ECS <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">객체 1만 개에서 OOP가 무너지는 지점 — 데이터와 동작을 분리하는 설계.</p>
+    <h3>왜 데이터 지향인가</h3>
+    <ul class="plain">
+      <li>OOP는 객체마다 동작이 흩어져 캐시 효율이 나쁘고, "불타는 + 얼어붙은 + 날아가는" 같은 조합 폭발에 상속이 못 버팁니다.</li>
+      <li><b>ECS:</b> Entity(그냥 ID) + Component(순수 데이터 <span class="term" tabindex="0" data-tip="Luau의 만능 자료구조. 목록도 사전도 전부 테이블">테이블</span>) + System(같은 컴포넌트 조합을 한 번에 처리하는 <span class="term" tabindex="0" data-tip="자주 하는 작업을 묶어 이름 붙인 것. 이름만 부르면 실행됨">함수</span>).</li>
+    </ul>
+    <pre class="code-block lua"><span class="cm">-- 개념 골격</span>
+<span class="kw">local</span> positions, velocities = {}, {}   <span class="cm">-- 컴포넌트 저장소 [id] = data</span>
+
+<span class="kw">local function</span> <span class="fn">moveSystem</span>(dt)          <span class="cm">-- 시스템: 일괄 처리</span>
+    <span class="kw">for</span> id, vel <span class="kw">in</span> velocities <span class="kw">do</span>
+        positions[id] += vel * dt
+    <span class="kw">end</span>
+<span class="kw">end</span></pre>
+    <ul class="plain">
+      <li>"불탄다"는 Burning 컴포넌트를 붙이는 것 — 어떤 엔티티든 즉시 조합 가능. 상속 트리가 사라집니다.</li>
+      <li>일괄 루프는 병렬화(Actor)와도 궁합이 좋습니다.</li>
+      <li>실전에서는 Matter, ECR 같은 검증된 Luau ECS 라이브러리 — 단, 게임 전체를 ECS로 할 필요는 없습니다. 대량·동질 객체(투사체, 군중, 도트뎀)에만 적용하는 하이브리드가 현실적.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="repl">
+  <div class="wrap">
+    <h2><span class="num">42</span>커스텀 리플리케이션 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">자동 복제에 맡기지 않고 — 무엇을, 누구에게, 언제 보낼지 직접 설계합니다.</p>
+    <h3>상태 동기화 계층 만들기</h3>
+    <ol class="steps">
+      <li><b>서버 진실 저장소:</b> 게임 상태를 인스턴스가 아닌 순수 테이블로 관리 (인스턴스는 그 표현일 뿐).</li>
+      <li><b>스냅샷 + 델타:</b> 입장 시 전체 스냅샷 1회, 이후엔 바뀐 키만 (델타) 주기 전송.</li>
+      <li><b>관심 관리:</b> 플레이어별로 "보이는 영역"의 엔티티만 동기화 — 거리 밖 정보는 보내지도, (치터가 볼 수 있으니) 노출하지도 않음.</li>
+      <li><b>우선순위 큐:</b> 가까운 것/전투 중인 것 먼저, 멀리 있는 장식은 늦게.</li>
+    </ol>
+    <pre class="code-block lua"><span class="cm">-- 델타 수집 골격</span>
+<span class="kw">local</span> dirty = {}                       <span class="cm">-- 이번 틱에 바뀐 것</span>
+<span class="kw">local function</span> <span class="fn">setState</span>(id, key, value)
+    state[id][key] = value
+    dirty[id] = dirty[id] <span class="kw">or</span> {}
+    dirty[id][key] = value
+<span class="kw">end</span>
+<span class="cm">-- 0.1초마다: 플레이어별 관심 엔티티의 dirty만 buffer로 패킹해 전송</span></pre>
+    <p>클라이언트는 받은 상태로 표현(보간 포함)만 합니다. 이 구조까지 오면 수백 엔티티 실시간 게임도 대역폭이 통제됩니다 — 초고급의 buffer(38)와 네트워크 최적화(33)가 여기서 합쳐집니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="authority">
+  <div class="wrap">
+    <h2><span class="num">43</span>서버 권위와 히트 검증 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">반응성(클라가 즉시)과 공정함(서버가 판정) 사이의 전문가적 타협점.</p>
+    <h3>3박자 구조</h3>
+    <ol class="steps">
+      <li><b>클라 예측:</b> 입력 즉시 자기 화면에서 공격 모션/이펙트 — 체감 지연 0.</li>
+      <li><b>서버 판정:</b> 같은 공격을 서버가 재계산(서버 좌표 기준 <span class="term" tabindex="0" data-tip="보이지 않는 광선을 쏘아 무엇에 닿는지 검사하는 기능">Raycast</span>/거리) — 진짜 데미지는 여기서만.</li>
+      <li><b>화해(reconcile):</b> 서버 결과가 예측과 다르면 클라가 보정 (빗나갔는데 맞은 척했던 이펙트 취소).</li>
+    </ol>
+    <h3>지연 보상 (Lag Compensation)</h3>
+    <ul class="plain">
+      <li>클라가 본 화면은 과거입니다 — 서버는 각 캐릭터의 최근 위치 히스토리(0.5~1초)를 링버퍼로 보관.</li>
+      <li>공격 패킷의 타임스탬프 시점으로 <b>되감아서</b> 판정 — "내 화면에선 분명 맞았는데"를 해결.</li>
+      <li>되감기 한도를 두세요(예: 300ms) — 무한 신뢰는 치트 벡터가 됩니다.</li>
+    </ul>
+    <h3>검증 휴리스틱</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>검사</th><th>기준</th><th>실패 시</th></tr></thead>
+      <tbody>
+        <tr><td>사거리</td><td>무기 사거리 + 이동 여유 + 지연 여유</td><td>무시</td></tr>
+        <tr><td>발사 각도</td><td>바라보는 방향과 표적의 각도차</td><td>무시</td></tr>
+        <tr><td>벽 관통</td><td>서버 Raycast로 시야 확인</td><td>무시 + 카운트</td></tr>
+        <tr><td>연사 속도</td><td>무기 쿨다운의 95% 미만 간격</td><td>무시 + 카운트</td></tr>
+        <tr><td>누적 의심</td><td>카운트 임계 초과</td><td>로그 → 그림자 모니터링 → 제재</td></tr>
+      </tbody>
+    </table></div>
+    <p>오탐을 전제로 — 즉시 킥이 아니라 점수화·로그·사후 분석이 전문가의 제재 설계입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="bigdata">
+  <div class="wrap">
+    <h2><span class="num">44</span>대규모 데이터 설계 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">동시접속 수천, 서버 수백 대에서 데이터가 깨지지 않게 — 세션 잠금과 트랜잭션.</p>
+    <h3>세션 잠금 (Session Locking)</h3>
+    <ul class="plain">
+      <li>문제: 유저가 서버 이동 시 두 서버가 같은 데이터를 동시에 들고 저장 — 늦게 저장한 쪽이 덮어씀 = 아이템 복사/소실 버그의 근원.</li>
+      <li>해법: 데이터에 <code>lock = {serverId, timestamp}</code>를 UpdateAsync로 기록. 다른 서버가 잠근 데이터는 잠시 대기 후 재시도, 오래된 잠금(크래시 잔재)은 만료 처리.</li>
+      <li>ProfileService/ProfileStore 같은 검증된 라이브러리가 이 문제의 사실상 표준 — 원리를 알고 쓰는 것과 모르고 쓰는 것의 차이가 장애 대응에서 갈립니다.</li>
+    </ul>
+    <h3>설계 규칙</h3>
+    <ul class="plain">
+      <li><b>UpdateAsync만:</b> 읽기-수정-쓰기를 원자적으로. SetAsync는 마지막 쓰기가 이깁니다.</li>
+      <li><b>스키마 버전:</b> <code>data.version</code> + 마이그레이션 함수 체인 (v1→v2→v3) — 옛 유저 데이터가 언제 로드돼도 안전.</li>
+      <li><b>분리 저장:</b> 자주 바뀌는 것(인벤토리)과 거의 안 바뀌는 것(도감)을 다른 키로 — 충돌 표면 축소.</li>
+      <li><b>MemoryStore:</b> 서버 간 실시간 공유(매치메이킹 큐, 글로벌 경매)는 <span class="term" tabindex="0" data-tip="게임을 껐다 켜도 데이터가 남게 영구 저장하는 서버 기능">DataStore</span>가 아닌 MemoryStore — 빠르고 휘발성.</li>
+      <li><b>감사 로그:</b> 고가 거래는 별도 OrderedDataStore에 기록 — 복구와 어뷰징 조사의 근거.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="opencloud">
+  <div class="wrap">
+    <h2><span class="num">45</span>Open Cloud와 외부 연동 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">게임 밖에서 게임을 조작하는 공식 통로 — 자동 배포, 외부 대시보드, 웹훅.</p>
+    <h3>Open Cloud API로 할 수 있는 것</h3>
+    <ul class="plain">
+      <li><b>DataStore API:</b> 웹에서 유저 데이터 조회/수정 — 고객지원 도구("아이템 복구해주세요")를 게임 밖에 구축.</li>
+      <li><b>Publishing API:</b> CI에서 플레이스 자동 배포 — Git에 머지되면 테스트 유니버스에 자동 <span class="term" tabindex="0" data-tip="내가 만든 맵/게임을 Roblox 서버에 올려 다른 사람도 플레이할 수 있게 공개하는 것">퍼블리시</span>.</li>
+      <li><b>MessagingService API:</b> 외부에서 전체 서버에 메시지 — 웹 관리자 페이지의 "공지 발송" 버튼.</li>
+    </ul>
+    <h3>게임 내부 ↔ 외부 다리</h3>
+    <pre class="code-block lua"><span class="cm">-- HttpService: 게임에서 외부 API 호출 (서버 전용, Game Settings에서 허용)</span>
+<span class="kw">local</span> HttpService = game:GetService(<span class="str">"HttpService"</span>)
+<span class="kw">local</span> ok, res = pcall(<span class="kw">function</span>()
+    <span class="kw">return</span> HttpService:PostAsync(WEBHOOK_URL, HttpService:JSONEncode({
+        event = <span class="str">"rare_drop"</span>, user = player.UserId,
+    }))
+<span class="kw">end</span>)</pre>
+    <ul class="plain">
+      <li>MessagingService(게임 내): 서버끼리 실시간 방송 — 크로스 서버 <span class="term" tabindex="0" data-tip="무언가 닿거나 들어왔을 때 함수를 실행하도록 예약하는 것">이벤트</span>, 글로벌 공지.</li>
+      <li><b>보안 수칙:</b> API 키는 절대 게임 코드에 넣지 않습니다 — 키는 외부 서버에만, 게임은 자기 웹훅 주소로 보내기만. 외부 응답도 신뢰하지 않고 검증.</li>
+      <li>속도 제한(쿼터)이 있으므로 호출은 큐에 모아 배치로.</li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec" id="telemetry">
+  <div class="wrap">
+    <h2><span class="num">46</span>텔레메트리와 데이터 기반 운영 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">"감"이 아니라 측정으로 게임을 고칩니다 — 무엇을 기록하고 어떻게 읽을 것인가.</p>
+    <h3>기록할 것</h3>
+    <ul class="plain">
+      <li><b>퍼널:</b> 입장 → 튜토리얼 완료 → 첫 전투 → 첫 구매 — 어느 단계에서 이탈하는가.</li>
+      <li><b>밸런스:</b> 무기별 사용률/승률, 스테이지별 클리어율, 평균 클리어 시간.</li>
+      <li><b>경제:</b> 코인 발생량 vs 소비량 — 인플레이션 조기 경보.</li>
+      <li><b>기술:</b> 평균 FPS(클라 보고), 서버 프레임 시간, 에러 발생률.</li>
+    </ul>
+    <h3>구현 계층</h3>
+    <ol class="steps">
+      <li>1차: AnalyticsService(공식) — 퍼널/이코노미 이벤트를 Creator Hub 대시보드로.</li>
+      <li>2차: 커스텀 이벤트를 HttpService로 자체 수집기에 — 게임 고유 지표.</li>
+      <li>이벤트 설계 규칙: 이름은 <code>category_action</code>(shop_purchase), 스키마 문서화, 개인정보는 UserId까지만.</li>
+    </ol>
+    <h3>A/B 테스트</h3>
+    <pre class="code-block lua"><span class="cm">-- UserId 해시로 결정적 분기 — 같은 유저는 항상 같은 그룹</span>
+<span class="kw">local</span> group = (player.UserId % <span class="num">100</span> &lt; <span class="num">50</span>) <span class="kw">and</span> <span class="str">"A"</span> <span class="kw">or</span> <span class="str">"B"</span>
+<span class="kw">local</span> tutorialVersion = (group == <span class="str">"A"</span>) <span class="kw">and</span> <span class="str">"short"</span> <span class="kw">or</span> <span class="str">"guided"</span></pre>
+    <p>한 번에 한 변수만, 충분한 표본이 모일 때까지, 그리고 결과가 가설과 달라도 데이터를 따르는 것 — 운영의 규율입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="liveops">
+  <div class="wrap">
+    <h2><span class="num">47</span>라이브 게임 운영 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">출시는 끝이 아니라 시작. 무중단 업데이트, 핫픽스, 장애 대응의 체계.</p>
+    <h3>업데이트 전략</h3>
+    <ul class="plain">
+      <li><b>구버전 서버 공존:</b> 퍼블리시해도 기존 서버는 구버전으로 계속 돕니다 — 데이터 스키마는 항상 한 버전의 하위 호환 유지.</li>
+      <li><b>소프트 셧다운:</b> 구서버 플레이어를 새 서버로 점진 이주 — 전원에게 안내 후 TeleportService로 재배치. 즉시 킥은 최후 수단.</li>
+      <li><b>기능 플래그:</b> 신기능을 코드에 넣되 꺼진 상태로 배포 → 일부 서버만 켜서 관찰 → 전체 활성화. 문제 시 코드 롤백 없이 플래그만 끄기.</li>
+    </ul>
+    <pre class="code-block lua"><span class="cm">-- 기능 플래그: MemoryStore/DataStore에서 주기 로드</span>
+<span class="kw">if</span> Flags.get(<span class="str">"NewBossEnabled"</span>) <span class="kw">then</span>
+    spawnNewBoss()
+<span class="kw">end</span></pre>
+    <h3>장애 대응 체계</h3>
+    <ol class="steps">
+      <li><b>감지:</b> 에러율/저장 실패율 임계치 초과 시 웹훅 알림 (챕터 45).</li>
+      <li><b>완화 먼저:</b> 원인 분석보다 피해 차단 — 문제 기능 플래그 오프, 거래 일시 중지.</li>
+      <li><b>복구:</b> 감사 로그(챕터 44) 기반 데이터 복원.</li>
+      <li><b>사후 분석:</b> 타임라인 기록, 재발 방지책을 테스트로 박제. 책임 추궁이 아니라 시스템 개선.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>운영의 황금률: 금요일 저녁에 배포하지 않는다. 그리고 모든 변경은 되돌릴 방법을 먼저 정한 뒤에 배포한다.</p></div>
+  </div>
+</section>
+
+<section class="sec" id="vm">
+  <div class="wrap">
+    <h2><span class="num">48</span>Luau 내부 동작 이해 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">왜 이 코드가 빠른가를 VM 수준에서 설명할 수 있는 단계.</p>
+    <h3>알아두면 코드가 달라지는 내부 사실</h3>
+    <ul class="plain">
+      <li><b>테이블 = 배열부 + 해시부:</b> 1..n 연속 정수 키는 배열부(빠름), 그 외는 해시부. 구멍 난 배열(중간 nil)은 둘 다 망칩니다 — #연산도 신뢰 불가.</li>
+      <li><b>네이티브 벡터:</b> Vector3는 힙 할당 없는 내장 타입 — 수만 개 생성해도 GC 부담이 적습니다. 좌표 묶음에 테이블 대신 Vector3를.</li>
+      <li><b>인라인 캐싱과 단형성:</b> 같은 자리에서 항상 같은 모양의 테이블을 다루면 빠릅니다 — 같은 필드 구성을 유지하고, 필드를 nil로 지웠다 다시 만들기보다 처음부터 모든 필드를 초기화.</li>
+      <li><b>업밸류:</b> 클로저가 잡은 지역 <span class="term" tabindex="0" data-tip="값을 담아 이름으로 꺼내 쓰는 상자. local x = 10처럼 만듦">변수</span> 접근은 전역(_G, 게임 트리 탐색)보다 빠릅니다 — 핫루프에서 <code>local find = table.find</code> 캐싱이 통하는 이유.</li>
+      <li><b>문자열 인터닝:</b> 같은 문자열은 메모리에 한 번 — 비교는 빠르지만 연결(..) 반복은 매번 새 문자열 = GC 압박.</li>
+    </ul>
+    <h3>벤치마크 규율</h3>
+    <pre class="code-block lua"><span class="kw">local function</span> <span class="fn">bench</span>(name, n, fn)
+    <span class="kw">local</span> t = os.clock()
+    <span class="kw">for</span> i = <span class="num">1</span>, n <span class="kw">do</span> fn() <span class="kw">end</span>
+    <span class="fn">print</span>(string.format(<span class="str">"%s: %.3fms"</span>, name, (os.clock()-t)*<span class="num">1000</span>))
+<span class="kw">end</span></pre>
+    <p>마이크로 최적화는 항상 측정과 함께 — 그리고 프로파일러가 가리키는 핫스팟에만. 나머지 코드의 우선순위는 성능이 아니라 가독성입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="codereview">
+  <div class="wrap">
+    <h2><span class="num">49</span>코드 리뷰와 팀 표준 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">전문가의 코드는 혼자 잘 쓴 코드가 아니라, 팀이 빨리 읽고 안전하게 바꿀 수 있는 코드입니다.</p>
+    <h3>팀 표준 문서 (있어야 할 최소)</h3>
+    <ul class="plain">
+      <li>스타일: 네이밍(camelCase 변수 / PascalCase 타입·클래스), 파일 구조, strict 의무화 범위. — 도구(StyLua 포매터, Selene 린터)로 자동 강제.</li>
+      <li>금지 목록과 이유: 예) RemoteFunction의 서버→클라 Invoke 금지(클라가 안 돌려주면 서버 영원 대기), wait() 대신 task.wait().</li>
+      <li>Remote 추가 절차: 이름 규칙, 검증 체크리스트(초고급 34) 통과 의무.</li>
+    </ul>
+    <h3>리뷰 문화</h3>
+    <ol class="steps">
+      <li>작은 PR — 변경 300줄 이하. 리뷰 불가능한 크기는 그 자체가 결함.</li>
+      <li>리뷰 관점 우선순위: ① 보안(검증 빠짐?) ② 데이터 안전(저장 경로?) ③ 누수(연결 정리?) ④ 설계 ⑤ 스타일(도구가 할 일).</li>
+      <li>코멘트는 코드에, 제안은 대안과 함께 — "왜 이렇게 했어요?"보다 "X 경우에 nil이 될 수 있어 보여요, FindFirstChild는 어떨까요".</li>
+      <li>리뷰는 가르침의 통로 — 신규 멤버의 첫 한 달 리뷰 밀도가 팀의 1년을 결정합니다.</li>
+    </ol>
+    <p>Rojo 기반(초고급 40)이면 GitHub PR 워크플로가 그대로 적용됩니다 — 브랜치, 자동 테스트, 승인 후 머지, 머지 시 자동 배포(챕터 45)까지가 전문가 팀의 파이프라인입니다.</p>
+  </div>
+</section>
+
+<section class="sec" id="luacareer">
+  <div class="wrap">
+    <h2><span class="num">50</span>전문가의 다음 — 기여와 성장 <span class="lv lv-pg">전문가</span></h2>
+    <p class="sec-sub">50챕터의 끝. 이제 배우는 사람에서 생태계에 돌려주는 사람으로.</p>
+    <h3>실력 증명 방법</h3>
+    <ul class="plain">
+      <li><b>오픈소스 라이브러리:</b> 직접 만든 유틸(정리 도구, 네트워킹 래퍼)을 Wally에 배포 — 문서, 테스트, 버전 관리까지 갖추면 그 자체가 포트폴리오.</li>
+      <li><b>실서비스 지표:</b> "동접 X에서 서버 프레임 Yms 유지", "데이터 사고 0건 Z개월" — 전문가 이력서는 숫자로 말합니다.</li>
+      <li><b>기술 글:</b> 장애 사후 분석, 최적화 과정을 공개 — 설명할 수 있는 지식만이 진짜 내 것입니다.</li>
+    </ul>
+    <h3>계속 성장하는 루틴</h3>
+    <ol class="steps">
+      <li>Luau RFC와 릴리즈 노트 구독 — 언어 자체가 계속 진화합니다 (네이티브 코드젠, 새 타입 기능).</li>
+      <li>다른 게임 분해: 잘 만든 게임의 네트워크 동작을 관찰하고 구조를 역설계해보는 습관.</li>
+      <li>가르치기: 커뮤니티 질문에 답하고 주니어를 리뷰 — 가르치다 막히는 곳이 자기 구멍입니다.</li>
+      <li>경계 넓히기: 일반 게임서버(Go/Rust), DB, 분산 시스템 — Roblox 밖의 지식이 Roblox 안의 설계를 한 단계 올립니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>이 강좌의 모든 코드보다 중요한 한 가지: 동작하는 가장 단순한 것을 먼저 만들고, 측정하고, 필요한 만큼만 복잡해지기. 전문가는 복잡한 코드를 쓰는 사람이 아니라 복잡함을 통제하는 사람입니다.</p></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <a class="next-level" href="index.html">
+    <div><span class="nl-label">DONE</span><span class="nl-title">Luau 전 과정 완주 — 메인으로 돌아가기</span></div>
+    <span class="nl-arrow">&rarr;</span>
+  </a>
+</div>
+
+</main>
+
+<footer class="page-foot">
+  <div class="wrap">
+    <p class="fine">이 가이드는 공식 Roblox 문서가 아닙니다.</p>
+    <nav class="foot-nav">
+      <a href="lua-master.html">&larr; 초고급</a>
+      <a href="index.html">메인</a>
+      <a href="glossary.html">용어 사전</a>
+    </nav>
+  </div>
+</footer>
+<button id="top-btn" aria-label="맨 위로">&uarr;</button>
+<script>
+(function(){
+  var prog=document.getElementById('progress');
+  function upP(){var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=h>0?(window.scrollY/h*100)+'%':'0'}
+  window.addEventListener('scroll',upP,{passive:true});
+  var secs=document.querySelectorAll('section.sec'),links=document.querySelectorAll('.nav-link');
+  var obs=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){links.forEach(function(l){l.classList.remove('active')});var a=document.querySelector('.nav-link[href="#'+e.target.id+'"]');if(a)a.classList.add('active')}})},{rootMargin:'-18% 0px -72% 0px'});
+  secs.forEach(function(s){obs.observe(s)});
+  var sb=document.getElementById('sidebar'),mb=document.getElementById('menu-btn'),ov=document.getElementById('overlay');
+  function cl(){sb.classList.remove('open');ov.classList.remove('show')}
+  mb.addEventListener('click',function(){sb.classList.toggle('open');ov.classList.toggle('show')});
+  ov.addEventListener('click',cl);links.forEach(function(l){l.addEventListener('click',cl)});
+  var tb=document.getElementById('top-btn');
+  window.addEventListener('scroll',function(){tb.classList.toggle('show',window.scrollY>500)},{passive:true});
+  tb.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})});
+})();
+</script>
+<script src="assistant.js"></script>
+</body>
+</html>
