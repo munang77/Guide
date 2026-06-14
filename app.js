@@ -209,6 +209,9 @@
   ];
 
   function searchInit() {
+    // style.css를 쓰는 페이지에서만 동작 (index.html은 자체 인라인 스타일이라 모달이 깨짐)
+    if (!document.querySelector('link[href*="style.css"]')) return;
+
     var here = location.pathname.split("/").pop() || "index.html";
 
     var ov = document.createElement("div");
