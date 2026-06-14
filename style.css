@@ -390,12 +390,4 @@ pre.code-block:hover .copy-btn,.copy-btn:focus-visible{opacity:1}
 .gsm-item.active .gsm-lv{opacity:0}
 .gsm-item.active .gsm-arrow{opacity:1;transform:translateX(0)}
 .gsm-empty{padding:34px 16px;text-align:center;color:var(--muted);font-size:13.5px}
-
-/* 푸터 단축키 안내 */
-.gsm-foot{display:flex;align-items:center;gap:14px;padding:11px 18px;border-top:1px solid var(--border-soft);
-  background:rgba(0,0,0,.15);color:var(--muted);font-size:11.5px}
-.gsm-hint{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
-.gsm-foot kbd{display:inline-grid;place-items:center;min-width:18px;height:18px;font-family:var(--mono);font-size:10.5px;font-weight:700;
-  color:var(--text-2);background:var(--panel);border:1px solid #3a3a46;border-bottom-width:2px;border-radius:5px;padding:0 4px;box-shadow:none;vertical-align:middle}
-.gsm-brand{margin-left:auto;font-family:var(--mono);font-size:10px;font-weight:800;letter-spacing:.14em;color:#54545f}
-@media(max-width:700px){.gsm-overlay{padding-top:8vh}.gss-k{display:none}.gsm-brand{display:none}.gsm-foot{gap:10px;font-size:11px}}
+@media(max-width:700px){.gsm-overlay{padding-top:8vh}.gss-k{display:none}}

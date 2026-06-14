@@ -218,12 +218,6 @@
       '<div class="gsm-bar"><span class="gsm-sico" aria-hidden="true"></span>' +
       '<input class="gsm-input" type="text" placeholder="검색…  예: 변수, 최적화, UV" aria-label="검색" autocomplete="off" spellcheck="false"></div>' +
       '<div class="gsm-results"></div>' +
-      '<div class="gsm-foot">' +
-      '<span class="gsm-hint"><kbd>↑</kbd><kbd>↓</kbd>이동</span>' +
-      '<span class="gsm-hint"><kbd>↵</kbd>열기</span>' +
-      '<span class="gsm-hint"><kbd>esc</kbd>닫기</span>' +
-      '<span class="gsm-brand">Guide</span>' +
-      '</div>' +
       '</div>';
     document.body.appendChild(ov);
 
