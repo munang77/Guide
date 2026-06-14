@@ -103,6 +103,27 @@
 
     <h3>읽는 순서</h3>
     <p>01번부터 순서대로 읽는 걸 권장합니다. 왼쪽 목록에서 원하는 챕터로 바로 이동해도 됩니다. 단축키 목록(10번)은 언제든 탭을 열어 두고 참조하세요.</p>
+
+    <h3>입문 코스 한눈에 보기</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>챕터</th><th>배우는 것</th><th>끝나면 할 수 있는 것</th></tr></thead>
+      <tbody>
+        <tr><td>01~02</td><td>설치, 화면 조작</td><td>3D 공간을 자유롭게 돌려보기</td></tr>
+        <tr><td>03~04</td><td>오브젝트·메시 다루기</td><td>블록 쌓고 모양 만들기</td></tr>
+        <tr><td>05~06</td><td>편집 도구, 모디파이어</td><td>복잡한 형태를 빠르게</td></tr>
+        <tr><td>07~08</td><td>색·재질·UV·텍스처</td><td>모델에 색과 무늬 입히기</td></tr>
+        <tr><td>09</td><td>FBX 내보내기</td><td>Studio로 모델 가져가기</td></tr>
+        <tr><td>10</td><td>단축키 정리</td><td>작업 속도 끌어올리기</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>처음 배울 때 마음가짐</h3>
+    <ul class="plain">
+      <li><b>단축키부터 외우지 마세요:</b> 자주 쓰는 G(이동)·R(회전)·S(크기)·Tab(모드 전환)만 먼저. 나머지는 쓰다 보면 자연히 외워집니다.</li>
+      <li><b>완벽한 결과보다 완성:</b> 첫 모델은 못생겨도 끝까지 만들어 보세요. 내보내기까지 한 번 해보는 게 100개 튜토리얼보다 낫습니다.</li>
+      <li><b>실수는 Ctrl+Z:</b> 마음껏 시도하세요. 되돌리기가 있으니 망가뜨려도 됩니다.</li>
+      <li><b>막히면 F3:</b> 기능 이름이 기억 안 나면 F3으로 검색하면 됩니다 — 모든 기능을 외울 필요 없습니다.</li>
+    </ul>
   </div>
 </section>
 
@@ -231,6 +252,32 @@
     <p>작업하다 보면 오브젝트가 화면 밖으로 날아갈 때가 있습니다. 오른쪽 위 아웃라이너에서 해당 오브젝트 이름을 클릭한 뒤, 넘패드 <kbd>.</kbd>을 누르면 그 오브젝트가 화면 중앙에 옵니다.</p>
 
     <div class="callout co-tip"><span class="ico">TIP</span><p>넘패드 <kbd>/</kbd>를 누르면 선택한 오브젝트만 보이고 나머지는 숨겨집니다. 복잡한 씬에서 하나만 집중해서 볼 때 유용. 다시 누르면 원래대로 돌아옵니다.</p></div>
+
+    <h3>노트북이라 넘패드가 없다면</h3>
+    <p>넘패드 없는 키보드면 위쪽 숫자키가 안 먹힙니다. 두 가지 해결책:</p>
+    <ul class="plain">
+      <li><b>설정으로 해결:</b> Edit &gt; Preferences &gt; Input &gt; <code>Emulate Numpad</code> 켜기. 이제 위쪽 숫자키 1~9가 넘패드처럼 동작합니다. (단, 메시 편집의 1/2/3 버텍스 전환과 겹치니 주의)</li>
+      <li><b>제스처로 해결:</b> 화면 오른쪽 위의 작은 좌표축(빨강·초록·파랑 공)을 클릭하면 그 방향 시점으로 전환됩니다. 마우스만으로 정면·측면·윗면 보기 가능.</li>
+      <li><b>메뉴로:</b> 뷰포트 상단 View &gt; Viewpoint 에 정면/측면/윗면이 다 있습니다.</li>
+    </ul>
+
+    <h3>마우스 휠/가운데 버튼이 불편하면</h3>
+    <ul class="plain">
+      <li><b>트랙패드:</b> Preferences &gt; Input &gt; <code>Emulate 3 Button Mouse</code> 켜면 <kbd>Alt</kbd>+왼쪽드래그로 회전할 수 있습니다.</li>
+      <li><b>회전 중심:</b> Preferences &gt; Navigation &gt; <code>Orbit Around Selection</code> 켜면, 선택한 오브젝트를 중심으로 화면이 돕니다. 안 켜면 엉뚱한 곳을 중심으로 돌아 멀미가 납니다 — 거의 필수 설정입니다.</li>
+    </ul>
+
+    <h3>시점 편의 단축키 모음</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>키</th><th>기능</th></tr></thead>
+      <tbody>
+        <tr><td>넘패드 <kbd>.</kbd></td><td>선택한 것에 화면 맞추기 (가장 자주)</td></tr>
+        <tr><td><kbd>Home</kbd></td><td>씬 전체 보기</td></tr>
+        <tr><td>넘패드 <kbd>2</kbd>/<kbd>8</kbd>/<kbd>4</kbd>/<kbd>6</kbd></td><td>시점을 조금씩 회전</td></tr>
+        <tr><td>넘패드 <kbd>9</kbd></td><td>현재 시점의 반대편으로</td></tr>
+        <tr><td>` (백틱)</td><td>시점 전환 파이 메뉴 (마우스로 선택)</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
@@ -287,6 +334,31 @@
       <li><b>숨기기:</b> <kbd>H</kbd>. 선택한 것만 숨김. <kbd>Alt</kbd>+<kbd>H</kbd>로 모두 다시 보이게.</li>
       <li><b>삭제:</b> <kbd>X</kbd> 또는 <kbd>Delete</kbd>. 확인 창이 뜸 (실수 방지용).</li>
     </ul>
+
+    <h3>실전 — 블록 위에 블록 올리기</h3>
+    <p>가장 기본적인 작업입니다. 큐브 두 개를 정확히 위아래로 쌓아 봅니다. 이것만 손에 익으면 계단, 탑, 집 다 만들 수 있습니다.</p>
+    <ol class="steps">
+      <li><kbd>Shift</kbd>+<kbd>A</kbd> &gt; Mesh &gt; Cube로 큐브 하나 추가. 기본 큐브는 한 변이 2m(원점이 중심이라 위로 1m, 아래로 1m)입니다.</li>
+      <li>다시 <kbd>Shift</kbd>+<kbd>A</kbd> &gt; Cube로 두 번째 큐브 추가. 같은 자리에 겹쳐 생깁니다.</li>
+      <li>두 번째 큐브를 선택한 채로 <kbd>G</kbd> &rarr; <kbd>Z</kbd> &rarr; <kbd>2</kbd> &rarr; Enter. 위로 정확히 2m 올라가 첫 큐브 위에 딱 얹힙니다.</li>
+      <li>왜 2일까요? 두 큐브 모두 높이가 2m라, 한 칸 올리려면 정확히 2를 이동하면 됩니다. 같은 크기를 계속 쌓으려면 G Z 2를 반복하세요.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>"왜 절반만 겹치지" "왜 공중에 떠 있지" 하는 혼란의 원인은 거의 다 <b>원점이 중심에 있어서</b>입니다. 큐브의 원점은 한가운데라, 바닥(Z=0)에 윗면을 맞추려면 큐브를 Z로 1만큼(높이의 절반) 올려야 바닥에 정확히 앉습니다.</p></div>
+
+    <h3>실전 — 바닥에 정확히 앉히기</h3>
+    <p>오브젝트가 바닥(빨간/초록 격자)을 뚫고 들어가거나 떠 있을 때, 바닥에 딱 맞추는 두 가지 방법:</p>
+    <ul class="plain">
+      <li><b>수치로:</b> 높이의 절반만큼 Z로 올리기. 기본 큐브(높이 2m)면 <kbd>G</kbd> <kbd>Z</kbd> <kbd>1</kbd>.</li>
+      <li><b>스냅으로:</b> 다른 오브젝트 위에 정확히 올리려면 스냅(자석)을 켜고 <kbd>G</kbd>로 끌어다 면에 붙이기 (다음 챕터에서 자세히).</li>
+      <li><b>N 패널 확인:</b> <kbd>N</kbd>을 눌러 오른쪽에 뜨는 Item 패널에서 Location Z 값을 직접 입력해도 됩니다.</li>
+    </ul>
+
+    <h3>여러 개를 나란히/규칙적으로 놓기</h3>
+    <ul class="plain">
+      <li><b>일렬 배치:</b> 하나 만들고 <kbd>Shift</kbd>+<kbd>D</kbd> &rarr; <kbd>X</kbd> &rarr; <kbd>3</kbd> &rarr; Enter. X로 3칸 떨어진 복제본. 다시 <kbd>Shift</kbd>+<kbd>D</kbd>를 누르면 직전 간격을 기억해 같은 간격으로 또 생깁니다.</li>
+      <li><b>격자 배치(Array 모디파이어):</b> 똑같은 것을 줄줄이(울타리, 계단, 기둥) 만들 땐 손으로 복제하지 말고 Array 모디파이어 — 개수만 입력하면 자동 복제. (06 챕터)</li>
+      <li><b>정렬:</b> 여러 개를 선택하고 <kbd>N</kbd> 패널에서 같은 축 값을 입력하면 한 줄로 정렬됩니다.</li>
+    </ul>
   </div>
 </section>
 
@@ -328,6 +400,53 @@
 
     <h3>프로포셔널 편집</h3>
     <p><span class="keys"><kbd>O</kbd></span>로 켜고 끄는 기능입니다. 켜진 상태에서 점 하나를 이동하면 주변 점들도 함께 영향을 받습니다. 자연스럽게 구부리거나 불룩하게 만들 때 유용합니다. 마우스 휠로 영향 범위를 조절합니다.</p>
+
+    <h3>정밀 이동 — 축 고정과 수치 입력</h3>
+    <p>마우스로 대충 옮기지 말고, 정확한 방향과 거리로 옮기는 습관을 들이면 작업이 훨씬 빨라집니다. 이동(<kbd>G</kbd>)·회전(<kbd>R</kbd>)·크기(<kbd>S</kbd>) 모두 같은 방식으로 동작합니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>입력</th><th>뜻</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td><kbd>G</kbd> <kbd>X</kbd></td><td>X축으로만 이동</td><td>좌우로만 움직임</td></tr>
+        <tr><td><kbd>G</kbd> <kbd>Z</kbd> <kbd>2</kbd></td><td>Z축으로 정확히 2만큼</td><td>위로 2m 올림</td></tr>
+        <tr><td><kbd>G</kbd> <kbd>Shift</kbd>+<kbd>Z</kbd></td><td>Z축 빼고 (XY 평면) 이동</td><td>바닥에 붙인 채 이동</td></tr>
+        <tr><td><kbd>R</kbd> <kbd>Z</kbd> <kbd>9</kbd> <kbd>0</kbd></td><td>Z축으로 90도 회전</td><td>정확히 직각 회전</td></tr>
+        <tr><td><kbd>S</kbd> <kbd>0</kbd></td><td>크기를 0으로 — 한 평면에 정렬</td><td>S Z 0 = 높이를 평평하게</td></tr>
+        <tr><td>이동 중 <kbd>Shift</kbd></td><td>천천히 미세 조정</td><td>정밀하게 맞출 때</td></tr>
+        <tr><td>이동 중 <kbd>Ctrl</kbd></td><td>스냅 단위로 이동</td><td>격자에 딱딱 맞춤</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>축을 두 번 누르면(예: <kbd>G</kbd> <kbd>Z</kbd> <kbd>Z</kbd>) 그 오브젝트가 기울어진 방향(로컬 축) 기준으로 이동합니다. 비스듬한 면을 따라 밀 때 유용합니다.</p></div>
+
+    <h3>스냅 — 자석처럼 달라붙기</h3>
+    <p>점·선·면을 다른 것에 정확히 붙이는 기능입니다. 윗줄 가운데 자석 아이콘으로 켜고 끄거나, 이동 중 <kbd>Ctrl</kbd>을 누르면 임시로 켜집니다.</p>
+    <ul class="plain">
+      <li><b>자석 아이콘 옆 드롭다운</b>에서 스냅 대상 선택: Vertex(점에 붙기), Edge(선에 붙기), Face(면에 붙기), Increment(격자 단위).</li>
+      <li><b>Vertex 스냅</b>이 가장 많이 쓰입니다 — 한 점을 다른 점에 정확히 겹칠 때.</li>
+      <li><b>Snap With</b> 옵션으로 "선택의 어디를 기준으로 붙일지"(Center/Closest/Active) 지정.</li>
+      <li>부품을 빈틈없이 이어 붙이거나, 바닥 격자에 정확히 올릴 때 필수입니다.</li>
+    </ul>
+
+    <h3>피벗과 기준점 바꾸기</h3>
+    <p>회전·크기 조절이 "어디를 중심으로" 일어날지 정하는 설정입니다. 윗줄 가운데 점 두 개 아이콘(Pivot Point)에서 바꿉니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>기준점</th><th>중심</th><th>쓰임</th></tr></thead>
+      <tbody>
+        <tr><td>Median Point</td><td>선택한 것들의 평균 위치</td><td>기본값</td></tr>
+        <tr><td>3D Cursor</td><td>3D 커서 위치</td><td>특정 점 기준 회전 (<kbd>.</kbd>로 메뉴)</td></tr>
+        <tr><td>Individual Origins</td><td>각자 자기 중심</td><td>여러 개를 제자리에서 각각 회전</td></tr>
+        <tr><td>Active Element</td><td>마지막 선택한 것</td><td>한 점 기준 정렬</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>3D 커서를 원하는 곳에 놓으려면 <kbd>Shift</kbd>+우클릭. 원점으로 되돌리려면 <kbd>Shift</kbd>+<kbd>C</kbd>. 선택한 것 위로 커서를 보내려면 <kbd>Shift</kbd>+<kbd>S</kbd> &gt; Cursor to Selected.</p></div>
+
+    <h3>알아두면 편한 정리 기능</h3>
+    <ul class="plain">
+      <li><b>Merge by Distance:</b> 거의 겹친 점들을 한 번에 합치기. 전체 선택 &gt; <kbd>M</kbd> &gt; By Distance. 임포트한 메시의 갈라진 점 정리에 필수.</li>
+      <li><b>Recalculate Normals:</b> 면 방향 자동 정리 — <kbd>Shift</kbd>+<kbd>N</kbd> (다음 챕터에서 자세히).</li>
+      <li><b>Hide/Reveal:</b> <kbd>H</kbd>로 선택한 것 숨기기, <kbd>Alt</kbd>+<kbd>H</kbd>로 전부 다시 보이기. 복잡한 안쪽을 작업할 때.</li>
+      <li><b>Checker Deselect:</b> 한 칸 걸러 선택 — 루프 선택 후 Select &gt; Checker Deselect. 규칙적인 패턴 작업에.</li>
+      <li><b>Select Similar (<kbd>Shift</kbd>+<kbd>G</kbd>):</b> 비슷한 것 한 번에 선택 (같은 크기 면, 같은 방향 등).</li>
+    </ul>
   </div>
 </section>
 
@@ -404,6 +523,44 @@
     <h3>모디파이어 적용 (Apply)</h3>
     <p><span class="term" tabindex="0" data-tip="원본을 직접 건드리지 않고 효과(복제, 휘기, 둥글리기 등)를 입히는 블렌더 기능">모디파이어</span> 결과를 실제 메시로 굳히는 것. 적용 버튼(v 체크 아이콘) 클릭. FBX 내보내기 시에는 Export 옵션에서 <code>Apply Modifiers</code>를 켜면 자동으로 적용됩니다.</p>
     <div class="callout co-warn"><span class="ico">!!</span><p>적용(Apply)하면 되돌리기(Ctrl+Z)를 저장 후에는 쓸 수 없습니다. 적용 전에 백업 파일을 저장해 두는 습관을 들이세요.</p></div>
+
+    <h3>실전 1 — Array로 똑같은 것 줄줄이 만들기</h3>
+    <p>계단, 울타리, 창살, 기둥처럼 같은 모양을 반복할 때. 손으로 복제하지 마세요.</p>
+    <ol class="steps">
+      <li>반복할 오브젝트 하나 선택 &gt; Add Modifier &gt; <code>Array</code>.</li>
+      <li><b>Count</b>에 개수 입력 (예: 10 = 10개).</li>
+      <li><b>Factor X/Y/Z</b>로 간격 조절. Factor X = 1이면 자기 폭만큼 딱 붙어서, 1.2면 살짝 띄워서 배치됩니다.</li>
+      <li>계단을 만들려면 Factor X에 1, Factor Z에 1을 같이 주면 옆+위로 한 칸씩 = 대각선 계단.</li>
+      <li>마음에 들면 Apply. 원본 하나만 수정하면 전부 바뀌니, 수정이 끝난 뒤 Apply하세요.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Array를 두 개 겹치면 격자(가로 X Array + 세로 Y Array)가 됩니다. 바닥 타일, 벽돌 벽을 순식간에 만들 수 있습니다.</p></div>
+
+    <h3>실전 2 — Mirror로 좌우 대칭 모델</h3>
+    <ol class="steps">
+      <li>오브젝트의 절반만 만들 준비를 하고 Add Modifier &gt; <code>Mirror</code>.</li>
+      <li>기본은 X축 대칭. 한쪽을 만들면 반대쪽이 거울처럼 자동 생성됩니다.</li>
+      <li><b>Clipping</b> 켜기 — 가운데 경계에서 점들이 서로 통과하지 않게 막아, 중앙에 틈/겹침이 안 생깁니다.</li>
+      <li>캐릭터, 차, 갑옷처럼 좌우 같은 것은 작업량이 절반으로 줄어듭니다.</li>
+    </ol>
+
+    <h3>실전 3 — Boolean으로 구멍 뚫기</h3>
+    <ol class="steps">
+      <li>구멍 낼 본체와, 뚫을 모양의 오브젝트(예: 원기둥)를 겹쳐 놓습니다.</li>
+      <li>본체 선택 &gt; Add Modifier &gt; <code>Boolean</code> &gt; Operation을 <b>Difference</b>(빼기)로.</li>
+      <li>Object 칸에 뚫을 원기둥을 지정.</li>
+      <li>원기둥을 숨기거나(<kbd>H</kbd>) 다른 곳에 치우면 본체에 구멍이 뚫린 게 보입니다.</li>
+      <li>Apply 후 뚫는 데 쓴 원기둥은 삭제. 창문, 문, 파이프 구멍에 유용합니다.</li>
+    </ol>
+    <div class="callout co-warn"><span class="ico">!!</span><p>Boolean은 가끔 면이 지저분해집니다(엉킨 토폴로지). 게임 에셋은 Boolean 후 정리(Merge by Distance, 면 다시 만들기)를 하거나, 단순한 형태는 에디트 모드에서 직접 뚫는 게 깔끔합니다.</p></div>
+
+    <h3>모디파이어 순서가 중요합니다</h3>
+    <p>모디파이어는 위에서 아래로 순서대로 적용됩니다. 순서가 바뀌면 결과가 완전히 달라집니다.</p>
+    <ul class="plain">
+      <li><b>Mirror &rarr; Subdivision 순서:</b> 먼저 대칭 만들고 부드럽게. (보통 이게 맞음)</li>
+      <li><b>Array &rarr; Bevel 순서:</b> 먼저 복제하고 전체 엣지를 둥글게.</li>
+      <li>순서는 모디파이어 목록에서 드래그(점 여섯 개 핸들)로 바꿉니다.</li>
+      <li>일반 규칙: 형태를 만드는 것(Mirror, Array, Boolean)을 위에, 다듬는 것(Subdivision, Bevel)을 아래에.</li>
+    </ul>
   </div>
 </section>
 
@@ -599,6 +756,15 @@
         <tr><td class="cat-cell">오브젝트</td><td><kbd>Ctrl</kbd>+<kbd>P</kbd></td><td>부모 설정</td></tr>
         <tr><td class="cat-cell">오브젝트</td><td><kbd>Alt</kbd>+<kbd>P</kbd></td><td>부모 해제</td></tr>
         <tr><td class="cat-cell">오브젝트</td><td><kbd>M</kbd></td><td>컬렉션(폴더)으로 이동</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td>이동 중 <kbd>Ctrl</kbd></td><td>스냅(격자/점) 단위로 이동</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td>이동 중 <kbd>Shift</kbd></td><td>천천히 미세 조정</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>Shift</kbd>+<kbd>Tab</kbd></td><td>스냅(자석) 켜기/끄기</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>Shift</kbd>+우클릭</td><td>3D 커서 위치 옮기기</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>Shift</kbd>+<kbd>C</kbd></td><td>3D 커서를 원점으로</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>Shift</kbd>+<kbd>S</kbd></td><td>스냅 메뉴 (커서/선택 정렬)</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>.</kbd> (마침표)</td><td>피벗(기준점) 선택 메뉴</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>,</kbd> (쉼표)</td><td>변환 좌표계 선택 메뉴</td></tr>
+        <tr><td class="cat-cell">정렬·스냅</td><td><kbd>S</kbd> <kbd>X</kbd> <kbd>0</kbd></td><td>X축으로 평평하게 정렬</td></tr>
         <tr><td class="cat-cell">선택</td><td><kbd>A</kbd></td><td>전체 선택 / 해제</td></tr>
         <tr><td class="cat-cell">선택</td><td><kbd>B</kbd></td><td>박스(사각형) 범위 선택</td></tr>
         <tr><td class="cat-cell">선택</td><td><kbd>C</kbd></td><td>원형 브러시로 선택</td></tr>
@@ -622,6 +788,10 @@
         <tr><td class="cat-cell">에디트 모드</td><td><kbd>Ctrl</kbd>+<kbd>X</kbd></td><td>선택 삭제하고 주변 메시 자동으로 메우기</td></tr>
         <tr><td class="cat-cell">에디트 모드</td><td><kbd>V</kbd></td><td>메시 찢기 (Rip)</td></tr>
         <tr><td class="cat-cell">에디트 모드</td><td><kbd>J</kbd></td><td>두 점 사이 직선 연결</td></tr>
+        <tr><td class="cat-cell">에디트 모드</td><td><kbd>M</kbd> &gt; By Distance</td><td>겹친 점들 한 번에 합치기 (정리)</td></tr>
+        <tr><td class="cat-cell">에디트 모드</td><td><kbd>Shift</kbd>+<kbd>G</kbd></td><td>비슷한 것 한 번에 선택 (Select Similar)</td></tr>
+        <tr><td class="cat-cell">에디트 모드</td><td><kbd>Alt</kbd>+<kbd>Z</kbd></td><td>X-Ray (투시) — 뒤쪽도 선택</td></tr>
+        <tr><td class="cat-cell">에디트 모드</td><td><kbd>Ctrl</kbd>+<kbd>+</kbd> / <kbd>-</kbd></td><td>선택 영역 늘리기 / 줄이기</td></tr>
         <tr><td class="cat-cell">UV</td><td><kbd>U</kbd></td><td>UV 펼치기 메뉴</td></tr>
         <tr><td class="cat-cell">UV 에디터</td><td><kbd>L</kbd></td><td>연결된 UV 섬(Island) 선택</td></tr>
         <tr><td class="cat-cell">UV 에디터</td><td><kbd>P</kbd></td><td>UV 섬들 자동 배치 (Pack Islands)</td></tr>

@@ -113,6 +113,25 @@ project/
       <li>텍스처 원본(PSD/KRA)과 베이크 산출물(PNG)을 분리 — 산출물은 재생성 가능하므로 LFS 부담을 줄일 수 있음.</li>
     </ul>
     <div class="callout co-tip"><span class="ico">TIP</span><p>파이프라인의 성공 기준은 "새 멤버가 문서만 읽고 반나절 안에 <span class="term" tabindex="0" data-tip="모델, 그림, 소리처럼 게임 제작에 쓰는 재료 파일">에셋</span> 하나를 규격대로 납품할 수 있는가" 입니다.</p></div>
+
+    <h3>에셋 납품 전 최종 점검표</h3>
+    <p>실무에서 에셋을 넘기기 직전 이 표대로 확인하면 반려가 줄어듭니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>항목</th><th>확인 내용</th></tr></thead>
+      <tbody>
+        <tr><td>스케일 적용</td><td>Ctrl+A로 Scale 1,1,1 — Studio에서 안 틀어지게</td></tr>
+        <tr><td>원점 위치</td><td>바닥 중앙 또는 약속된 피벗 위치</td></tr>
+        <tr><td>회전 0</td><td>정면을 보게 정렬 후 Rotation 0</td></tr>
+        <tr><td>네이밍</td><td>SM_구역_이름_번호 규칙 준수</td></tr>
+        <tr><td>폴리곤 예산</td><td>합의된 트라이앵글 수 이하</td></tr>
+        <tr><td>UV</td><td>겹침 없음(라이트맵용은 별도), 0~1 안에</td></tr>
+        <tr><td>텍스처 규격</td><td>해상도·채널 패킹·컬러스페이스 확인</td></tr>
+        <tr><td>모디파이어</td><td>적용 또는 Export 시 Apply 옵션</td></tr>
+        <tr><td>불필요 데이터</td><td>Orphan Data 정리, 숨은 오브젝트 제거</td></tr>
+        <tr><td>미리보기</td><td>실제 엔진/뷰어에서 한 번 확인</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>이 점검표 자체를 파이썬 스크립트로 자동 검사하게 만들면(스케일 1인지, 네이밍 맞는지) 전문가 파이프라인의 완성입니다 — 30챕터 Python과 연결됩니다.</p></div>
   </div>
 </section>
 

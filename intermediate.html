@@ -161,6 +161,34 @@
 
     <h3>Multiresolution 모디파이어</h3>
     <p>Dyntopo 대신 쓸 수 있는 방법입니다. 모디파이어를 붙이고 Subdivide 버튼을 눌러 레벨을 올리면, 낮은 레벨에서 큰 형태를 잡고 높은 레벨에서 세밀한 디테일을 추가할 수 있습니다. UV와 리깅이 유지됩니다.</p>
+
+    <h3>스컬프트 작업 순서 (큰 형태 → 디테일)</h3>
+    <p>처음부터 주름을 파지 마세요. 항상 큰 덩어리에서 작은 디테일로 내려갑니다.</p>
+    <ol class="steps">
+      <li><b>실루엣:</b> Grab·Draw로 전체 비율과 큰 덩어리부터. 멀리서 봐도 무엇인지 알 수 있게.</li>
+      <li><b>2차 형태:</b> Clay Strips·Inflate로 근육, 볼, 살집 같은 중간 덩어리.</li>
+      <li><b>디테일:</b> Crease·Draw Sharp로 주름, 흠집, 갑옷 엣지. 이때 Dyntopo나 Multires 레벨을 올림.</li>
+      <li><b>마감:</b> Smooth로 어색한 곳 정리. 과하면 Mask로 보호하고 부분만.</li>
+    </ol>
+
+    <h3>대칭과 마스크 활용</h3>
+    <ul class="plain">
+      <li><b>X 대칭(<kbd>X</kbd>):</b> 얼굴·갑옷처럼 좌우 같은 것은 켜고 한쪽만 작업. Y·Z 대칭도 가능.</li>
+      <li><b>Radial 대칭:</b> 방패 문양, 바퀴처럼 방사형으로 반복되는 형태에 (Symmetry 패널에서 횟수 지정).</li>
+      <li><b>마스크 반전(<kbd>Ctrl</kbd>+<kbd>I</kbd>):</b> 보호할 곳 대신 작업할 곳만 빠르게 지정.</li>
+      <li><b>마스크 지우기(<kbd>Alt</kbd>+<kbd>M</kbd>):</b> 전체 마스크 해제.</li>
+      <li><b>Face Sets:</b> 메시를 영역으로 나눠 관리 — 갑옷 조각별로 따로 스컬프트할 때.</li>
+    </ul>
+
+    <h3>게임 에셋으로 쓰려면 — 리토폴로지 예고</h3>
+    <p>스컬프트 결과는 폴리곤이 수십만~수백만이라 그대로 게임에 못 씁니다. 흐름은 이렇습니다:</p>
+    <ol class="steps">
+      <li>고폴리곤으로 스컬프트 (디테일 풍부한 원본).</li>
+      <li>그 위에 저폴리곤 메시를 새로 만듦 (리토폴로지 — 고급에서 자세히).</li>
+      <li>고폴리곤의 디테일을 <span class="term" tabindex="0" data-tip="복잡한 디테일이나 조명을 이미지 한 장으로 구워내 저장하는 것">베이킹</span>으로 노멀 맵에 구워 저폴리곤에 입힘.</li>
+      <li>결과: 가벼운 메시 + 디테일해 보이는 표면. 게임 캐릭터의 표준 제작법입니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>로블록스 캐릭터/소품 정도면 스컬프트를 가볍게만 쓰고(Multires 2~3레벨) 바로 노멀 맵을 베이킹하는 게 효율적입니다. 영화급 디테일은 게임에서 거의 보이지 않습니다.</p></div>
   </div>
 </section>
 
@@ -346,6 +374,36 @@
     <h3>EEVEE Bloom 설정</h3>
     <p>Emission(발광) 재질에 빛 번짐 효과를 주려면 EEVEE의 Bloom을 켜세요:</p>
     <p>Properties &gt; Render &gt; Bloom 체크. Threshold: 0.8 (이 밝기 이상에서만 번짐 발생). Intensity: 0.05~0.1. Emission Strength가 높은 재질이 실제로 빛나는 것처럼 보입니다.</p>
+    <div class="callout co-warn"><span class="ico">!!</span><p>블렌더 4.2부터는 EEVEE가 EEVEE Next로 바뀌어 Bloom이 별도 항목이 아니라 Compositor의 Glare로 처리됩니다. 버전에 따라 메뉴 위치가 다를 수 있습니다.</p></div>
+
+    <h3>조명 다루는 실전 팁</h3>
+    <ul class="plain">
+      <li><b>밝기 단위:</b> Point/Spot/Area는 Power(W) 값으로 조절. 너무 어두우면 100, 1000처럼 크게 올려보세요.</li>
+      <li><b>그림자 부드럽게:</b> 광원의 Radius(크기)를 키우면 그림자 가장자리가 부드러워집니다. 0이면 칼같은 그림자.</li>
+      <li><b>색온도:</b> 광원 Color를 따뜻한 주황(실내/노을)이나 차가운 파랑(달빛/그늘)으로 — 분위기가 확 삽니다.</li>
+      <li><b>광원도 보이게:</b> 마법 구체 같은 건 광원만으론 안 보입니다. Emission 재질의 작은 구를 광원 위치에 같이 두세요.</li>
+      <li><b>빠른 배치:</b> 광원을 선택하고 시점을 원하는 각도로 맞춘 뒤, 광원을 그 방향으로 옮기면 미리보기(Rendered 뷰)로 즉시 확인.</li>
+    </ul>
+
+    <h3>렌더 품질 설정 (Cycles)</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>설정</th><th>위치</th><th>추천</th></tr></thead>
+      <tbody>
+        <tr><td>Samples</td><td>Render Properties &gt; Sampling</td><td>프리뷰 64, 최종 256~512</td></tr>
+        <tr><td>Denoise (노이즈 제거)</td><td>Sampling &gt; Denoise 체크</td><td>켜기 — 적은 샘플로도 깨끗</td></tr>
+        <tr><td>Device</td><td>Preferences &gt; System</td><td>GPU 있으면 GPU Compute</td></tr>
+        <tr><td>Max Bounces</td><td>Light Paths</td><td>기본값으로 충분</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>이미지로 저장하기 (출력 설정)</h3>
+    <ol class="steps">
+      <li>Output Properties(프린터 아이콘)에서 해상도 설정 — 보통 1920×1080.</li>
+      <li><kbd>F12</kbd>로 렌더링 시작. 렌더 창이 뜹니다.</li>
+      <li>렌더 창에서 Image &gt; Save As로 PNG 저장. 배경 투명이 필요하면 Output에서 <code>RGBA</code> + PNG.</li>
+      <li>이펙트 프리뷰처럼 빠르게 보려면 EEVEE로 전환 후 F12 — 거의 즉시 나옵니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>게임 이펙트 메시(검기, 마법진 등)의 홍보용 이미지를 만들 땐 EEVEE + Bloom + 검은 배경이면 충분합니다. Cycles는 캐릭터 포트폴리오처럼 사실적 품질이 필요할 때만 쓰세요.</p></div>
   </div>
 </section>
 
@@ -493,6 +551,28 @@
       <li>외부 애드온(.zip 파일): 우상단 <code>Install...</code> 클릭 &rarr; zip 파일 선택 &rarr; 체크박스 켜기.</li>
       <li>설정이 유지되도록 우하단 <code>Save Preferences</code> 클릭 (또는 Auto-Save Preferences 켜기).</li>
     </ol>
+
+    <h3>꼭 켜둘 내장 애드온 활용법</h3>
+    <ul class="plain">
+      <li><b>Node Wrangler — 거의 필수:</b> 셰이더 작업이 몇 배 빨라집니다. 텍스처 노드 선택 후 <kbd>Ctrl</kbd>+<kbd>T</kbd>면 연결에 필요한 노드가 자동 생성, <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+클릭으로 어느 노드든 결과 미리보기.</li>
+      <li><b>LoopTools — 정리의 친구:</b> 삐뚤한 점들을 우클릭 &gt; LoopTools &gt; <code>Circle</code>로 완벽한 원으로, <code>Space</code>로 균등 간격, <code>Relax</code>로 부드럽게. 구멍을 둥글게 다듬을 때 최고.</li>
+      <li><b>Bool Tool — 빠른 불리언:</b> 두 오브젝트 선택 후 <kbd>Ctrl</kbd>+<kbd>-</kbd>로 즉시 빼기. 06챕터 Boolean을 단축키로.</li>
+      <li><b>Extra Objects (Mesh/Curve):</b> 기본 도형 외에 더 많은 시작 도형(톱니바퀴, 돌, 매듭 등) 추가.</li>
+    </ul>
+
+    <h3>게임 에셋 제작에 유용한 외부 애드온</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>애드온</th><th>하는 일</th><th>비고</th></tr></thead>
+      <tbody>
+        <tr><td>UVPackmaster</td><td>UV 섬을 빈틈없이 자동 배치 — 텍스처 공간 절약</td><td>유료, 강력</td></tr>
+        <tr><td>TexTools</td><td>UV/텍스처/베이킹 도구 모음. 무료</td><td>게임 에셋 필수급</td></tr>
+        <tr><td>Quad Remesher / 내장 Remesh</td><td>지저분한 메시를 깔끔한 사각 면으로 재구성</td><td>리토폴로지 보조</td></tr>
+        <tr><td>Auto-Rig Pro</td><td>캐릭터 리깅 자동화 + 게임 엔진 내보내기</td><td>유료, 캐릭터 작업 시</td></tr>
+        <tr><td>Blender to Roblox 류</td><td>로블록스 규격(스케일/축)에 맞춰 내보내기 보조</td><td>커뮤니티 제작</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-warn"><span class="ico">!!</span><p>외부 애드온은 출처를 확인하고, 자신의 블렌더 버전과 호환되는지 보세요. 버전이 안 맞으면 켜지지 않거나 에러가 납니다. 공식 Extensions 플랫폼(extensions.blender.org)의 것이 가장 안전합니다.</p></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>애드온을 많이 깔수록 시작이 느려지고 충돌 위험도 커집니다. "실제로 매번 쓰는 것"만 켜두세요. 처음엔 Node Wrangler, LoopTools 둘만으로도 충분합니다.</p></div>
   </div>
 </section>
 

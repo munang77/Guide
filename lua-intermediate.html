@@ -115,6 +115,30 @@ player.level = player.level + <span class="num">1</span></pre>
     <span class="fn">print</span>(key, value)
 <span class="kw">end</span></pre>
     <div class="callout co-tip"><span class="ico">TIP</span><p>Luau의 인덱스는 1부터입니다. 다른 언어의 0부터에 익숙하다면 가장 자주 틀리는 부분.</p></div>
+
+    <h3>자주 쓰는 테이블 함수</h3>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>함수</th><th>하는 일</th><th>예시</th></tr></thead>
+      <tbody>
+        <tr><td><code>table.insert(t, v)</code></td><td>끝에 추가</td><td>table.insert(list, "사과")</td></tr>
+        <tr><td><code>table.insert(t, i, v)</code></td><td>i번째에 끼워넣기</td><td>table.insert(list, 2, "배")</td></tr>
+        <tr><td><code>table.remove(t, i)</code></td><td>i번째 제거</td><td>table.remove(list, 1)</td></tr>
+        <tr><td><code>table.find(t, v)</code></td><td>값의 위치 찾기 (없으면 nil)</td><td>table.find(list, "사과")</td></tr>
+        <tr><td><code>#t</code></td><td>배열 길이</td><td>#list</td></tr>
+        <tr><td><code>table.sort(t)</code></td><td>정렬</td><td>table.sort(scores)</td></tr>
+        <tr><td><code>table.concat(t, sep)</code></td><td>글자로 이어붙이기</td><td>table.concat(names, ", ")</td></tr>
+        <tr><td><code>table.clear(t)</code></td><td>전부 비우기</td><td>table.clear(temp)</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>알아두면 편한 것들</h3>
+    <ul class="plain">
+      <li><b>배열 vs 딕셔너리 순회:</b> 순서가 있는 목록은 <code>ipairs</code>, 이름표 보관함은 <code>pairs</code>. Luau에서는 그냥 <code>for k, v in t do</code>도 됩니다.</li>
+      <li><b>중간에 nil 금지:</b> 배열 중간을 nil로 비우면 <code>#</code>와 ipairs가 거기서 멈춥니다. 제거는 꼭 table.remove로.</li>
+      <li><b>테이블은 참조:</b> <code>b = a</code>는 복사가 아니라 같은 테이블을 가리킵니다. b를 바꾸면 a도 바뀝니다. 진짜 복사는 table.clone(t).</li>
+      <li><b>중첩 테이블:</b> 테이블 안에 테이블을 넣어 구조를 만듭니다 — <code>players[name] = {hp=100, items={}}</code>.</li>
+      <li><b>키로 빠른 조회:</b> 목록에서 매번 find로 찾기보다, 딕셔너리(이름→데이터)로 만들면 즉시 찾습니다.</li>
+    </ul>
   </div>
 </section>
 

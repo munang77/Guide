@@ -398,6 +398,32 @@
     </ol>
 
     <div class="callout co-warn"><span class="ico">!!</span><p>Geometry Nodes로 만든 인스턴스는 FBX 내보내기 전에 반드시 <b>Realize Instances</b> 노드를 추가하거나 모디파이어를 Apply해야 합니다. 안 하면 메시가 비어있는 상태로 내보내집니다.</p></div>
+
+    <h3>자주 쓰는 핵심 노드</h3>
+    <p>처음엔 이 노드들만 알아도 대부분의 작업이 됩니다. <kbd>Shift</kbd>+<kbd>A</kbd>로 추가하거나 검색합니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>노드</th><th>하는 일</th><th>대표 용도</th></tr></thead>
+      <tbody>
+        <tr><td>Distribute Points on Faces</td><td>면 위에 점을 흩뿌림</td><td>나무·풀·바위 심을 위치</td></tr>
+        <tr><td>Instance on Points</td><td>각 점에 오브젝트 복제 배치</td><td>숲, 군중, 자갈밭</td></tr>
+        <tr><td>Random Value</td><td>점마다 무작위 값</td><td>크기·회전·종류 랜덤</td></tr>
+        <tr><td>Rotate / Scale Instances</td><td>인스턴스 회전·크기 변경</td><td>자연스러운 변화</td></tr>
+        <tr><td>Set Position</td><td>점 위치 옮기기</td><td>노이즈로 울퉁불퉁하게</td></tr>
+        <tr><td>Noise Texture</td><td>자연스러운 무작위 패턴</td><td>분포 마스크, 높이</td></tr>
+        <tr><td>Join Geometry</td><td>여러 지오메트리 합치기</td><td>여러 레이어 결합</td></tr>
+        <tr><td>Realize Instances</td><td>인스턴스를 실제 메시로</td><td>내보내기 전 필수</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>입문자가 자주 막히는 곳</h3>
+    <ul class="plain">
+      <li><b>Group Input/Output 연결:</b> 노드 트리는 항상 왼쪽 Group Input(원본 지오메트리)에서 시작해 오른쪽 Group Output(결과)로 끝나야 화면에 나타납니다.</li>
+      <li><b>소켓 색이 다르면 연결 주의:</b> 초록(지오메트리), 보라(벡터), 회색(숫자), 파랑(불리언). 색이 다르면 자동 변환되거나 연결이 안 됩니다.</li>
+      <li><b>스피너로 미리보기:</b> 노드 헤더의 <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+클릭(Node Wrangler 켜진 경우)으로 중간 결과를 뷰포트에서 즉시 확인.</li>
+      <li><b>인스턴스 vs 실제 메시:</b> 인스턴스 상태는 가볍지만, 점 색칠·UV 등 일부 작업은 Realize 후에만 됩니다.</li>
+      <li><b>Named Attribute:</b> 분포에서 만든 값(밀도, 크기)을 뒷단으로 넘길 때 이름표로 전달 — 복잡한 트리의 정리 도구.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>Geometry Nodes는 한 번에 완벽한 트리를 만들려 하지 말고, "점 뿌리기 → 확인 → 복제 배치 → 확인 → 랜덤 추가" 처럼 한 노드씩 붙이며 결과를 보는 게 빠릅니다. 막히면 노드를 끊어 어디까지 되는지 확인하세요.</p></div>
   </div>
 </section>
 
@@ -490,6 +516,32 @@
         <tr><td>Displacement</td><td>실제로 표면을 올록볼록하게. Cycles 전용</td><td>Texture &rarr; Displacement 노드 &rarr; Material Output의 Displacement</td></tr>
       </tbody>
     </table></div>
+
+    <h3>게임용 PBR 텍스처 연결 (표준)</h3>
+    <p>게임 엔진과 호환되는 재질은 보통 이 텍스처들을 Principled BSDF에 연결합니다. <b>색 텍스처는 sRGB, 데이터 텍스처는 반드시 Non-Color</b>로 설정하세요.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>텍스처</th><th>연결 위치</th><th>컬러스페이스</th></tr></thead>
+      <tbody>
+        <tr><td>Base Color (Albedo)</td><td>Base Color</td><td>sRGB</td></tr>
+        <tr><td>Roughness</td><td>Roughness</td><td>Non-Color</td></tr>
+        <tr><td>Metallic</td><td>Metallic</td><td>Non-Color</td></tr>
+        <tr><td>Normal</td><td>Normal Map 노드 경유</td><td>Non-Color</td></tr>
+        <tr><td>Ambient Occlusion</td><td>Base Color에 Mix(곱하기)</td><td>Non-Color</td></tr>
+        <tr><td>Emission</td><td>Emission Color + Strength</td><td>sRGB</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-warn"><span class="ico">!!</span><p>가장 흔한 실수: Roughness/Normal 텍스처를 sRGB로 두는 것. 이러면 재질이 미묘하게 틀어집니다. Image Texture 노드의 Color Space를 꼭 <code>Non-Color</code>로 바꾸세요.</p></div>
+
+    <h3>알아두면 쓸모있는 노드 조합</h3>
+    <ul class="plain">
+      <li><b>ColorRamp:</b> 흑백 값을 색이나 단계로 변환 — 마스크를 그라데이션이나 경계로. 만능 조절기.</li>
+      <li><b>Mix(Color):</b> 두 텍스처/색을 마스크로 섞기 — 이끼 낀 바위, 젖은 부분.</li>
+      <li><b>Fresnel / Layer Weight:</b> 보는 각도에 따라 변화 — 가장자리 발광(림 라이트), 물의 반사.</li>
+      <li><b>Geometry &gt; Pointiness + ColorRamp:</b> 튀어나온 모서리만 밝게 — 마모된 금속 엣지, 먼지 쌓인 홈.</li>
+      <li><b>Object/Generated 좌표:</b> UV 없이도 텍스처 투영 — 단, 게임 베이킹 시엔 UV 기반으로 바꿔야 함.</li>
+      <li><b>Bump + Normal 동시:</b> Normal Map의 큰 디테일 + Bump의 작은 디테일을 겹쳐 더 풍부하게.</li>
+    </ul>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>프로시저럴 노드(좌표 기반 무늬)는 무한히 정밀하지만 게임으로 못 갑니다. 최종적으로 텍스처에 <span class="term" tabindex="0" data-tip="복잡한 디테일이나 조명을 이미지 한 장으로 구워내 저장하는 것">베이킹</span>해야 하니, 게임용이면 처음부터 "이 노드가 베이킹 가능한가"를 염두에 두세요.</p></div>
   </div>
 </section>
 

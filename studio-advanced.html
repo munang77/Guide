@@ -239,6 +239,28 @@ h2 .num{color:#5aa7ff;background:rgba(90,167,255,.13);border-color:rgba(90,167,2
       <li>메시: <span class="prop-tag pt-r">CanCollide: false</span> + CollisionFidelity는 Box로.</li>
       <li>계단도 마찬가지 — 보이는 건 계단, 충돌은 경사 Wedge 하나. 캐릭터가 덜컹거리지 않고 미끄러지듯 올라갑니다. 대형 게임들의 표준 기법입니다.</li>
     </ol>
+
+    <h3>CollisionFidelity — 메시 충돌 정밀도</h3>
+    <p>MeshPart는 충돌 형태를 4단계로 정할 수 있습니다(Properties &gt; CollisionFidelity). 정밀할수록 무겁습니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>모드</th><th>정밀도</th><th>성능</th><th>쓰임</th></tr></thead>
+      <tbody>
+        <tr><td>Box</td><td>가장 단순 (직육면체)</td><td>가장 가벼움</td><td>장식, 멀리 있는 것</td></tr>
+        <tr><td>Hull</td><td>외곽만 감싸기</td><td>가벼움</td><td>대충 막으면 되는 바위</td></tr>
+        <tr><td>Default</td><td>중간</td><td>보통</td><td>일반 구조물</td></tr>
+        <tr><td>PreciseConvexDecomposition</td><td>가장 정밀</td><td>무거움</td><td>구멍 통과 등 정밀 필요 시만</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>대부분의 맵 메시는 Box나 Hull로 충분합니다. 정밀 모드는 "캐릭터가 그 구멍을 정확히 통과해야 한다" 같은 특수한 경우에만. 무심코 Precise로 둔 메시 수백 개가 렉의 원인인 경우가 많습니다.</p></div>
+
+    <h3>충돌 확인하고 디버깅하기</h3>
+    <ul class="plain">
+      <li><b>충돌 형태 보기:</b> Studio 설정에서 Visualization &gt; <code>Show Decomposition Geometry</code>를 켜면 실제 충돌 형태가 색으로 보입니다. 보이는 모양과 다르면 여기서 확인.</li>
+      <li><b>벽에 끼임:</b> 캐릭터가 벽에 박히거나 떨면 충돌 형태가 너무 복잡하거나 겹친 것 — 단순 충돌체로 교체.</li>
+      <li><b>바닥 통과(떨어짐):</b> CanCollide가 꺼져 있거나, 얇은 파트(두께 1 미만)는 빠른 속도에서 통과할 수 있음 — 두께를 늘리거나 아래 보강 파트.</li>
+      <li><b>안 닿아야 할 게 닿음:</b> 장식인데 길을 막으면 CanCollide false.</li>
+      <li><b>투명벽으로 경계:</b> 맵 밖으로 못 나가게 Transparency 1 + CanCollide true 파트로 보이지 않는 벽을 두르세요.</li>
+    </ul>
   </div>
 </section>
 
@@ -313,6 +335,37 @@ ReplicatedStorage
       </tbody>
     </table></div>
     <div class="callout co-tip"><span class="ico">TIP</span><p>테마의 완성은 통일감입니다. 위 표에서 한 줄을 골랐으면 그 팔레트 밖의 색은 포인트 5% 이하로만. 사막 맵에 쨍한 초록 나무 하나가 전체를 싸구려로 만듭니다.</p></div>
+
+    <h3>테마 적용 순서</h3>
+    <ol class="steps">
+      <li><b>Lighting부터:</b> 표의 ClockTime·Brightness를 먼저 적용. 전체 톤이 한 번에 잡힙니다.</li>
+      <li><b>Atmosphere 추가:</b> Lighting에 Atmosphere가 없으면 추가 &gt; Density·Haze·Color 입력. 원근감과 분위기가 살아납니다.</li>
+      <li><b>머티리얼 통일:</b> 바닥·벽·주요 구조물을 테마 머티리얼로. (숲=Grass/Wood, 던전=Slate, 화산=Basalt)</li>
+      <li><b>포인트 조명:</b> 횃불·네온·빛기둥 같은 국소 광원으로 시선 유도와 디테일.</li>
+      <li><b>소품과 파티클:</b> 마지막에 표의 소품(버섯, 백골, 불씨)과 파티클로 생기를.</li>
+    </ol>
+
+    <h3>분위기를 끌어올리는 연출 디테일</h3>
+    <ul class="plain">
+      <li><b>빛기둥(God Rays):</b> 반투명(Transparency 0.9) Neon 원기둥을 창문·천장 구멍 아래 비스듬히 — 신전·던전에 극적인 빛내림.</li>
+      <li><b>젖은 바닥:</b> 바닥 파트의 Reflectance를 0.1~0.3 — 밤 도시·비 온 뒤 느낌. 네온이 반사돼 화려해집니다.</li>
+      <li><b>안개로 깊이감:</b> Atmosphere Haze를 올리면 먼 곳이 뿌예져 공간이 넓어 보이고 먼 파트의 디테일 부담도 줄어듭니다.</li>
+      <li><b>색 대비:</b> 따뜻한 주광(횃불) + 차가운 그림자(달빛 Ambient)를 섞으면 입체감이 확 삽니다.</li>
+      <li><b>움직이는 요소:</b> 떠다니는 불씨·먼지·잎사귀 파티클을 약하게 — 정적인 맵이 살아 있는 느낌이 됩니다.</li>
+      <li><b>소리도 테마:</b> 환경음(새소리/바람/용암 끓는 소리)이 더해지면 분위기가 두 배 (중급 19 참고).</li>
+    </ul>
+
+    <h3>같은 맵, 다른 시간대</h3>
+    <p>하나의 맵을 낮/밤/노을로 바꾸면 완전히 다른 분위기를 공짜로 얻습니다. ClockTime과 Ambient만 바꾸면 됩니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>시간대</th><th>ClockTime</th><th>느낌</th></tr></thead>
+      <tbody>
+        <tr><td>맑은 아침</td><td>7~9</td><td>상쾌, 시작 지점</td></tr>
+        <tr><td>한낮</td><td>12~13</td><td>밝고 또렷, 그림자 짧음</td></tr>
+        <tr><td>노을</td><td>17~18</td><td>주황빛, 감성적, 클라이맥스</td></tr>
+        <tr><td>밤</td><td>0~2</td><td>긴장, 조명 연출이 핵심</td></tr>
+      </tbody>
+    </table></div>
   </div>
 </section>
 
