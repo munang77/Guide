@@ -57,6 +57,11 @@
   <div class="nav-group"><span>실전</span>
     <a class="nav-link" href="#skill-vfx"><span class="n">EX</span>게임 스킬 이펙트 메시</a>
   </div>
+  <div class="nav-group"><span>그 외 영역</span>
+    <a class="nav-link" href="#grease"><span class="n">GP</span>그리스 펜슬 (2D)</a>
+    <a class="nav-link" href="#vse"><span class="n">VSE</span>영상 편집</a>
+    <a class="nav-link" href="#tracking"><span class="n">MT</span>모션 트래킹</a>
+  </div>
 </nav>
 
 <div class="page-topbar">
@@ -76,7 +81,7 @@
     <h1>블렌더 고급</h1>
     <p class="lead">파티클, 물리/유체 시뮬레이션, Cycles 렌더링, 컴포지팅, Geometry Nodes, Python 자동화.</p>
     <div class="hero-tags">
-      <span class="hero-tag"><b>10+EX</b>챕터</span>
+      <span class="hero-tag"><b>13+EX</b>챕터</span>
       <span class="hero-tag">시뮬레이션</span>
       <span class="hero-tag">Cycles 렌더링</span>
       <span class="hero-tag">Geometry Nodes</span>
@@ -707,6 +712,120 @@ new_mat  = bpy.data.materials[<span class="str">"FinalMaterial"</span>]
     </ol>
     <div class="callout co-rbx"><span class="ico">RBX</span><p>Studio에 가져갈 때 공통 속성: Anchored true, CanCollide false, CastShadow false, Material Neon. 맵 장식으로 배치하는 방법은 Studio 고급 강좌의 "이펙트 메시 배치" 챕터에서 다룹니다. 스킬처럼 움직이게 하려면 TweenService 스크립트가 필요합니다 (확대 + 전진 + 투명도 페이드를 0.2~0.3초에).</p></div>
     <div class="callout co-warn"><span class="ico">!!</span><p>이펙트 메시는 전부 Cap/뚜껑 제거, 폴리곤 최소화, 모디파이어 Apply 후 내보내기. 한 스킬에 메시가 5~6개씩 쓰이므로 하나하나가 가벼워야 합니다.</p></div>
+  </div>
+</section>
+
+<!-- GP: 그리스 펜슬 -->
+<section class="sec" id="grease">
+  <div class="wrap">
+    <h2><span class="num">GP</span>그리스 펜슬 — 3D 공간의 2D 드로잉 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">블렌더 안에서 직접 그리는 2D 그림. 손그림 애니메이션, 컨셉 스케치, 그리고 게임용 2D 이펙트 텍스처를 만드는 도구입니다.</p>
+
+    <h3>그리스 펜슬이란</h3>
+    <p>3D 공간에 펜으로 그리는 <span class="term" tabindex="0" data-tip="점과 선과 면으로 이루어진 3D 모델 대신, 선(스트로크) 자체를 데이터로 다루는 방식">스트로크</span> 기반 오브젝트입니다. 일반 메시가 점·면이라면 그리스 펜슬은 "선과 칠"이 데이터. 2D 애니메이션, 3D 위에 덧그리는 주석, 만화풍 연출에 쓰입니다.</p>
+    <ul class="plain">
+      <li><b>2D 애니메이션:</b> 종이에 그리듯 프레임별로 그려 움직이는 만화.</li>
+      <li><b>게임 2D 이펙트:</b> 번개·슬래시·만화풍 폭발을 그려서 렌더 → 스프라이트 텍스처로.</li>
+      <li><b>스토리보드·컨셉:</b> 3D 블로킹 위에 직접 그려 연출을 확인.</li>
+    </ul>
+
+    <h3>시작하기</h3>
+    <ol class="steps">
+      <li>새 파일을 <code>File &gt; New &gt; 2D Animation</code> 템플릿으로 열면 바로 그릴 준비가 됩니다. 3D 씬에 추가하려면 <code>Add &gt; Grease Pencil &gt; Blank</code>.</li>
+      <li>왼쪽 위 모드 선택을 <b>Draw Mode</b>로 — 이제 마우스/펜으로 뷰포트에 그릴 수 있습니다.</li>
+      <li>왼쪽 툴바에서 <b>Draw</b>(그리기), <b>Erase</b>(지우개), <b>Fill</b>(면 칠하기), <b>Tint</b>(색 입히기)를 고릅니다.</li>
+    </ol>
+
+    <h3>레이어와 머티리얼</h3>
+    <p>그리스 펜슬은 포토샵처럼 <b>레이어</b>로 나뉘고, 선과 칠의 색은 <b>그리스 펜슬 머티리얼</b>로 정합니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>요소</th><th>위치</th><th>역할</th></tr></thead>
+      <tbody>
+        <tr><td>Layers</td><td>Properties &gt; 오브젝트 데이터(초록 아이콘)</td><td>밑그림 / 선화 / 채색을 층으로 분리</td></tr>
+        <tr><td>Material — Stroke</td><td>Material Properties</td><td>선의 색·두께·질감</td></tr>
+        <tr><td>Material — Fill</td><td>Material Properties</td><td>닫힌 영역을 채우는 색</td></tr>
+        <tr><td>Onion Skin</td><td>레이어 설정</td><td>앞뒤 프레임을 흐리게 비춰 애니메이션 보조</td></tr>
+      </tbody>
+    </table></div>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>선 하나가 안 칠해지면 머티리얼에 <b>Fill</b>이 켜져 있는지, 스트로크가 닫혀 있는지 확인하세요. Fill 도구는 거의 닫힌 영역도 채워주지만, 틈이 크면 새어 나갑니다.</p></div>
+
+    <h3>게임용 2D 이펙트로 쓰기</h3>
+    <ol class="steps">
+      <li>정면 뷰(넘패드 <kbd>1</kbd>)에서 슬래시·번개 같은 모양을 흰색~밝은색으로 그립니다.</li>
+      <li>배경을 투명하게: <code>Render Properties &gt; Film &gt; Transparent</code> 체크.</li>
+      <li>여러 프레임으로 변형을 그려 시퀀스 PNG로 렌더 → Roblox에서 스프라이트시트/연속 텍스처로 사용.</li>
+    </ol>
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>Roblox는 3D 그리스 펜슬을 직접 가져갈 수 없습니다. 항상 <b>렌더한 이미지(PNG)</b>로 만들어 ImageLabel·Beam·Decal·ParticleEmitter 텍스처로 쓰는 흐름입니다.</p></div>
+  </div>
+</section>
+
+<!-- VSE: 영상 편집 -->
+<section class="sec" id="vse">
+  <div class="wrap">
+    <h2><span class="num">VSE</span>비디오 시퀀스 에디터 — 영상 편집 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">블렌더에 내장된 영상 편집기. 렌더한 클립을 자르고 이어 붙여 포트폴리오 릴이나 데모 영상을 별도 프로그램 없이 완성합니다.</p>
+
+    <h3>편집 화면 열기</h3>
+    <p>상단 워크스페이스 탭에서 <b>Video Editing</b>을 클릭하거나, <code>File &gt; New &gt; Video Editing</code>. 아래쪽 타임라인이 영상을 늘어놓는 공간입니다.</p>
+
+    <h3>스트립 다루기</h3>
+    <p>타임라인에 올리는 클립 하나하나를 <b>스트립(Strip)</b>이라 합니다.</p>
+    <div class="tbl-wrap"><table class="tbl">
+      <thead><tr><th>작업</th><th>방법</th></tr></thead>
+      <tbody>
+        <tr><td>영상/이미지/소리 추가</td><td><code>Add &gt; Movie / Image / Sound</code></td></tr>
+        <tr><td>자르기 (컷)</td><td>재생헤드 위치에서 <kbd>K</kbd> (Hard Cut)</td></tr>
+        <tr><td>이동 / 삭제</td><td><kbd>G</kbd> 이동, <kbd>X</kbd> 삭제</td></tr>
+        <tr><td>자막 넣기</td><td><code>Add &gt; Text</code> → 사이드바에서 내용·크기·위치</td></tr>
+        <tr><td>장면 전환 / 페이드</td><td>스트립 선택 → <code>Add &gt; Fade</code>, 또는 Cross 트랜지션</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>포트폴리오 릴 만들기 흐름</h3>
+    <ol class="steps">
+      <li>모델을 <b>턴테이블</b>로 렌더(카메라가 한 바퀴 도는 360° 회전 영상)합니다.</li>
+      <li>여러 모델의 턴테이블 클립을 타임라인에 순서대로 올리고 <kbd>K</kbd>로 길이를 다듬습니다.</li>
+      <li>시작·끝에 텍스트 스트립으로 제목과 이름을 넣고, 클립 사이를 Fade로 부드럽게.</li>
+      <li>음악 스트립을 깔아 박자에 맞춰 컷을 정리합니다.</li>
+    </ol>
+
+    <h3>출력(렌더) 설정</h3>
+    <ul class="plain">
+      <li><code>Output Properties &gt; File Format</code>을 <b>FFmpeg Video</b>로.</li>
+      <li>Encoding 프리셋 <b>H.264 / MPEG-4(.mp4)</b> — 어디서나 재생되는 표준.</li>
+      <li>오디오가 있으면 Audio Codec을 <b>AAC</b>로 설정해야 소리가 같이 나갑니다.</li>
+      <li><code>Render &gt; Render Animation</code>(<kbd>Ctrl</kbd>+<kbd>F12</kbd>)으로 영상 파일 출력.</li>
+    </ul>
+    <div class="callout co-warn"><span class="ico">!!</span><p>이미지 스트립의 길이가 너무 짧으면 한 프레임만 스쳐 지나갑니다. 정지 이미지는 스트립 양 끝을 드래그해 원하는 길이(초)만큼 늘려주세요.</p></div>
+  </div>
+</section>
+
+<!-- MT: 모션 트래킹 -->
+<section class="sec" id="tracking">
+  <div class="wrap">
+    <h2><span class="num">MT</span>모션 트래킹 — 실사 영상에 3D 합성 <span class="lv lv-3">고급</span></h2>
+    <p class="sec-sub">촬영한 실사 영상의 카메라 움직임을 분석해, 그 위에 내 3D 모델을 진짜처럼 얹는 기술. 합성·VFX의 출발점입니다.</p>
+
+    <h3>원리 한 줄</h3>
+    <p>영상 속 고정된 점들(모서리, 무늬)이 프레임마다 어떻게 움직였는지 추적하면, 거꾸로 <b>카메라가 어떻게 움직였는지</b>를 계산할 수 있습니다. 그 가상 카메라에 3D 오브젝트를 두면 실사 배경에 딱 붙어 따라갑니다.</p>
+
+    <h3>작업 순서</h3>
+    <ol class="steps">
+      <li>워크스페이스 <b>Motion Tracking</b> 탭을 열고 <code>Open</code>으로 촬영 영상을 불러옵니다.</li>
+      <li><b>Track</b> 패널에서 잘 보이는 점들에 마커를 찍습니다 (대비 강한 모서리·얼룩 8개 이상 권장).</li>
+      <li>마커를 선택하고 영상 전체에 걸쳐 <b>Track Markers</b>(▶▶)로 자동 추적시킵니다.</li>
+      <li><b>Solve</b> 패널의 <code>Solve Camera Motion</code> — Solve Error가 <b>1.0 미만</b>이면 좋은 결과입니다.</li>
+      <li><code>Setup Tracking Scene</code> 버튼을 누르면 카메라·바닥·그림자 받을 면이 자동으로 만들어집니다.</li>
+      <li>그 위에 3D 모델을 배치하고 렌더하면 실사 영상에 합성됩니다.</li>
+    </ol>
+    <div class="callout co-tip"><span class="ico">TIP</span><p>좋은 트래킹은 좋은 촬영에서 나옵니다 — 흔들림이 적고, 초점이 맞고, 모서리·무늬가 풍부한 장면일수록 쉽습니다. 단색 벽이나 모션블러가 심한 영상은 추적이 잘 안 됩니다.</p></div>
+
+    <h3>이 기능을 언제 쓰나</h3>
+    <ul class="plain">
+      <li>내가 만든 게임 캐릭터/소품을 현실 책상·길거리에 세워 보여주는 홍보 영상.</li>
+      <li>실사 배경 합성이 필요한 쇼릴·VFX 연습.</li>
+    </ul>
+    <div class="callout co-rbx"><span class="ico">RBX</span><p>게임 안에서 직접 쓰는 기술은 아닙니다. <b>완성 영상</b>을 만드는 단계의 도구라, 포트폴리오·트레일러를 멋지게 뽑고 싶을 때 빛납니다.</p></div>
   </div>
 </section>
 
