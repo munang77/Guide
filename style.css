@@ -303,3 +303,20 @@ h3.mas-h::before{background:#e040fb}
 .term::before{content:"";position:absolute;bottom:calc(100% + 3px);left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#3f3f4b;opacity:0;visibility:hidden;transition:opacity .15s;z-index:99}
 .term:hover::after,.term:focus::after{opacity:1;visibility:visible;transform:translateX(-50%) translateY(0)}
 .term:hover::before,.term:focus::before{opacity:1;visibility:visible}
+
+/* ===== 코드블록 복사 버튼 ===== */
+pre.code-block{padding-top:30px}            /* 버튼 자리 확보 */
+.copy-btn{position:absolute;top:8px;right:8px;display:inline-flex;align-items:center;gap:5px;
+  font-family:var(--sans);font-size:11.5px;font-weight:650;letter-spacing:-.01em;
+  color:var(--muted);background:var(--panel-2);border:1px solid var(--border);
+  border-radius:7px;padding:4px 9px;cursor:pointer;opacity:0;transition:opacity .15s,color .15s,border-color .15s,background .15s;z-index:2}
+pre.code-block:hover .copy-btn,.copy-btn:focus-visible{opacity:1}
+.copy-btn:hover{color:var(--text);border-color:#41414d;background:var(--header-strip)}
+.copy-btn .copy-ico{width:13px;height:13px;flex:none;background:currentColor;
+  -webkit-mask:var(--copy-mask) center/contain no-repeat;mask:var(--copy-mask) center/contain no-repeat;
+  --copy-mask:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>')}
+.copy-btn.copied{color:var(--green);border-color:rgba(90,208,138,.5);background:var(--green-dim);opacity:1}
+.copy-btn.copied .copy-ico{--copy-mask:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="black" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>')}
+.copy-btn.failed{color:var(--red);border-color:rgba(255,112,112,.5);opacity:1}
+/* 터치 기기에선 항상 보이게 (hover가 없음) */
+@media(hover:none){.copy-btn{opacity:.7}}
